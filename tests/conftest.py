@@ -223,12 +223,10 @@ def config_entry() -> ConfigEntry:
         title="",
         data={CONF_TOKEN: TOKEN},
         source="user",
-        options={},
+        options={CONF_TOKEN: [TOKEN]},
         unique_id="12345",
     )
 
-
-@pytest_asyncio.fixture
 async def ws_client(hacs: HacsBase, hass: HomeAssistant) -> WSClient:
     """Owner authenticated Websocket client fixture."""
     auth_provider = HassAuthProvider(hass, hass.auth._store, {"type": "homeassistant"})
