@@ -215,17 +215,11 @@ def repository_netdaemon(hacs):
 
 
 @pytest.fixture
-def config_entry() -> ConfigEntry:
+def config_entry(config_entry) -> ConfigEntry:
     """Fixture for a config entry."""
-    yield ConfigEntry(
-        version=1,
-        domain=DOMAIN,
-        title="",
-        data={CONF_TOKEN: TOKEN},
-        source="user",
-        options={},
-        unique_id="12345",
-    )
+    entry = config_entry
+    entry.options = {}
+    return entry
 
 
 @pytest_asyncio.fixture
