@@ -17,6 +17,9 @@ from homeassistant import auth, bootstrap, config_entries, core as ha, config as
 from homeassistant.auth import auth_store, models as auth_models
 from homeassistant.const import (
     EVENT_HOMEASSISTANT_CLOSE,
+    EVENT_HOMEASSISTANT_START,
+    __version__ as current_ha_version,
+)
     EVENT_HOMEASSISTANT_STOP,
     __version__ as HAVERSION,
 )
