@@ -1,1 +1,3 @@
-## Example readme file
+```markdown
+# Example readme file
+```
