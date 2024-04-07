@@ -1,4 +1,3 @@
-
 from typing import Any
 import pytest
 from custom_components.hacs.base import HacsBase
@@ -17,6 +16,8 @@ async def test_validate_repository(hacs: HacsBase, data: dict[str, Any], result:
     repository = HacsRepository(hacs=hacs)
     repository.data.full_name = "octocat/integration"
     for key, value in data.items():
+        setattr(repository.data, key, value)
+    assert await repository.get_documentation() == result
         setattr(repository.data, key, value)
 
     hacs.session = await client_session_proxy(hacs.hass)
