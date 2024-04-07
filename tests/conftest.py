@@ -214,6 +214,14 @@ def repository_netdaemon(hacs):
     yield dummy_repository_base(hacs, repository_obj)
 
 
+import pytest
+import pytest_asyncio
+from homeassistant.core import ConfigEntry  # This is an assumed import
+from homeassistant.const import CONF_TOKEN  # Another assumed import
+
+# Assuming DOMAIN and TOKEN are defined in test_constants.py
+from tests.test_constants import DOMAIN, TOKEN
+
 @pytest.fixture
 def config_entry() -> ConfigEntry:
     """Fixture for a config entry."""
