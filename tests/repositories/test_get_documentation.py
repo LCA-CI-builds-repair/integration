@@ -1,4 +1,3 @@
-
 from typing import Any
 import pytest
 from custom_components.hacs.base import HacsBase
