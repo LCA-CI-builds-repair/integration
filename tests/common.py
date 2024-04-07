@@ -10,13 +10,21 @@ import os
 from typing import Any, Iterable, Mapping
 from unittest.mock import AsyncMock, Mock, patch
 
+```python
 from aiohttp import ClientSession, ClientWebSocketResponse
 from aiohttp.typedefs import StrOrURL
 from awesomeversion import AwesomeVersion
-from homeassistant import auth, bootstrap, config_entries, core as ha, config as ha_config
+from homeassistant import (
+    auth,
+    bootstrap,
+    config_entries,
+    core as ha,
+    config as ha_config,
+)
 from homeassistant.auth import auth_store, models as auth_models
-from homeassistant.const import (
-    EVENT_HOMEASSISTANT_CLOSE,
+from homeassistant.const import EVENT_HOMEASSISTANT_CLOSE
+# There may be more changes below this point to other lines depending on their original formatting.
+```
     EVENT_HOMEASSISTANT_STOP,
     __version__ as HAVERSION,
 )
