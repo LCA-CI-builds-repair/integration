@@ -4,8 +4,17 @@ from __future__ import annotations
 import asyncio
 from contextlib import contextmanager
 import functools as ft
-import json
-import os
+import import asyncio
+from unittest.mock import patch
+
+async def mock_start(orig_start, hass):
+    """Start the mocking."""
+    with patch("homeassistant.core._async_create_timer"):
+        with patch.object(hass, "async_stop_track_tasks"):
+            await orig_start()
+
+# Call mock_start function with the necessary arguments
+await mock_start(orig_start, hass)mport os
 from typing import Any
 
 from aiohttp import ClientSession, ClientWebSocketResponse

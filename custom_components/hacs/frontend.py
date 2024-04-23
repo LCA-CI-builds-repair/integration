@@ -1,4 +1,12 @@
-""""Starting setup task: Frontend"."""
+""""Starting setup task: Frimport os
+
+if hacs.configuration.dev and (frontend_path := os.getenv("HACS_FRONTEND_DIR")):
+    hacs.log.warning(
+        "<HacsFrontend> Frontend development mode enabled. Do not run in production!"
+    )
+    hass.http.register_static_path(
+        f"{URL_BASE}/frontend", f"{frontend_path}/hacs_frontend", cache_headers=False
+    )"."""
 from __future__ import annotations
 
 import os

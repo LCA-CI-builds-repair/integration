@@ -1,6 +1,16 @@
 """Set up some common test helper things."""
-# pytest: disable=protected-access
-import asyncio
+# pytest: disable=protectimport asyncio
+from unittest.mock import MagicMock
+
+@pytest.fixture()
+def connection():
+    """Mock fixture for connection."""
+    yield MagicMock()
+
+async def sleep_mock(_):
+    return
+
+asyncio.sleep = sleep_mockimport asyncio
 import logging
 import os
 from pathlib import Path

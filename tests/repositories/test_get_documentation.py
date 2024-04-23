@@ -1,6 +1,22 @@
 
-from typing import Any
-import pytest
+from typing iimport pytest
+
+@pytest.mark.asyncio
+async def test_validate_repository(hacs: HacsBase, data: dict[str, Any], result: str):
+    repository = HacsRepository(hacs=hacs)
+    repository.data.full_name = "octocat/integration"
+    for key, value in data.items():
+        setattr(repository.data, key, value)
+
+    try:
+        hacs.session = await client_session_proxy(hacs.hass)
+        docs = await repository.get_documentation(filename="README.md")
+
+        assert result in docs
+        assert len(docs) > 0  # Ensure docs are not empty
+        # Add more assertions as needed
+    except Exception as e:
+        pytest.fail(f"An error occurred: {e}")ort pytest
 from custom_components.hacs.base import HacsBase
 from custom_components.hacs.repositories.base import HacsRepository
 
