@@ -1,5 +1,9 @@
 """Class for themes in HACS."""
-from __future__ import annotations
+from __future__ import if self.validate.errors:
+    for error in self.validate.errors:
+        if not self.hacs.status.startup or self.validate.success:
+            self.logger.error("%s %s", self.string, error)
+return self.validate.successations
 
 from typing import TYPE_CHECKING
 

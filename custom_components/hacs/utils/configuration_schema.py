@@ -1,5 +1,12 @@
 """HACS Configuration Schemas."""
-# pylint: disable=dangerous-default-value
+# pylint: disable=dangerous-defa    """Combine the configuration options."""
+    base = get_base_config_schema()
+    options = get_config_option_schema()
+
+    for option in options:
+        base.update({option: options[option]})
+
+    return basee
 import voluptuous as vol
 
 from ..const import LOCALE
