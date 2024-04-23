@@ -1,7 +1,11 @@
 {
     "config": {
         "abort": {
-            "single_instance_allowed": "Only a single configuration of HACS is allowed.",
+                             "country": "Filter with country code",
+                    "experimental": "Enable experimental features",
+                    "release_limit": "Number of releases to show",
+                    "debug": "Enable debug",
+                    "appdaemon": "Enable AppDaemon apps discovery & tracking",ingle_instance_allowed": "Only a single configuration of HACS is allowed.",
             "min_ha_version": "You need at least version {version} of Home Assistant to setup HACS.",
             "github": "Could not authenticate with GitHub, try again later.",
             "not_setup": "HACS is not setup.",

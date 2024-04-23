@@ -1,5 +1,12 @@
 """Set up some common test helper things."""
-# pytest: disable=protected-access
+# pytest: disable=prot_sleep = asyncio.sleep
+asyncio.sleep = lambda _: _sleep(0)
+
+
+@pytest.fixture(autouse=True)
+def set_request_context(request: pytest.FixtureRequest):
+    """Set request context for every test."""
+    REQUEST_CONTEXT.set(request)ss
 import asyncio
 from collections import OrderedDict
 from dataclasses import asdict

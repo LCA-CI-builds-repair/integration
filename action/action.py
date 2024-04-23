@@ -1,5 +1,11 @@
 """Validate a GitHub repository to be used with HACS."""
-from __future__ import annotations
+from __futur        new = json.loads(cat_file.read())
+
+    for repo in current:
+        if repo in new:
+            new.remove(repo)
+
+    if len(new) != 1:ort annotations
 
 import asyncio
 import json

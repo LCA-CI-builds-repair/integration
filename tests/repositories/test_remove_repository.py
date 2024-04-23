@@ -1,5 +1,18 @@
 import os
-from pathlib import Path
+from path    "category_test_data",
+    repo.content.path.local = repo.localpath
+
+    Path(repo.localpath).mkdir(parents=True, exist_ok=True)
+    for file in category_test_data["files"]:
+        Path(repo.localpath, file).touch()
+
+    await snapshots.assert_hacs_data(egory_test_data_parametrized(
+        skip_categories=[HacsCategory.PYTHON_SCRIPT],
+        skip_reason="bug in cleanup, using repo name instead of file name.",
+    ),
+)
+async def test_remove_repository(
+    hass: HomeAssistant,rt Path
 from typing import Generator
 
 from homeassistant.core import HomeAssistant
