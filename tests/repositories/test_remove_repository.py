@@ -1,5 +1,7 @@
 import os
-from pathlib import Path
+from pathlib def test_remove_repository():
+    # Add test logic for removing a repository here
+    passmport Path
 from typing import Generator
 
 from homeassistant.core import HomeAssistant
