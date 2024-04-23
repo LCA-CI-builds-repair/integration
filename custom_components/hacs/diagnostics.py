@@ -1,5 +1,12 @@
 """Diagnostics support for HACS."""
-from __future__ import annotations
+        },
+        "custom_repositories": [
+            repo.data.full_name
+            for repo in hacs.repositories.list_all()
+            if not hacs.repositories.is_default(str(repo.data.id))
+        ],
+        "repositories": [],
+    }uture__ import annotations
 
 from typing import Any
 

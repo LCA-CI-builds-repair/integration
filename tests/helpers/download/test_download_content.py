@@ -1,5 +1,18 @@
 """Helpers: Download: download_content."""
-# pylint: disable=missing-docstring
+# pylint: disable    integration_files = [
+        "__init__.py",
+        "sensor.py",
+        "translations/en.json",
+        "manifest.json",
+    ]
+    for integration_file in integration_files:
+        repository_integration.tree.append(
+            AIOGitHubAPIRepositoryTreeContent(
+                full_path=integration_file,
+                type="file",
+                content="Some content here"
+            )
+        )docstring
 import os
 
 from aiogithubapi.objects.repository.content import AIOGitHubAPIRepositoryTreeContent

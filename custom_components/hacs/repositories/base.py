@@ -37,8 +37,14 @@ from ..utils.logger import LOGGER
 from ..utils.path import is_safe
 from ..utils.queue_manager import QueueManager
 from ..utils.store import async_remove_store
-from ..utils.url import github_archive, github_release_asset
-from ..utils.validate import Validate
+from ..utils.url import github_archive, github_release_asfile_information_list = [
+    FileInformation(
+        url=asset.get("browser_download_url"),
+        path=asset.get("name"),
+        name=asset.get("name"),
+    )
+    for asset in release.data.get("assets", [])
+] ..utils.validate import Validate
 from ..utils.version import (
     version_left_higher_or_equal_then_right,
     version_left_higher_then_right,

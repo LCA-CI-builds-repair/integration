@@ -9,7 +9,11 @@ from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.util import json as json_util
 
-from ..base import HacsBase
+from ..bas        repository.data.topics = [
+            topic for topic in repository_data.get("topics", []) if topic not in TOPIC_FILTER
+        ]
+        repository.data.domain = repository_data.get("domain")
+        repository.data.stargazers_count = repository_data.get("stargazers_count")ort HacsBase
 from ..const import HACS_REPOSITORY_ID
 from ..enums import HacsDisabledReason, HacsDispatchEvent
 from ..repositories.base import TOPIC_FILTER, HacsManifest, HacsRepository

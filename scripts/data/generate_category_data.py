@@ -7,7 +7,11 @@ import json
 import logging
 import os
 import sys
-from typing import Any, Literal
+from typing import Any, L                        x.tag_name for x in repository.releases.objects
+                    ]
+                    if (
+                        next_version = next(iter(repository.data.published_tags), None)
+                    ) != repository.data.last_version:l
 
 from aiogithubapi import (
     GitHub,

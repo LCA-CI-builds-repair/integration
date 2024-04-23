@@ -1,7 +1,11 @@
 """Hacs validation manager."""
-from __future__ import annotations
-
-import asyncio
+from __future__ import annotati            validator
+            for validator in self.validators or []
+            if (
+                (not validator.categories or repository.data.category in validator.categories)
+                and validator.slug not in os.getenv("INPUT_IGNORE", "").split(" ")
+                and (not is_pull_from_fork or validator.allow_fork)
+            )mport asyncio
 from importlib import import_module
 import os
 from pathlib import Path

@@ -5,7 +5,11 @@ import json
 from aresponses import ResponsesMockServer
 import pytest
 
-from custom_components.hacs.base import HacsBase
+from custom_compon                            {"path": "repository.yaml", "type": "blob"},
+                        ],
+                        "some-user/some-invalid-repo": [
+                            {"path": "setup.py", "type": "blob"},
+                        ]hacs.base import HacsBase
 from custom_components.hacs.enums import HacsCategory
 from custom_components.hacs.exceptions import (
     AddonRepositoryException,

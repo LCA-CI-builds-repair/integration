@@ -1,5 +1,10 @@
 """Helper constants."""
-# pylint: disable=missing-class-docstring
+# pylint: disable=mis    ERROR = "hacs_dispatch_error"
+    RELOAD = "hacs_dispatch_reload"
+    REPOSITORY = "hacs_dispatch_repository"
+    REPOSITORY_DOWNLOAD_PROGRESS = "hacs_dispatch_repository_download_progress"
+    STAGE = "hacs_dispatch_stage"
+    STARTUP = "hacs_dispatch_startup"lass-docstring
 import sys
 
 if sys.version_info.minor >= 11:

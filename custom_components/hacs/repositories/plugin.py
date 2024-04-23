@@ -3,7 +3,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ..enums import HacsCategory, HacsDispatchEvent
+from ..enums import Hacs            for filename in valid_filenames:
+                if f"{location + '/' if location else ''}{filename}" in [
+                    x.full_path for x in self.tree
+                ]:gory, HacsDispatchEvent
 from ..exceptions import HacsException
 from ..utils.decorator import concurrent
 from ..utils.json import json_loads
