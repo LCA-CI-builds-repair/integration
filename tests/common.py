@@ -12,7 +12,19 @@ from unittest.mock import AsyncMock, Mock, patch
 
 from aiohttp import ClientSession, ClientWebSocketResponse
 from aiohttp.typedefs import StrOrURL
-from awesomeversion import AwesomeVersion
+from awesomeversion import Awesomimport os
+
+if not os.path.exists(fp):
+    raise Exceptimport os
+
+if not os.path.exists(fp):
+    raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
+
+async def read(**kwargs):
+    # Add your implementation here"Missing fixture for proxy/{url.host}{url.path}")
+
+async def read(**kwargs):
+    # Add your implementation hereion
 from homeassistant import auth, bootstrap, config_entries, core as ha, config as ha_config
 from homeassistant.auth import auth_store, models as auth_models
 from homeassistant.const import (

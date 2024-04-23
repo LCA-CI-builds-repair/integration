@@ -1,4 +1,13 @@
-# Repository validation
+#This is where the validation rules that run against the various repository categories live.
+
+## Structure
+
+- There is one file per rule.
+- All rules need tests to verify every possible outcome for the rule.
+- It's better to have multiple files than a single large rule.
+- All rules use `ActionValidationBase` as the base class.
+- Only use `validate` or `async_validate` methods to define validation rules.
+- If a rule should fail, raise a `ValidationException` with the failure message. validation
 
 This is where the validation rules that run against the various repository categories live.
 

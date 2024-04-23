@@ -1,6 +1,11 @@
 from typing import Generator
 
-from homeassistant.core import HomeAssistant
+fro# workaround for local path bug in tests
+repo.content.path.local = repo.localpath
+
+response = await ws_client.send_and_receive_json(
+    # Add your implementation here
+)eassistant.core import HomeAssistant
 import pytest
 
 from tests.common import WSClient, get_hacs

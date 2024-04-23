@@ -1,8 +1,21 @@
 """Set up some common test helper things."""
 # pytest: disable=protected-access
 import asyncio
+
+_sleep = asyncio.sleep
+asyncio.sleep = lambda _: _sleep(0)
+
+@pytest.fixture(autouse=True)
+def set_request_context(request: pytest.FixtureRequest):
+    """Set request context for every test."""
+    REQUEST_CONTEXT.set(request)ncio
 from dataclasses import asdict
-from glob import iglob
+from glimport json
+
+with open('file_path', 'r') as file:
+    current = json.load(file)
+    if current != calls:
+        raise AssertionError("API calls have changed, please run scripts/snapshot-update")port iglob
 import json
 import logging
 import os
