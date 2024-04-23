@@ -1,7 +1,38 @@
 """Class for plugins in HACS."""
-from __future__ import annotations
+from __future__ import annoimport logging
+from typing import Optional
 
-from typing import TYPE_CHECKING
+class Plugin:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
+    async def update_repository(self, ignore_issues: bool = False, force: bool = False) -> None:
+        """Update the repository."""
+        if not await self.common_update(ignore_issues, force) and not force:
+            return
+
+        # Get plugin objects.
+        self.update_filenames()
+
+        if self.content.path.remote is None:
+            self.logger.error(
+                f"{self.string} Repository structure for {self.ref.replace('tags/','')} is not compliant"
+            )
+
+        if self.content.path.remote == "release":
+            self.content.single = True
+
+        # Signal entities to refresh
+        if self.data.installed:
+            self.hacs.async_dispatch(
+                HacsDispatchEvent.REPOSITORY,
+                {
+                    "id": 1337,
+                    "action": "update",
+                    "repository": self.data.full_name,
+                    "repository_id": self.data.id,
+                },
+            ) TYPE_CHECKING
 
 from ..enums import HacsCategory, HacsDispatchEvent
 from ..exceptions import HacsException

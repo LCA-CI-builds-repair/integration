@@ -1,5 +1,30 @@
-""""Starting setup task: Frontend"."""
-from __future__ import annotations
+""""Starting setup task:import os
+from typing import Optional
+
+class Frontend:
+    def __init__(self):
+        self.log = logging.getLogger(__name__)
+
+    def setup_frontend(self) -> None:
+        hacs.async_setup_frontend_endpoint_themes()
+
+        if hacs.configuration.dev and (frontend_path := os.getenv("HACS_FRONTEND_DIR")):
+            self.log.warning(
+                "<HacsFrontend> Frontend development mode enabled. Do not run in production!"
+            )
+            hass.http.register_static_path(
+                f"{URL_BASE}/frontend", f"{frontend_path}/hacs_frontend", cache_headers=False
+            )
+        elif hacs.configuration.experimental:
+            self.log.info("<HacsFrontend> Using experimental frontend")
+            hass.http.register_static_path(
+                f"{URL_BASE}/frontend", experimental_locate_dir(), cache_headers=False
+            )
+        else:
+            self.log.info("<HacsFrontend> Using default frontend")
+            hass.http.register_static_path(
+                f"{URL_BASE}/frontend", locate_dir(), cache_headers=False
+            )m __future__ import annotations
 
 import os
 from typing import TYPE_CHECKING

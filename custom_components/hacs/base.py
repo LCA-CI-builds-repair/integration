@@ -25,7 +25,37 @@ from aiogithubapi.objects.repository import AIOGitHubAPIRepository
 from aiohttp.client import ClientSession, ClientTimeout
 from awesomeversion import AwesomeVersion
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
-from homeassistant.const import EVENT_HOMEASSISTANT_FINAL_WRITE, Platform
+fimport asyncio
+import logging
+
+class Base:
+    def __init__(self):
+        self.log = logging.getLogger(__name__)
+
+    async def download_file(self, url: str) -> None:
+        timeouts = 0
+        while timeouts < 5:
+            try:
+                response = await self.session.get(url)
+                response.raise_for_status()
+                content = await response.read()
+                return content
+            except asyncio.TimeoutError:
+                self.log.warning(
+                    "A timeout of 60 seconds was encountered while downloading %s. "
+                    "Using over 60 seconds to download a single file is not normal. "
+                    "This may be due to how your host communicates with GitHub. "
+                    "Retrying up to 5 times to handle network issues. "
+                    "Tries left: %s",
+                    url,
+                    (4 - timeouts),
+                )
+                timeouts += 1
+                await asyncio.sleep(1)
+                continue
+            except Exception as e:
+                self.log.error(f"An error occurred while downloading {url}: {e}")
+                breakt.const import EVENT_HOMEASSISTANT_FINAL_WRITE, Platform
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
