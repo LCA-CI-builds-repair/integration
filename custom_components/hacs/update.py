@@ -3,7 +3,32 @@ from __future__ import annotations
 
 from typing import Any
 
-from homeassistant.components.update import UpdateEntity, UpdateEntityFeature
+from homeafrom homeassistant.exceptions import HomeAssistantError
+
+            raise HomeAssistantError(
+                f"This version requires Home Assistant {target_manifest.homeassistant} or newer."
+            )
+        if target_manifest.hacs is not None and self.hacs.core.ha_version < target_manifest.hacs:
+            raise HomeAssistantError(f"This version requires HACS {target_manifest.hacs} or newer.")
+
+    async def async_install(self, version: str | None, backup: bool, **kwargs: Any) -> None:
+        """Install an update."""
+        await self._ensure_capabilities(version)
+        self.repository.logger.info("Starting update, version: %s", version)
+        if self.repository.display_version_or_commit == "version":
+            self._update_in_progress(progress=10)
+            if not version:
+                await self.repository.update_repository(force=True)
+            else:
+                self.repository.ref = version
+            self.repository.data.selected_tag = version
+            self.repository.force_branch = version is not None
+            self._update_in_progress(progress=20)
+
+        try:
+            await self.repository.async_install(version=version)
+        except HacsException as exception:
+            self.repository.logger.error(f"Failed to install update: {exception}")ate import UpdateEntity, UpdateEntityFeature
 from homeassistant.core import HomeAssistantError, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 

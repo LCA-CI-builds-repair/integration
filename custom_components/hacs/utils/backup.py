@@ -3,8 +3,49 @@ from __future__ import annotations
 
 import os
 import shutil
-import tempfile
-from time import sleep
+imporimport os
+import shutil
+import os
+import shutil
+
+class BackupManager:
+    def __init__(self, hacs, backup_path_full, local_path):
+        self.hacs = hacs
+        self.backup_path_full = backup_path_full
+        self.local_path = local_path
+
+    def create_backup(self):
+        """Create a backup."""
+        try:
+            shutil.copyfile(self.local_path, self.backup_path_full)
+        except Exception as e:
+            self.hacs.log.error(f"Failed to create backup: {e}")
+
+    def restore_backup(self):
+        """Restore from backup."""
+        if not os.path.exists(self.backup_path_full):
+            return
+
+        if os.path.isfile(self.backup_path_full):
+            try:
+                if os.path.exists(self.local_path):
+                    os.remove(self.local_path)
+                shutil.copyfile(self.backup_path_full, self.local_path)
+            except Exception as e:
+                self.hacs.log.error(f"Failed to restore backup: {e}")            self.hacs.log.warning("Failed to create backup: %s", exception)
+
+    def restore(self) -> None:
+        """Restore from backup."""
+        if not os.path.exists(self.backup_path_full):
+            return
+
+        if os.path.isfile(self.backup_path_full):
+            try:
+                if os.path.exists(self.local_path):
+                    os.remove(self.local_path)
+                shutil.copyfile(self.backup_path_full, self.local_path)
+            except Exception as e:
+                self.hacs.log.error(f"Failed to restore backup: {e}")from time import sleep
 from typing import TYPE_CHECKING
 
 from .path import is_safe

@@ -1,6 +1,36 @@
 import os
-from pathlib import Path
-from typing import Generator
+from pathlib import pytest
+from tests.async_mock import MagicMock
+from custom_components.hacs.repositories import get_hacs
+from custom_components.hacs.const import STARTUP
+from custom_components.hacs.operational.setup_actions.repository import install_repository
+
+@pytest.mark.asyncio
+async def test_remove_repository(
+    hass: HomeAssistant,
+    setup_integration: Generator,
+    ws_client: WSClient,
+    category_test_data: CategoryTestData,
+    snapshots: SnapshotFixture,
+):
+    hacs = get_hacs(hass)
+
+    repo = hacs.repositories.get_by_full_name(category_test_data["repository"])
+    assert repo is not None
+    assert repo.data.installed is False
+    repo.data.installed = True
+
+    assert len(hacs.repositories.list_downloaded) == 2
+
+    try:
+        if repo.data.category in ("theme", "python_script"):
+            repo.data.file_name = category_test_data["files"][0]
+
+        # workaround for local path bug in tests
+        repo.content.path.local = repo.localpath
+    except Exception as e:
+        raise RuntimeError(f"Error in test_remove_repository: {e}")
+import Generator
 
 from homeassistant.core import HomeAssistant
 import pytest

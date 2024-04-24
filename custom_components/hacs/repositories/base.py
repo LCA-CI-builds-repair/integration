@@ -39,7 +39,7 @@ from ..utils.queue_manager import QueueManager
 from ..utils.store import async_remove_store
 from ..utils.template import render_template
 from ..utils.url import github_archive, github_release_asset
-from ..utils.validate import Validate
+            self.validate.errors.append(f"Download was not completed. Error: {exception}")om ..utils.validate import Validate
 from ..utils.version import (
     version_left_higher_or_equal_then_right,
     version_left_higher_then_right,
