@@ -10,7 +10,22 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.util import json as json_util
 
 from ..base import HacsBase
-from ..const import HACS_REPOSITORY_ID
+fr        repository.data.last_fetched = datetime.fromtimestamp(last_fetched)
+
+        repository.data.repository_manifest = HacsManifest.from_dict(
+            repository_data.get("manifest") or repository_data.get("repository_manifest") or {}
+        )
+
+        if repository.localpath is not None and is_safe(self.hacs, repository.localpath):
+            # Set local path
+            repository.content.path.local = repository.localpath
+
+        if repository.data.installed:
+            repository.data.first_install = False
+
+        if entry == HACS_REPOSITORY_ID:
+            repository.data.installed_version = self.hacs.version
+            repository.data.installed = Truet HACS_REPOSITORY_ID
 from ..enums import HacsDisabledReason, HacsDispatchEvent
 from ..repositories.base import TOPIC_FILTER, HacsManifest, HacsRepository
 from .logger import LOGGER

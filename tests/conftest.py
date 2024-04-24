@@ -8,7 +8,32 @@ import json
 import logging
 import os
 import shutil
-from typing import Any, Generator
+f# Get the entities for the config entry
+entities_data = []
+for entity in er.async_entries_for_config_entry(
+    er.async_get(hacs.hass),
+    hacs.configuration.config_entry.entry_id,
+):
+    state = hacs.hass.states.get(entity.entity_id).state
+    attributes = hacs.hass.states.get(entity.entity_id).attributes
+    entity_data = {
+        "state": state,
+        "attributes": attributes,
+        **recursive_remove_key(entity.as_partial_dict, ("id",)),
+    }
+    entities_data.append(entity_data)
+
+# Create the final data structure
+final_data = sorted(
+    [{**entity_data, **(additional or {})} for entity_data in entities_data],
+    key=lambda x: x["unique_id"],
+)
+
+# Remove unnecessary keys and save to a file
+save_data_to_file(
+    recursive_remove_key(final_data, ("last_fetched", "config_entry_id", "device_id")),
+    filename,
+)Any, Generator
 from unittest.mock import MagicMock, patch
 
 from homeassistant.auth.models import Credentials

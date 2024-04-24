@@ -25,7 +25,33 @@ from aiogithubapi.objects.repository import AIOGitHubAPIRepository
 from aiohttp.client import ClientSession, ClientTimeout
 from awesomeversion import AwesomeVersion
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
-from homeassistant.const import EVENT_HOMEASSISTANT_FINAL_WRITE, Platform
+f                    f"Got status code {request.status} when trying to download {url}"
+                            self.repositories.mark_default(repository)
+        except HacsException as exception:
+            if "403" in str(exception):
+                self.log.critical(
+                    "GitHub API is ratelimited, or the token is wrong."
+                )
+            else:
+                self.log.critical("Could not load HACS! - %s", exception)
+            self.disable_hacs(HacsDisabledReason.LOAD_HACS)
+
+    async def async_get_all_category_repositories(self, _=None) -> None:
+        """Get all category repositories."""
+        if self.system.disabled: except asyncio.TimeoutError:
+                self.log.warning(
+                    "A timeout of 60 seconds was encountered while downloading %s. "
+                    "Using over 60 seconds to download a single file is not normal. "
+                    "This is not a problem with HACS but how your host communicates with GitHub. "
+                    "Retrying up to 5 times to mask/hide your host/network problems and prevent "
+                    "the flow of issues opened about it. "
+                    "Tries left: %s",
+                    url,
+                    (5 - timeouts),
+                )
+                timeouts += 1
+                await asyncio.sleep(1)
+                continuet.const import EVENT_HOMEASSISTANT_FINAL_WRITE, Platform
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue

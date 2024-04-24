@@ -1,4 +1,23 @@
-"""Test generate category data."""
+"import json
+
+import pytest
+
+from scripts.data.generate_category_data import OUTPUT_DIR, generate_category_data
+
+from tests.common import (
+    CategoryTestData,
+    category_test_data_parametrized,
+    safe_json_dumps,
+)
+from tests.conftest import SnapshotFixture
+
+BASE_HEADERS = {"Content-Type": "application/json"}
+RATE_LIMIT_HEADER = {
+    **BASE_HEADERS,
+    "X-RateLimit-Limit": "9999",
+    "X-RateLimit-Remaining": "9999",
+    "X-RateLimit-Reset": "9999",
+} data."""
 import json
 
 from homeassistant.core import HomeAssistant

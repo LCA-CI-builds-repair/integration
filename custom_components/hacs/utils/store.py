@@ -1,4 +1,7 @@
-"""Storage handers."""
+"from ..const import VERSION_STORAGE
+from .logger import LOGGER
+
+_LOGGER = LOGGERhanders."""
 from homeassistant.helpers.json import JSONEncoder
 from homeassistant.helpers.storage import Store
 from homeassistant.util import json as json_util

@@ -1,4 +1,9 @@
-"""Custom template support."""
+"""Custom tem    """Render templates in content."""
+    if hacs.configuration.experimental:
+        # Do not render for experimental
+        return content
+    # Fix None issues
+    prerelease = context.releases.last_release_object.prerelease if context.releases.last_release_object else Falseport."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

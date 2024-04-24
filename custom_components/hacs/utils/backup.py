@@ -5,7 +5,14 @@ import os
 import shutil
 import tempfile
 from time import sleep
-from typing import TYPE_CHECKING
+from typing import Timport shutil
+
+if not filename.endswith(".yaml"):
+    continue
+
+source_file_name = f"{self.backup_path}/{filename}"
+target_file_name = f"{self.repository.content_path.local}/{filename}"  # Fixed the attribute name
+shutil.copyfile(source_file_name, target_file_name)ECKING
 
 from .path import is_safe
 

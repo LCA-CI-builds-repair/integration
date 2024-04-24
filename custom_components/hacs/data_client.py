@@ -1,5 +1,6 @@
 """HACS Data client."""
-from __future__ import annotations
+from __future__ imp        except Exception as exception:
+            raise HacsException(f"Error fetching data from HACS: {exception}") from exceptiont annotations
 
 import asyncio
 from typing import Any

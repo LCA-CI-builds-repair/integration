@@ -1,6 +1,13 @@
 from typing import Generator
 
-from homeassistant.core import HomeAssistant
+from home    assert repo.data.installed is True
+
+    await snapshots.assert_hacs_data(
+        hacs, f"{category_test_data['repository']}/test_download_repository.json"
+    )
+
+    # cleanup
+    repo.data.installed = False.core import HomeAssistant
 import pytest
 
 from tests.common import (

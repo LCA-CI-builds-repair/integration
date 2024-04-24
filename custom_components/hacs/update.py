@@ -3,7 +3,20 @@ from __future__ import annotations
 
 from typing import Any
 
-from homeassistant.components.update import UpdateEntity, UpdateEntityFeature
+from homeassistant.components.u            await self.repository.async_install(version=version)
+        except HacsException as exception:
+            raise HomeAssistantError(
+                f"Downloading {self.repository.data.full_name} with version {version or self.repository.data.last_version or self.repository.data.last_commit} failed. Exception: {exception}"
+            ) from exception
+        finally:
+            self.repository.data.selected_tag = None
+            self.repository.force_branch = False
+            self._update_in_progress(progress=False)
+
+    async def async_release_notes(self) -> Optional[str]:
+        """Return the release notes."""
+        if self.repository.pending_restart or not self.repository.can_download:
+            return NonepdateEntity, UpdateEntityFeature
 from homeassistant.core import HomeAssistantError, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 

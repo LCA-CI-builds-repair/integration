@@ -1,5 +1,22 @@
-# pylint: disable=missing-docstring,invalid-name
-from __future__ import annotations
+# pylint: disable=missing-docstring,invalid-namefrom custom_components.hacs.const import DOMAIN
+from custom_components.hacs.enums import HacsCategory
+from custom_components.hacs.repositories.base import HacsManifest, HacsRepository
+from custom_components.hacs.utils.configuration_schema import TOKEN as CONF_TOKEN
+from custom_components.hacs.utils.logger import LOGGER
+
+IGNORED_BASE_FILES = {
+    "/config/automations.yaml",
+    "/config/configuration.yaml",
+    "/config/scenes.yaml",
+    "/config/scripts.yaml",
+    "/config/secrets.yaml",
+}
+
+class CategoryTestData(TypedDict):
+    repository: str
+    category: str
+    files: list[str]
+    version_base: strannotations
 
 import asyncio
 from contextlib import contextmanager
