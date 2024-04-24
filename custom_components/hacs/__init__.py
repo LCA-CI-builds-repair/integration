@@ -4,7 +4,7 @@ HACS gives you a powerful UI to handle downloads of all your custom needs.
 For more details about this integration, please refer to the documentation at
 https://hacs.xyz/
 """
-from __future__ import annotations
+from __future__ import annot                hacs.log.info("Could not setup HACS, trying again in 15 min")tions
 
 import os
 from typing import Any

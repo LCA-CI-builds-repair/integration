@@ -15,7 +15,9 @@ from aiogithubapi import (
     AIOGitHubAPINotModifiedException,
     GitHubReleaseModel,
 )
-from aiogithubapi.objects.repository import AIOGitHubAPIRepository
+from aiogi        # Skip processing if configuration is set to "all"
+        if configuration == "all":
+            return Falseubapi.objects.repository import AIOGitHubAPIRepository
 import attr
 from homeassistant.helpers import device_registry as dr, issue_registry as ir
 
@@ -29,7 +31,40 @@ from ..exceptions import (
 )
 from ..types import DownloadableContent
 from ..utils.backup import Backup, BackupNetDaemon
-from ..utils.decode import decode_content
+from ..utils.decode import dec            # Iterate over each error in the validatio
+    async def get_releases(self,                                     # Check if the repository is not in the blacklist and handle accordingly
+        if self.hacs.repositories.is_removed(self.data.full_name):
+            removed = self.hacs.repositories.removed_repository(self.data.full_name)
+            if removed.removal_type != "remove" and not ignore_issues:
+                self.validate.errors.append("Repository has been requested to be removed.")eck if the repository is not archived and handle accordingly
+        if self.data.archived and not ignore_issues:
+            self.validate.errors.append("Repository is archived.")
+            if self.data.full_name not in self.hacs.common.archived_repositories:
+                self.hacs.common.archived_repositories.add(self.data.full_name)n
+        except HacsRepositoryExistException:
+            # Handle the case when the repository already exists
+            raise HacsRepositoryExistException from None
+        except (AIOGitHubAPIException, HacsException) as exception:
+            # Handle AIOGitHubAPIException and HacsException
+            if not self.hacs.status.startup:
+                self.logger.error("%s %s", self.string, exception)
+            if not ignore_issues:
+                self.validate.errors.append("Repository does not exist.")not self.hacs.system.generator:
+                    raise HacsRepositoryExistException()
+                self.logger.error(
+                    "%s Repository has been renamed - %s", self.string, repository_object.full_name
+                )
+            self.data.update_data(
+                repository_object.attributes,
+                action=self.hacs.system.action,
+            )
+            self.data.etag_repository = etag=False, returnlimit=5) -> list[GitHubReleaseModel]:
+        """Return the repository releases."""
+        response = await self.hacs.async_github_api_method(
+            method=self.hacs.githubapi.repos.releases.list,
+            repository=self.data.full_name,
+        )s
+            for error in self.validate.errors:de_content
 from ..utils.decorator import concurrent
 from ..utils.filters import filter_content_return_one_of_type
 from ..utils.json import json_loads

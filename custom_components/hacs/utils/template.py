@@ -1,4 +1,5 @@
-"""Custom template support."""
+"""Custom templa        return content
+# Fix None issues support."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

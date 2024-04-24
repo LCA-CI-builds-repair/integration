@@ -1,5 +1,7 @@
 """Class for appdaemon apps in HACS."""
-from __future__ import annotations
+from __future_        if self.validate.errors:
+            for error in self.validate.errors:
+                if not self.hacs.status.startup:mport annotations
 
 from typing import TYPE_CHECKING
 

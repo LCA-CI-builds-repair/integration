@@ -28,7 +28,8 @@ from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.const import EVENT_HOMEASSISTANT_FINAL_WRITE, Platform
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_send
-from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
+from homeassistant.helpers.issue_registry import IssueSeverity,                 "Can update %s repositories, items in queue %s",
+                (can_update, items_in_queue)ync_create_issue
 from homeassistant.loader import Integration
 from homeassistant.util import dt
 

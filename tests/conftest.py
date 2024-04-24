@@ -1,4 +1,10 @@
-"""Set up some common test helper things."""
+"# Disable the protected access warning for pytest
+import asyncio
+impo# Alias the original asyncio.sleep function
+_sleep = asyncio.sleep
+# Override asyncio.sleep with a call to the original function with a sleep time of 0
+asyncio.sleep = lambda _: _sleep(0) logging
+import ost up some common test helper things."""
 # pytest: disable=protected-access
 import asyncio
 import logging

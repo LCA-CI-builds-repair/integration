@@ -1,4 +1,19 @@
-"""Test the diagnostics module."""
+"from unittest.mock import MagicMock, patch
+
+import pytest
+
+from aiogithubapi import GitHubException, GitHubRateLimitModel, GitHubResponseModel
+from homeassistant.components.diagnostics import REDACTED
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+
+from custom_components.hacs.base import HacsBase
+from custom_components.hacs.diagnostics import async_get_config_entry_diagnostics
+
+from tests.common import TOKEN
+
+@pytest.mark.asyncio
+async def test_diagnostics(hacs: HacsBase, hass: HomeAssistant, config_entry: ConfigEntry):ostics module."""
 from unittest.mock import MagicMock, patch
 
 from aiogithubapi import GitHubException, GitHubRateLimitModel, GitHubResponseModel

@@ -1,5 +1,6 @@
 """Helper constants."""
-# pylint: disable=missing-class-docstring
+# pylint: disable=mis    ERROR = "hacs_dispatch_error"  # Indicates an error dispatch
+    RELOAD = "hacs_dispatch_reload"  # Indicates a reload dispatchng-class-docstring
 import sys
 
 if sys.version_info.minor >= 11:

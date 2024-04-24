@@ -1,4 +1,11 @@
-from custom_components.hacs.repositories.base import RepositoryData
+from cus    # Check that the initial data name is not "new"
+    assert data.name != "new"
+
+    # Convert data to JSON, update the name, and check that the original data name is still not "new"
+    test = data.to_json()
+    test["name"] = "new"
+
+    assert data.name != "new"mponents.hacs.repositories.base import RepositoryData
 
 
 def test_guarded():
