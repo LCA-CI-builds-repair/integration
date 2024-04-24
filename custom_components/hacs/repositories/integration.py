@@ -3,7 +3,24 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
+from homeass        if manifest := await self.async_get_integration_manifest():
+            try:
+                self.integration_manifest = manifest
+                self.data.authors = manifest.get("codeowners", [])
+                self.data.domain = manifest["domain"]
+                self.data.manifest_name = manifest.get("name")
+                self.data.config_flow = manifest.get("config_flow", False)
+
+            except KeyError as exception:
+                self.validate.errors.append(
+                    f"Missing expected key '{exception}' in { RepositoryFile.MANIFEST_JSON}"
+                )
+                self.hacs.log.error(
+                    "Missing expected key '%s' in '%s'", exception, RepositoryFile.MANIFEST_JSON
+                )
+
+        # Set local path
+        self.content.path.local = self.localpathue_registry import IssueSeverity, async_create_issue
 from homeassistant.loader import async_get_custom_components
 
 from ..const import DOMAIN

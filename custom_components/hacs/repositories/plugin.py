@@ -1,5 +1,87 @@
 """Class for plugins in HACS."""
-from __future__ import annotations
+        """Validate."""
+     async def update_repositor        """Get package c            if self.releases.objects:
+                release = self.releases.objects[0]
+                if release.assets:
+                    assetnames = []
+                    for filename in valid_filenames:
+                        for asset in release.assets:
+                            if filename == asset.name:
+                                assetnames.append(filename)
+                    if assetnames:
+                        self.data.file_name = assetnames[0]
+                        self.content.path.remote = "release"
+                        return
+
+        for location in ("",) if self.repository_manifest.content_in_root else ("dist", ""):
+            for filename in valid_filenames:
+                file_path = f"{location+'/' if location else ''}{filename}"
+                if file_path in [x.full_path for x in self.tree]:
+                    self.data.file_name = filename.split("/")[-1]
+                    self.content.path.remote = locationry:
+            package = await self.repository_object.get_contents("package.json", self.ref)
+            package = json_loads(package.content)
+
+            if package and "author" in package:
+                self.data.authors = package["author"]
+        except Exception as e:
+            pass
+
+    async def update_filenames(self) -> None:
+        """Get the filename to target."""
+        # Handler for plug requirement 3
+        if self.repository_manifest.filename:
+            valid_filenames = (self.repository_manifest.filename,)
+        else:
+            valid_filenames = (
+                f"{self.data.name.replace('lovelace-', '')}.js",
+                f"{self.data.name}.js",
+                f"{self.data.name}.umd.js",
+                f"{self.data.name}-bundle.js",
+            )False, force=False):
+        """Update."""
+        if not await self.common_update(ignore_issues, force) and not force:
+            return
+
+        # Get plugin objects.
+        self.update_filenames()
+
+        if self.content.path.remote == None:
+            self.validate.errors.append(
+                f"{self.string} Repository structure for {self.ref.replace('tags/','')} is not compliant"
+            )
+
+        if self.content.path.remote == "release":
+            self.content.single = True
+
+        # Signal entities to refresh
+        if self.data.installed:
+            self.hacs.async_dispatch(
+                HacsDispatchEvent.REPOSITORY,
+                {
+                    "id": 1337,
+                    "action": "update",
+                    "repository": self.data.full_name,
+                    "repository_id": self.data.id,
+                }
+            )tion steps.
+        await self.common_validate()
+
+        # Custom step 1: Validate content.
+        self.update_filenames()
+
+        if self.content.path.remote == None:
+            raise HacsException(
+                f"{self.string} Repository structure for {self.ref.replace('tags/','')} is not compliant"
+            )
+
+        if self.content.path.remote == "release":
+            self.content.single = True
+
+        for error in self.validate.errors:
+            if not self.hacs.status.startup:
+                self.logger.error("%s %s", self.string, error)
+        return self.validate.successt annotations
 
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,17 @@
 from typing import Generator
 
-from homeassistant.core import HomeAssistant
+from     repo.content.path.local = repo.localpath
+
+    response = await ws_client.send_and_receive_json(
+        "hacs/repository/download", {"repository": repo.data.id}
+    )
+    assert response["success"] is True
+
+    assert len(hacs.repositories.list_downloaded) == 2
+
+    assert repo.data.installed is True
+
+    await snapshots.assert_hacs_data(hacs, f"{repository_full_name}/test_download_repository.json")t.core import HomeAssistant
 import pytest
 
 from tests.common import WSClient, get_hacs

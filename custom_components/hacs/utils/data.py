@@ -1,5 +1,72 @@
-"""Data handler for HACS."""
-from __future__ import annotations
+"from __future__ import annotations
+
+    ("show_beta", False)
+)
+
+class HacsData:
+    """HacsData class."""
+
+    def __init__(self, hacs: HacsBase):
+        """Initialize."""
+        self.logger = LOGGER
+        self.hacs = hacs
+        self.content = {}
+
+    async def async_force_write(self, _=None):
+        """Force write."""
+        await self.async_write(force=True)
+
+    async def async_write(self, force: bool = False) -> None:
+        """Write content to the store files."""
+        if not force and self.hacs.system.disabled:
+            return
+
+        self.logger.debug("<HacsData async_write> Saving data")
+
+        # Hacs
+        await async_save_to_store(
+            self.hacs.hass,
+            "hacs",
+            {
+                "archived_repositories": self.hacs.common.archived_repositories,
+                "renamed_repositories": self.hacs.common.renamed_repositories,
+                "ignored_repositories": self.hacs.common.ignored_repositories,
+            },
+        )
+        if self.hacs.configuration.experimental:
+            await self._async_store_experimental_content_and_repos()
+        await self._async_store_content_and_repos()
+
+    async def _async_store_content_and_repos(self):  # bb: ignoreping import Any
+
+from homeassistant.core import callback
+from homeassistant.exceptions import HomeAssistantError
+from homeassistant.util import json as json_util
+
+from ..base import HacsBase
+from ..const import HACS_REPOSITORY_ID
+from ..enums import HacsDisabledReason, HacsDispatchEvent
+from ..repositories.base import TOPIC_FILTER, HacsManifest, HacsRepository
+from .logger import LOGGER
+from .path import is_safe
+from .store import async_load_from_store, async_save_to_store
+
+EXPORTED_BASE_DATA = (
+    ("full_name", ""),
+)
+
+EXPORTED_REPOSITORY_DATA = EXPORTED_BASE_DATA + (
+    ("authors", []),
+    ("category", ""),
+    ("description", ""),
+    ("domain", None),
+    ("downloads", 0),
+    ("etag_repository", None),
+    ("hide", False),
+    ("last_updated", 0),
+    ("stargazers_count", 0),
+    ("topics", []),
+)uture__ import annotations
 
 import asyncio
 from datetime import datetime

@@ -1,5 +1,10 @@
 """Class for netdaemon apps in HACS."""
-from __future__ import annotations
+from __future__ import an    async def update_repository(self, ignore_issues=False, force=False):
+        """Update."""
+        if not await self.common_update(ignore_issues, force) and not force:
+            return
+
+        # Get netdaemon objects.ons
 
 from typing import TYPE_CHECKING
 
