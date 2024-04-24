@@ -1,4 +1,5 @@
-""""Starting setup task: Frontend"."""
+""""Starting setup task: Fronlogger.warning("<HacsFrontend> Frontend development mode enabled. Do not run in production!")
+hass.http.register_static_path(d"."""
 from __future__ import annotations
 
 import os

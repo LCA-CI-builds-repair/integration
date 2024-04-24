@@ -29,7 +29,18 @@ from ..exceptions import (
 )
 from ..types import DownloadableContent
 from ..utils.backup import Backup, BackupNetDaemon
-from ..utils.decode import decode_content
+from ..utils.decode imawait self.common_registration()
+
+# Set correct local path for content
+self.content.path.local = self.localpath
+
+# Run local post-registration steps after setting local path.
+await self.async_post_registraself.repository_object = repository_object
+if self.data.full_name.lower() != repository_object.full_name.lower():
+    self.hacs.common.renamed_repositories[self.data.full_name] = repository_object.full_name
+    if not self.hacs.system.generator:
+        raise HacsRepositoryExistException
+    self.logger.error("%s Repository has been renamed to %s", self.string, repository_object.full_name)_content
 from ..utils.decorator import concurrent
 from ..utils.filters import filter_content_return_one_of_type
 from ..utils.json import json_loads

@@ -1,4 +1,6 @@
-"""Repairs platform for HACS."""
+"""Repairs platform for Hdef handle_first_step_fix_flow():
+    # Add logic here to handle the first step of the fix flow
+    passCS."""
 
 from __future__ import annotations
 

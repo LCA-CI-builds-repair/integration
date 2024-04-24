@@ -1,8 +1,20 @@
 """Set up some common test helper things."""
-# pytest: disable=protected-access
+# pytest: disable=import py_sleep = asyncio.sleep
+asyncio.sleep = lambda seconds: _sleep(0)t
+
+pytestmark = pytest.mark.asynciorotected-access
 import asyncio
 import logging
-import os
+idef config_entry() -> ConfigEntry:
+    """Fixture for a config entry."""
+    yield ConfigEntry(
+        version=1,
+        domain="test_domain",
+        title="Test Config Entry",
+        data={},
+        source="import",
+        connection_class=CONNECTION_NETWORK_MAC,
+    )rt os
 from pathlib import Path
 from unittest.mock import AsyncMock
 
