@@ -29,10 +29,14 @@ from ..exceptions import (
 )
 from ..types import DownloadableContent
 from ..utils.backup import Backup, BackupNetDaemon
-from ..utils.decode import decode_content
+from ..utils.decode imawait self.common_registration()
+# Add 'await' before calling the common_registration method for proper asynchronous executifor error in self.validate.errors:
+    self.logger.error("%s: %s", self.string, error)
+# Update the log message to include the error message in a more descriptive formatort decode_content
 from ..utils.decorator import concurrent
 from ..utils.filters import filter_content_return_one_of_type
-from ..utils.json import json_loads
+from ..utiself.validate.errors.append(f"Download was not completed. Exception: {exception}")
+# Update the error message format to include the exception for better contexts.json import json_loads
 from ..utils.logger import LOGGER
 from ..utils.path import is_safe
 from ..utils.queue_manager import QueueManager

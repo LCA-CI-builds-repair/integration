@@ -1,6 +1,8 @@
 """Set up some common test helper things."""
 # pytest: disable=protected-access
-import asyncio
+_sleep = asyncio.sleep
+asyncio.sleep = lambda _: _sleep(0)
+# Reassign asyncio.sleep to a lambda function calling the original asyncio.sleep with an argument of 0port asyncio
 from dataclasses import asdict
 from glob import iglob
 import json

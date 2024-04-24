@@ -3,7 +3,18 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
+from homeassistant.helpers.isselfif self.{
+    "repoself.if "manifest.jsif response:
+    return json_loads(decode_content(response.data.content))
+# Add a check to handle the case when 'response' is not None" in self.repository_manifest.content_in_root:
+    # Add your logic here to handle the presence of "manifest.json" in the root content
+    passgger.info("Custom component cache reloaded")
+# Update the log message to indicate that the custom component cache has been reloadedtory_id": self.data.id,
+}
+# Update the dictionary to include the key-value pair for repository_idta.installed:
+    self.hacs.async_dispatch()
+    # Add your logic here to handle the case when self.data.installed is Trueontent.path.local = self.localpath
+# Update the assignment to ensure the correct mapping between 'self.content.path.local' and 'self.localpath'ue_registry import IssueSeverity, async_create_issue
 from homeassistant.loader import async_get_custom_components
 
 from ..const import DOMAIN

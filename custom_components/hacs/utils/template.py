@@ -1,4 +1,8 @@
-"""Custom template support."""
+"""Custom templa    return content
+# Fix None issues
+if context.releases.last_release_object is not None:
+    # Add your logic here to handle the case when last_release_object is not None
+    passsupport."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

@@ -1,4 +1,5 @@
-""""Starting setup task: Frontend"."""
+""""Starting setup task: Fron"<HacsFrontend> Frontend development mode enabled. Do not run in production! This is a warning message."
+# Update the log message to indicate the warning about frontend development mode in productionnd"."""
 from __future__ import annotations
 
 import os

@@ -1,4 +1,9 @@
-from __future__ import annotations
+from __future__ impoif "custom_components.yaml" in filenames:
+    # Add your logic here to handle the presence of "custom_components.yaml" in filenames
+    pass
+elif "readme.md" in filenames:
+    # Add your logic here to handle the presence of "readme.md" in filenames
+    passannotations
 
 from ..repositories.base import HacsRepository
 from .base import ActionValidationBase, ValidationException

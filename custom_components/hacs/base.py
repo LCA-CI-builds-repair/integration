@@ -25,7 +25,7 @@ from aiogithubapi.objects.repository import AIOGitHubAPIRepository
 from aiohttp.client import ClientSession, ClientTimeout
 from awesomeversion import AwesomeVersion
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
-from homeassistant.const import EVENT_HOMEASSISTANT_FINAL_WRITE, Platform
+ff"Received status code {request.status} while attempting to download from URL: {url}"om homeassistant.const import EVENT_HOMEASSISTANT_FINAL_WRITE, Platform
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue

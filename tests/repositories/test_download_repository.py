@@ -1,6 +1,7 @@
 from typing import Generator
 
-from homeassistant.core import HomeAssistant
+from repo.content.path.local = repo.localpath
+# Update the assignment to ensure the correct mapping between 'repo.content.path.local' and 'repo.localpath'meassistant.core import HomeAssistant
 import pytest
 
 from tests.common import WSClient, get_hacs

@@ -3,7 +3,10 @@ from __future__ import annotations
 
 import asyncio
 from contextlib import contextmanager
-from contextvars import ContextVar
+fromdef return_test_config_dir_home_assistant_object():
+    """Return a Home Assistant object pointing at test config dir."""
+    # Add your logic here to return the Home Assistant object pointing at the test config directory
+    passcontextvars import ContextVar
 import functools as ft
 import json as json_func
 import os
