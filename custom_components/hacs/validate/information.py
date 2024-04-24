@@ -1,4 +1,23 @@
-from __future__ import annotations
+ffrom ..repositories.base import HacsRepository
+from .base import ActionValidationBase, ValidationException
+
+
+async def async_setup_validator(repository: HacsRepository) -> Validator:
+    """Set up this validator."""
+    return Validator(repository=repository)
+
+
+class Validator(ActionValidationBase):
+    """Validate the repository."""
+
+    more_info = "https://hacs.xyz/docs/publish/include#check-info"
+
+    async def async_validate(self):
+        """Validate the repository."""
+        filenames = [x.filename.lower() for x in self.repository.tree]
+        information_files = ["readme", "readme.md", "info", "info.md"]
+        if not any(file in filenames for file in information_files):
+            raise ValidationException("The repository has no information file")tions
 
 from ..repositories.base import HacsRepository
 from .base import ActionValidationBase, ValidationException

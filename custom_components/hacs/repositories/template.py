@@ -1,4 +1,50 @@
-"""Class for themes in HACS."""
+"from __future__ import annotatio        """Run post installation steps."""
+        await self.hacs.hass.services.async_call("homeassistant", "reload_custom_templates", {})
+
+    async def validate_repository(self):
+        """Validate."""
+        # Run common validation steps.
+        await self.common_validate()
+
+        # Custom step 1: Validate content.
+        self.data.file_name = self.repository_manifest.filename
+
+        if (
+            not self.data.file_name
+            or "/" in self.data.file_name
+            or not self.data.file_name.endswith(".jinja")
+            or self.data.file_name not in self.treefiles
+        ):
+            raise HacsException(
+                f"{self.string} Repository structure for {self.ref.replace('tags/','')} is not compliant"
+            )rt TYPE_CHECKING
+
+from ..enums import HacsCategory, HacsDispatchEvent
+from ..exceptions import HacsException
+from ..utils.decorator import concurrent
+from .base import HacsRepository
+
+if TYPE_CHECKING:
+    from ..base import HacsBase
+
+
+class HacsTemplateRepository(HacsRepository):
+    """Custom templates in HACS."""
+
+    def __init__(self, hacs: HacsBase, full_name: str):
+        """Initialize."""
+        super().__init__(hacs=hacs)
+        self.data.full_name = full_name
+        self.data.full_name_lower = full_name.lower()
+        self.data.category = HacsCategory.TEMPLATE
+        self.content.path.remote = ""
+        self.content.path.local = self.localpath
+        self.content.single = True
+
+    @property
+    def localpath(self) -> str:
+        """Return localpath."""
+        return f"{self.hacs.core.config_path}/custom_templates"
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

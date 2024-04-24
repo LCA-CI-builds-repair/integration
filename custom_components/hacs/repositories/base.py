@@ -36,8 +36,73 @@ from ..utils.json import json_loads
 from ..utils.logger import LOGGER
 from ..utils.path import is_safe
 from ..utils.queue_manager import QueueManager
-from ..utils.store import async_remove_store
-from ..utils.url import archive_download, asset_download
+from ..utils.store import async_        """Return a list of file objects to be dow            if not self.repository_manifest.filen                _content_path = content.path
+             # The code snippet provided for            result = result.decode(encoding="utf-8") \
+                .replace("<svg", "<disabled") \
+                .replace("</svg", "</disabled") \
+                if result else None
+        )
+
+    async def get_hacs_json(self, *, version: str, **kwargs) -> HacsManifest | None:
+        """Get the hacs.json file of the repository."""
+        self.logger.debug("%s Getting hacs.json for version=%s", self.string, version)
+        try:
+            result = await self.hacs.async_download_file(
+                f"https://raw.githubusercontent.com/{self.data.full_name}/{version}/hacs.json",issing. Please provide the code snippet that needs to be edited.  if not self.repository_manifest.content_in_root:
+                    _content_path = _content_path.replace(f"{self.content.path.remote}", "")
+
+                local_directory = f"{self.content.path.local}/{_content_path}"
+                local_directory = local_directory.split("/")
+                del local_directory[-1]
+                local_directory = "/".join(local_directory)
+
+                # Check local directory and create if it doesn't exist
+                pathlib.Path(local_directory).mkdir(parents=True, exist_ok=True)
+
+                local_file_path = (f"{local_directory}/{content.name}").replace("//", "/")
+
+                result = await self.hacs.async_save_file(local_file_path, filecontent)
+                if result:
+                    self.logger.info("%s Download of %s completed", self.string, content.name)
+                    return
+                self.validate.errors.append(f"[{content.name}] was not downloaded.")  if category == "theme":
+                    tree = filter_content_return_one_of_type(self.tree, "", "yaml", "full_path")
+        else:
+            tree = []  # Initialize tree as an empty list if not defined
+
+        for path in tree:
+            if path.is_directory:
+                continue
+            if path.full_path.startswith(self.content.path.remote):
+                files.append(FileInformation(path.download_url, path.full_path, path.filename))
+        return files
+
+    async def release_contents(self, version: str | None = None) -> list[FileInformation] | None:
+        """Gather the contents of a release."""
+        release = await self.hacs.async_github_api_method(
+            method=self.hacs.githubapi.generic,
+            endpoint=f"/repos/{self.data.full_name}/releases/tags/{version}",
+            raise_exception=False,
+        )
+        if release is None:
+            return Nonefiles = []
+        tree = self.tree
+        ref = f"{self.ref}".replace("tags/", "")
+        releaseobjects = self.releases.objects
+        category = self.data.category
+        remotelocation = self.content.path.remote
+
+        if self.should_try_releases:
+            for release in releaseobjects or []:
+                if ref == release.tag_name:
+                    for asset in release.assets or []:
+                        files.append(
+                            FileInformation(asset.browser_download_url, asset.name, asset.name)
+                        )
+            if files:
+                return files
+                
+        return []  # Default return if no files found ..utils.url import archive_download, asset_download
 from ..utils.validate import Validate
 from ..utils.version import (
     version_left_higher_or_equal_then_right,

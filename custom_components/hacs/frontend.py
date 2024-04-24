@@ -1,5 +1,20 @@
-""""Starting setup task: Frontend"."""
-from __future__ import annotations
+""""Starting setup task:    hacs.async_setup_frontend_endpoint_themes()
+
+    # Register frontend
+    if hacs.configuration.dev and (frontend_path := os.getenv("HACS_FRONTEND_DIR")):
+        hacs.log.warning(
+            "<HacsFrontend> Frontend development mode enabled. Do not run in production!"
+        )
+        hass.http.register_static_path(
+            f"{URL_BASE}/frontend", f"{frontend_path}/hacs_frontend", cache_headers=False
+        )
+    elif hacs.configuration.experimental:
+        hacs.log.info("<HacsFrontend> Using experimental frontend")
+        hass.http.register_static_path(
+            f"{URL_BASE}/frontend", experimental_locate_dir(), cache_headers=False
+        )
+    else:
+        # Add default action here if neededom __future__ import annotations
 
 import os
 from typing import TYPE_CHECKING

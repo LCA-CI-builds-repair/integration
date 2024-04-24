@@ -1,8 +1,41 @@
 # pylint: disable=missing-docstring,invalid-name
-from __future__ import annotations
+from __future__ import annotatio    return repository
 
-import asyncio
-from contextlib import contextmanager
+# pylint: disable=protected-access
+async def async_test_ho    return hass
+
+@ha.callback
+def ensure_auth_manager_loaded(auth_mgr):
+    """Ensure an auth manager is considered loaded."""
+    store = auth_mgr._store
+    if store._users is None:
+        store._set_defaults()
+    
+    return store  # Add the return statement here"""Return a Home Assistant object pointing at test config dir."""
+    try:
+        hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
+    except TypeError:
+        hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
+    store = auth_store.AuthStore(hass)
+    hass.auth = auth.AuthManager(hass, store, {}, {})
+    ensure_auth_manager_loaded(hass.auth)
+    INSTANCES.append(hass)
+
+    orig_async_add_job = hass.async_add_job
+    orig_async_add_executor_job = hass.async_add_executor_job
+    orig_async_create_task = hass.async_create_task
+
+    def async_add_job(target, *args):
+        """Add job."""
+        check_target = target
+        while isinstance(check_target, ft.partial):
+            check_target = check_target.func
+
+        if isinstance(check_target, Mock) and not isinstance(target, AsyncMock):
+            fut = asyncio.Future()
+            fut.set_result(target(*args))
+        
+        return fut  # Add the return statement hereextlib import contextmanager
 import functools as ft
 import json
 import os

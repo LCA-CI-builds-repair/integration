@@ -1,5 +1,29 @@
 """Class for themes in HACS."""
-from __future__ import annotations
+f        """Run post installation steps."""
+        try:
+            await self.hacs.hass.services.async_call("frontend", "reload_themes", {})
+        except BaseException:  # lgtm [py/catch-base-exception] pylint: disable=broad-except
+            pass
+
+        self.hacs.async_setup_frontend_endpoint_themes()
+
+    async def validate_repository(self):
+        """Validate."""
+        # Run common validation steps.
+        await self.common_validate()
+
+        # Custom step 1: Validate content.
+        compliant = False
+        for treefile in self.treefiles:
+            if treefile.startswith("themes/") and treefile.endswith(".yaml"):
+                compliant = True
+                break
+        if not compliant:
+            raise HacsException(
+                f"{self.string} Repository structure for {self.ref.replace('tags/','')} is not compliant"
+            )
+
+        if hasattr(self.repository_manifest, 'content_in_root') and self.repository_manifest.content_in_root:otations
 
 from typing import TYPE_CHECKING
 
