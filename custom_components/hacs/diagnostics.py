@@ -1,4 +1,24 @@
-"""Diagnostics support for HACS."""
+"from __future__ import annotations
+
+from typing import Any
+
+from aiogithubapi import GitHubException
+from homeassistant.components.diagnostics import async_redact_data
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+
+from .base import HacsBase
+from .const import DOMAIN
+from .utils.configuration_schema import TOKEN
+
+
+async def async_get_config_entry_diagnostics(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+) -> dict[str, Any]:
+    """Return diagnostics for a config entry."""
+    
+    return {"example_key": "example_value"}rt for HACS."""
 from __future__ import annotations
 
 from typing import Any

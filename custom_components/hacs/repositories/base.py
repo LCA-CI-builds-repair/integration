@@ -31,8 +31,42 @@ from ..types import DownloadableContent
 from ..utils.backup import Backup, BackupNetDaemon
 from ..utils.decode import decode_content
 from ..utils.decorator import concurrent
-from ..utils.filters import filter_content_return_one_of_type
-from ..utils.json import json_loads
+from ..utils.filters import filter_content_return_one_of_        self.hacs.async_dispatch(
+            HacsDispatchEvent.REPOSITORY_DOWNLOAD_PROGRESS,
+            {"repository": self.data.full_name, "progress": 70},
+        )
+
+        if self.validate.errors:
+            # Handle validation errors
+            for error in self.validate.errors:
+                self.logger.error(        device_registry.async_remove_device(device_id=device.id)
+
+    def version_to_download(self) -> str:
+        """Determine which version to download."""
+        if self.data.selected_tag:
+            return self.data.selected_tag
+
+        if self.data.last_version:
+            return self.data.last_version
+
+        if self.data.default_branch and self.data.default_branch in self.data.published_tags:
+            return self.data.default_branch
+
+        return self.data.default_branch or "main" error)
+            if self.data.installed and not self.content.single:
+                # Restore backup and cleanup if needed
+                await self.hacs.hass.async_add_executor_job(backup.restore)
+                await self.hacs.hass.async_add_executor_job(backup.cleanup)
+            raise HacsException("Could not download, see log for details")
+
+        self.hacs.async_dispatch(
+            HacsDispatchEvent.REPOSITORY_DOWNLOAD_PROGRESS,
+            {"repository": self.data.full_name, "progress": 80},
+        )
+
+        if self.data.installed and not self.content.single:
+            # Cleanup backup if not a single content repository
+            await self.hacs.hass.async_add_executor_job(backup.cleanup)son import json_loads
 from ..utils.logger import LOGGER
 from ..utils.path import is_safe
 from ..utils.queue_manager import QueueManager

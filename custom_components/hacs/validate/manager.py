@@ -1,5 +1,33 @@
-"""Hacs validation manager."""
-from __future__ import annotations
+"from __future__ import annotations
+
+import asyncio
+from importlib import import_module
+import os
+from pathlib import Path
+from typing import TYPE_CHECKING
+
+from homeassistant.core import HomeAssistant
+
+from ..repositories.base import HacsRepository
+from .base import ActionValidationBase
+
+if TYPE_CHECKING:
+    from ..base import HacsBase
+
+
+class ValidationManager:
+    """Hacs validation manager."""
+
+    def __init__(self, hacs: HacsBase, hass: HomeAssistant) -> None:
+        """Initialize the setup manager class."""
+        self.hacs = hacs
+        self.hass = hass
+        self._validators: dict[str, ActionValidationBase] = {}
+
+    @property
+    def validators(self) -> dict[str, ActionValidationBase]:
+        """Return a dictionary of all tasks."""
+        return self._validatorsfrom __future__ import annotations
 
 import asyncio
 from importlib import import_module

@@ -1,4 +1,21 @@
-from __future__ import annotations
+from __    """Set up this validator."""
+    return Validator(repository=repository)
+
+
+class Validator(ActionValidationBase):
+    """Validate the repository."""
+
+    more_info = "https://hacs.xyz/docs/publish/include#check-info"
+
+    async def async_validate(self):
+        """Validate the repository."""
+        filenames = [x.filename.lower() for x in self.repository.tree]
+        if "readme" in filenames or "readme.md" in filenames:
+            return  # README file found, validation passed
+        elif "info" in filenames or "info.md" in filenames:
+            return  # Info file found, validation passed
+        else:
+            raise ValidationException("The repository has no valid information file")ions
 
 from ..repositories.base import HacsRepository
 from .base import ActionValidationBase, ValidationException

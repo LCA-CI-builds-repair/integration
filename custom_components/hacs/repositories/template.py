@@ -1,7 +1,28 @@
 """Class for themes in HACS."""
-from __future__ import annotations
+from __future__ import         if self.validate.errors:
+            for error in self.validate.errors:
+                if not self.hacs.status.startup:
+                    self.logger.error("%s %s", self.string, error)
+        return self.validate.success
 
-from typing import TYPE_CHECKING
+    async def async_post_registration(self):
+        """Perform post-registration tasks."""
+        # Set filenames
+        self.data.file_name = self.repository_manifest.filename
+        self.content.path.local = self.localpath
+
+        if self.hacs.system.action:
+            await self.hacs.validation.async_run_repository_checks(self)
+
+    @concurrent(concurrenttasks=10, backoff_time=5)
+    async def update_repository(self, ignore_issues=False, force=False):
+        """Update the repository."""
+        if not await self.common_update(ignore_issues, force) and not force:
+            return
+
+        # Update filenames
+        self.data.file_name = self.repository_manifest.filename
+        self.content.path.local = self.localpath import TYPE_CHECKING
 
 from ..enums import HacsCategory, HacsDispatchEvent
 from ..exceptions import HacsException

@@ -1,6 +1,45 @@
 """Set up some common test helper things."""
-# pytest: disable=protected-access
+# pytest: import logging
+import os
+import pytest
 import asyncio
+from unittest.mock import MagicMock
+from homeassistant.helpers.event import HassEventLoopPolicy
+
+logging.basicConfig(level=logging.DEBUG)
+
+if "GITHUB_ACTION" in os.environ:
+    logging.basicConfig(
+        format="::%(levelname)s:: %(message)s",
+        level=logging.DEBUG,
+    )
+
+# All test coroutines will be treated as marked.
+pytestmark = pytest.mark.asyncio
+
+asyncio.set_event_loop_policy(HassEventLoopPolicy(False))
+# Disable fixtures overriding our beautiful policy
+asyncio.set_event_loop_policy = lambda policy: None
+
+# Disable sleep in tests
+_sleep = asyncio.sleep
+asyncio.sleep = lambda _: _sleep(0)
+
+@pytest.fixture()
+def connection():
+    """Mock fixture for connection."""
+    yield MagicMock()
+
+@pytest.fixture
+def hass_storage():
+    """Fixture to mock storage."""
+    with mock_storage() as stored_data:
+        yield stored_data
+
+@pytest.fixture
+def hass(event_loop, tmpdir):
+    """Fixture for Home Assistant instance."""
+    # Implement the setup of Home Assistant instance hereyncio
 import logging
 import os
 from pathlib import Path

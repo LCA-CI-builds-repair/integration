@@ -5,7 +5,10 @@ import asyncio
 from datetime import datetime
 from typing import Any
 
-from homeassistant.core import callback
+from homeassistant.core impo        try:
+            hacs = await async_load_from_store(self.hacs.hass, "hacs") or {}
+        except HomeAssistantError:
+            passcallback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.util import json as json_util
 

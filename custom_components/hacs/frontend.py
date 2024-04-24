@@ -1,4 +1,27 @@
-""""Starting setup task: Frontend"."""
+"from __future__ import annotations
+
+import os
+from typing import TYPE_CHECKING
+
+from homeassistant.core import HomeAssistant, callback
+
+from .const import DOMAIN, URL_BASE
+from .hacs_frontend import VERSION as FE_VERSION, locate_dir
+from .hacs_frontend_experimental import (
+    VERSION as EXPERIMENTAL_FE_VERSION,
+    locate_dir as experimental_locate_dir,
+)
+
+if TYPE_CHECKING:
+    from .base import HacsBase
+
+
+@callback
+def async_register_frontend(hass: HomeAssistant, hacs: HacsBase) -> None:
+    """Register the frontend."""
+    
+    # Setup themes endpoint if needed
+    hacs.async_setup_frontend_endpoint_themes()Frontend"."""
 from __future__ import annotations
 
 import os

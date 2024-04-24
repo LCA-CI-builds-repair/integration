@@ -4,9 +4,28 @@ HACS gives you a powerful UI to handle downloads of all your custom needs.
 For more details about this integration, please refer to the documentation at
 https://hacs.xyz/
 """
-from __future__ import annotations
+from __future__     async def async_try_startup(_=None):
+        """Startup wrapper for yaml config."""
+        try:
+            startup_result = await async_startup()
+        except AIOGitHubAPIException as e:
+            hacs.log.error("Error during startup: %s", e)
+            startup_result = False
+        
+        if not startup_result:
+            if (
+                hacs.configuration.config_type == ConfigurationType.YAML
+                or hacs.system.disabled_reason != HacsDisabledReason.INVALID_TOKEN
+            ):
+                hacs.log.info("Could not set up HACS, trying again in 15 min")
+                async_call_later(hass, 900, async_try_startup)
+            return
+        
+        hacs.enable_hacs()
 
-import os
+    await async_try_startup()
+
+    # Mischief managed!import os
 from typing import Any
 
 from aiogithubapi import AIOGitHubAPIException, GitHub, GitHubAPI
