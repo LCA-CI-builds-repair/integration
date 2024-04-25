@@ -141,7 +141,7 @@ async def test_registration_issues(
                         ],
                         "some-user/some-invalid-repo": [
                             {"path": "setup.py", "type": "blob"},
-                        ],
+                        ]
                     }[repository_full_name]
                 }
             ),

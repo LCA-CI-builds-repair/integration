@@ -10,7 +10,8 @@
         "error": {
             "auth": "Personal Access Token is not correct",
             "acc": "You need to acknowledge all the statements before continuing"
-        },
+        }
+    }
         "step": {
             "user": {
                 "data": {

@@ -7,6 +7,7 @@ https://hacs.xyz/
 from __future__ import annotations
 
 import os
+import asyncio   # Add missing import for asyncio
 from typing import Any
 
 from aiogithubapi import AIOGitHubAPIException, GitHub, GitHubAPI
