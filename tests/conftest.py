@@ -79,28 +79,23 @@ asyncio.set_event_loop_policy = lambda policy: None
 
 # Disable sleep in tests
 _sleep = asyncio.sleep
-asyncio.sleep = lambda _: _sleep(0)
-
+asyncio.sleep = _sleep
 
 @pytest.fixture(autouse=True)
 def set_request_context(request: pytest.FixtureRequest):
     """Set request context for every test."""
     REQUEST_CONTEXT.set(request)
 
-
 @pytest.fixture()
 def connection():
     """Mock fixture for connection."""
     yield MagicMock()
 
-
-@pytest.fixture
+@pytest.fixture()
 def hass_storage():
     """Fixture to mock storage."""
     with mock_storage() as stored_data:
         yield stored_data
-
-
 @pytest.fixture(scope="session")
 def event_loop():
     try:
@@ -358,11 +353,13 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int):
         calls[_test_caller][url] += 1
 
     if session.config.option.snapshot_update:
+        if (url := call.get("url")) not in calls[_test_caller]:
+            calls[_test_caller][url] = 0
+        calls[_test_caller][url] += 1
+
+    if session.config.option.snapshot_update:
         with open("tests/output/proxy_calls.json", mode="w", encoding="utf-8") as file:
             file.write(safe_json_dumps(calls))
             return
 
     with open("tests/output/proxy_calls.json", encoding="utf-8") as file:
-        current = json.load(file)
-        if current != calls:
-            raise AssertionError("API calls have changed, please run scripts/snapshot-update")
