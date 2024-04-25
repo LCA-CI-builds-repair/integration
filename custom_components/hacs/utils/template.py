@@ -21,7 +21,7 @@ def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> st
     else:
         prerelease = False
 
-    # Render the template
+    # Implement the template rendering logic here
     try:
         return Template(content).render(
             installed=context.data.installed,

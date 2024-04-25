@@ -176,6 +176,8 @@ async def async_test_home_assistant(loop, tmpdir):
     hass.async_start = mock_async_start
 
     async def clear_instance(event):
+        # Implement the functionality for clearing the instance
+        pass
         """Clear global instance."""
         await hass.http.stop()
         INSTANCES.remove(hass)

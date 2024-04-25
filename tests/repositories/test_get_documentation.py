@@ -22,4 +22,4 @@ async def test_validate_repository(hacs: HacsBase, data: dict[str, Any], result:
     hacs.session = await client_session_proxy(hacs.hass)
     docs = await repository.get_documentation(filename="README.md")
 
-    assert result in docs
+    assert expected_result in docs
