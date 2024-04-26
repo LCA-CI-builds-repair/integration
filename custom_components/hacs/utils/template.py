@@ -16,10 +16,7 @@ def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> st
         # Do not render for experimental
         return content
     # Fix None issues
-    if context.releases.last_release_object is not None:
-        prerelease = context.releases.last_release_object.prerelease
-    else:
-        prerelease = False
+    prerelease = context.releases.last_release_object.prerelease if context.releases.last_release_object is not None else False
 
     # Render the template
     try:

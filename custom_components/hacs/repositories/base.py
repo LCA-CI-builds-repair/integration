@@ -765,7 +765,10 @@ class HacsRepository:
             except BaseException:  # lgtm [py/catch-base-exception] pylint: disable=broad-except
                 pass
         elif self.data.category == "template":
-            await self.hacs.hass.services.async_call("homeassistant", "reload_custom_templates", {})
+            if "reload_custom_templates" in self.hacs.hass.services.async_services():
+                await self.hacs.hass.services.async_call("homeassistant", "reload_custom_templates", {})
+            else:
+                # Handle the case where the service is not available
 
         await async_remove_store(self.hacs.hass, f"hacs/{self.data.id}.hacs")
 

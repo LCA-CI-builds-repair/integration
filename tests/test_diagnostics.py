@@ -25,8 +25,6 @@ async def test_diagnostics(hacs: HacsBase, hass: HomeAssistant, config_entry: Co
     assert diagnostics["rate_limit"]["resources"]["core"]["remaining"] == 0
     assert TOKEN not in str(diagnostics)
     assert diagnostics["entry"]["data"]["token"] == REDACTED
-
-
 @pytest.mark.asyncio
 async def test_diagnostics_with_exception(
     hacs: HacsBase, hass: HomeAssistant, config_entry: ConfigEntry
