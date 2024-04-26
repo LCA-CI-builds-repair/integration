@@ -21,7 +21,7 @@ from tests.conftest import SnapshotFixture
     category_test_data_parametrized(
         skip_categories=[HacsCategory.PYTHON_SCRIPT],
         skip_reason="bug in cleanup, using repo name instad of file name.",
-    ),
+# Add the required code content before the closing parenthesis
 )
 async def test_remove_repository(
     hass: HomeAssistant,
