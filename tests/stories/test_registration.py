@@ -122,28 +122,30 @@ async def test_registration_issues(
     )
 
     aresponses.add(
-        "api.github.com",
-        f"/repos/{repository_full_name}/git/trees/main",
-        "get",
-        aresponses.Response(
-            body=json.dumps(
-                {
-                    "tree": {
-                        "home-assistant/core": [],
-                        "home-assistant/addons": [
-                            {"path": "repository.json", "type": "blob"},
-                        ],
-                        "hassio-addons/some-addon": [
-                            {"path": "repository.json", "type": "blob"},
-                        ],
-                        "some-user/addons": [
-                            {"path": "repository.yaml", "type": "blob"},
-                        ],
-                        "some-user/some-invalid-repo": [
-                            {"path": "setup.py", "type": "blob"},
-                        ],
-                    }[repository_full_name]
-                }
+"api.github.com",
+f"/repos/{repository_full_name}/git/trees/main",
+"get",
+aresponses.Response(
+    body=json.dumps(
+        {
+            "tree": {
+                "home-assistant/core": [],
+                "home-assistant/addons": [
+                    {"path": "repository.json", "type": "blob"},
+                ],
+                "hassio-addons/some-addon": [
+                    {"path": "repository.json", "type": "blob"},
+                ],
+                "some-user/addons": [
+                    {"path": "repository.yaml", "type": "blob"},
+                ],
+                "some-user/some-invalid-repo": [
+                    {"path": "setup.py", "type": "blob"},
+                ],
+            }.get(repository_full_name, [])
+        }
+    )
+)
             ),
             headers=response_rate_limit_header,
         ),

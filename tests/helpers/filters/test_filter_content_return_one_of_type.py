@@ -15,17 +15,21 @@ def test_valid_objects():
         ),
         AIOGitHubAPIRepositoryTreeContent(
             {"path": "test/file.png", "type": "blob"}, "test/test", "main"
-        ),
-    ]
-    files = [
-        x.filename
-        for x in filters.filter_content_return_one_of_type(tree, "test", "file", "full_path")
-    ]
-    assert "file.file" in files
-    assert "newfile.file" not in files
-    assert "file.png" in files
+import tests.helpers.filters as filters
 
+# Add proper setup and context for using the filters.filter_content_return_one_of_type function
+# For example:
+# tree = setup_tree()  # Assuming setup_tree() is a function that creates a tree for testing purposes
 
+files = [
+    x.filename
+    for x in filters.filter_content_return_one_of_type(tree, "test", "file", "full_path")
+]
+
+# Add meaningful error messages to the assertion checks
+assert "file.file" in files, "Expected 'file.file' in files"
+assert "newfile.file" not in files, "Unexpected 'newfile.file' in files"
+assert "file.png" in files, "Expected 'file.png' in files"
 def test_valid_list():
     tree = ["test/file.file", "test/newfile.file", "test/file.png"]
 

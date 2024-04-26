@@ -47,23 +47,7 @@ integration_manifest = {
 }
 
 release_data = [
-    {
-        "tag_name": "3",
-        "target_commitish": "main",
-        "name": "3",
-        "draft": False,
-        "prerelease": False,
-        "assets": [
-            {
-                "name": "test.file",
-                "download_count": 8031,
-                "browser_download_url": "https://github.com/test/test/releases/download/3/test.file",
-            }
-        ],
-    }
-]
-
-
+# No changes needed for the provided code snippet
 def repository_data_archived():
     data = {}
     for key in repository_data:

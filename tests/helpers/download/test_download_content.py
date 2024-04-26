@@ -67,7 +67,11 @@ async def test_download_content_integration(repository_integration, aresponses, 
     for integration_file in integration_files:
         repository_integration.tree.append(
             AIOGitHubAPIRepositoryTreeContent(
-                {"path": f"custom_components/test/{integration_file}", "type": "blob"},
+                {"path": f"custom_components/test/{integration_file}", "type": "blob"}
+            )
+        )  # Add the closing parentheses for the constructor
+
+        # Add error handling or logging for potential issues during loop execution
                 "test/test",
                 "main",
             )

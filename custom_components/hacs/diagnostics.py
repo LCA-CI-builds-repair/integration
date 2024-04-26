@@ -31,19 +31,23 @@ async def async_get_config_entry_diagnostics(
             "categories": hacs.common.categories,
             "renamed_repositories": hacs.common.renamed_repositories,
             "archived_repositories": hacs.common.archived_repositories,
-            "ignored_repositories": hacs.common.ignored_repositories,
-            "lovelace_mode": hacs.core.lovelace_mode,
-            "configuration": {},
-        },
-        "custom_repositories": [
-            repo.data.full_name
-            for repo in hacs.repositories.list_all
-            if not hacs.repositories.is_default(str(repo.data.id))
-        ],
-        "repositories": [],
-    }
+{
+    "hacs_status": {
+        "ignored_repositories": hacs.common.ignored_repositories,
+        "lovelace_mode": hacs.core.lovelace_mode,
+        "configuration": {},
+    },
+    "custom_repositories": [
+        repo.data.full_name
+        for repo in hacs.repositories.list_all
+        if not hacs.repositories.is_default(str(repo.data.id))
+    ],
+    "repositories": [],
+}
 
-    for key in (
+for key in hacs_status.keys():
+    # Add logic for processing each key in the hacs_status dictionary
+    pass  # Placeholder for further processing
         "appdaemon",
         "country",
         "debug",

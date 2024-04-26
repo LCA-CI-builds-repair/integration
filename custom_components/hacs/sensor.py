@@ -40,23 +40,30 @@ class HACSSensor(HacsSystemEntity, SensorEntity):
         """Update the sensor."""
 
         repositories = [
-            repository
-            for repository in self.hacs.repositories.list_all
-            if repository.pending_update
-        ]
-        self._attr_native_value = len(repositories)
-        if (
-            self.hacs.configuration.config_type == ConfigurationType.YAML
-            or not self.hacs.configuration.experimental
-        ):
-            self._attr_extra_state_attributes = {
-                "repositories": [
-                    {
-                        "name": repository.data.full_name,
-                        "display_name": repository.display_name,
-                        "installed_version": repository.display_installed_version,
-                        "available_version": repository.display_available_version,
-                    }
-                    for repository in repositories
-                ]
-            }
+repositories = [
+    repository
+    for repository in self.hacs.repositories.list_all
+    if repository.pending_update
+]
+self._attr_native_value = len(repositories)
+
+# Add try-except block for error handling during loop execution
+try:
+    if (
+        self.hacs.configuration.config_type == ConfigurationType.YAML
+        or not self.hacs.configuration.experimental
+    ):
+        self._attr_extra_state_attributes = {
+            "repositories": [
+                {
+                    "name": repository.data.full_name,
+                    "display_name": repository.display_name,
+                    "installed_version": repository.display_installed_version,
+                    "available_version": repository.display_available_version,
+                }
+                for repository in repositories
+            ]
+        }
+except Exception as e:
+    # Add appropriate logging or error handling for potential exceptions
+    logging.error(f"An error occurred during sensor update: {e}")

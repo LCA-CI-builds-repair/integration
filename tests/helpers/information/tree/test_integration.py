@@ -46,16 +46,12 @@ async def test_base(aresponses, repository_integration):
     )
 
     (
-        repository_integration.repository_object,
-        _,
-    ) = await repository_integration.async_get_legacy_repository_object()
-    tree = await repository_integration.get_tree(
-        repository_integration.repository_object.default_branch
-    )
-    filestocheck = [
-        "custom_components/test/__init__.py",
-        "custom_components/test/translations/en.json",
-        "custom_components/test/manifest.json",
-    ]
-    for check in filestocheck:
-        assert check in [x.full_path for x in tree]
+repository_integration.repository_object, _ = await repository_integration.async_get_legacy_repository_object()
+tree = await repository_integration.get_tree(repository_integration.repository_object.default_branch)
+filestocheck = [
+    "custom_components/test/__init__.py",
+    "custom_components/test/translations/en.json",
+    "custom_components/test/manifest.json",
+]
+for check in filestocheck:
+    assert check in [x.full_path for x in tree]

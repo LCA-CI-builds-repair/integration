@@ -284,15 +284,16 @@ class HacsData:
         repository.data.description = repository_data.get("description", "")
         repository.data.downloads = repository_data.get("downloads", 0)
         repository.data.last_updated = repository_data.get("last_updated", 0)
-        if self.hacs.system.generator:
-            repository.data.etag_releases = repository_data.get("etag_releases")
-            repository.data.open_issues = repository_data.get("open_issues", 0)
-        repository.data.etag_repository = repository_data.get("etag_repository")
-        repository.data.topics = [
-            topic for topic in repository_data.get("topics", []) if topic not in TOPIC_FILTER
-        ]
-        repository.data.domain = repository_data.get("domain")
-        repository.data.stargazers_count = repository_data.get(
+if self.hacs.system.generator:
+    repository.data.etag_releases = repository_data.get("etag_releases")
+    repository.data.open_issues = repository_data.get("open_issues", 0)
+repository.data.etag_repository = repository_data.get("etag_repository")
+repository.data.topics = [
+    topic for topic in repository_data.get("topics", []) if topic not in TOPIC_FILTER
+]
+repository.data.domain = repository_data.get("domain")
+repository.data.stargazers_count = repository_data.get("stargazers_count")
+# Add the missing code or closing brackets here
             "stargazers_count"
         ) or repository_data.get("stars", 0)
         repository.releases.last_release = repository_data.get("last_release_tag")

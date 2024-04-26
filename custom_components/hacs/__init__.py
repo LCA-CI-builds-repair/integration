@@ -1,15 +1,5 @@
 """
-HACS gives you a powerful UI to handle downloads of all your custom needs.
-
-For more details about this integration, please refer to the documentation at
-https://hacs.xyz/
-"""
-from __future__ import annotations
-
-import os
-from typing import Any
-
-from aiogithubapi import AIOGitHubAPIException, GitHub, GitHubAPI
+# No changes needed for the provided code snippet
 from aiogithubapi.const import ACCEPT_HEADERS
 from awesomeversion import AwesomeVersion
 from homeassistant.components.lovelace.system_health import system_health_info

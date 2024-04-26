@@ -60,18 +60,19 @@ class ValidationManager:
         )
 
         validatiors = [
-            validator
-            for validator in self.validatiors or []
-            if (
-                (not validator.categories or repository.data.category in validator.categories)
-                and validator.slug not in os.getenv("INPUT_IGNORE", "").split(" ")
-                and (not is_pull_from_fork or validator.allow_fork)
-            )
-        ]
+validators = [
+    validator
+    for validator in self.validators or []
+    if (
+        (not validator.categories or repository.data.category in validator.categories)
+        and validator.slug not in os.getenv("INPUT_IGNORE", "").split(" ")
+        and (not is_pull_from_fork or validator.allow_fork)
+    )
+]
 
-        await asyncio.gather(*[validator.execute_validation() for validator in validatiors])
+await asyncio.gather(*[validator.execute_validation() for validator in validators])
 
-        total = len(validatiors)
+total = len(validators)
         failed = len([x for x in validatiors if x.failed])
 
         if failed != 0:

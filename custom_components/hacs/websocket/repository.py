@@ -310,17 +310,16 @@ async def hacs_repository_release_notes(
     repository = hacs.repositories.get_by_id(msg["repository"])
 
     connection.send_message(
-        websocket_api.result_message(
-            msg["id"],
-            [
-                {
-                    "name": x.name,
-                    "body": x.body,
-                    "tag": x.tag_name,
-                }
-                for x in repository.releases.objects
-                if not repository.data.installed_version
-                or version_left_higher_then_right(x.tag_name, repository.data.installed_version)
-            ],
-        )
-    )
+websocket_api.result_message(
+    msg["id"],
+    [
+        {
+            "name": x.name,
+            "body": x.body,
+            "tag": x.tag_name,
+        }
+        for x in repository.releases.objects
+        if not repository.data.installed_version
+        or version_left_higher_then_right(x.tag_name, repository.data.installed_version)
+    ]
+)

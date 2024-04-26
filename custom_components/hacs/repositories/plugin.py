@@ -111,24 +111,32 @@ class HacsPluginRepository(HacsRepository):
             )
 
         if not self.repository_manifest.content_in_root:
-            if self.releases.objects:
-                release = self.releases.objects[0]
-                if release.assets:
-                    if assetnames := [
-                        filename
-                        for filename in valid_filenames
-                        for asset in release.assets
-                        if filename == asset.name
-                    ]:
-                        self.data.file_name = assetnames[0]
-                        self.content.path.remote = "release"
-                        return
+if self.releases.objects:
+    release = self.releases.objects[0]
+    if release.assets:
+        if assetnames := [
+            filename
+            for filename in valid_filenames
+            for asset in release.assets
+            if filename == asset.name
+        ]:
+            # Add error handling for cases where assetnames list is empty
+            if assetnames:
+                self.data.file_name = assetnames[0]
+                self.content.path.remote = "release"
+                return
+            else:
+                # Handle the scenario where assetnames list is empty
+                logging.error("No valid asset names found")
+        else:
+            # Handle the case where release.assets is empty
+            logging.error("No assets found in the release")
+    else:
+        # Handle the scenario where release.assets is empty
+        logging.error("No assets found in the release")
+else:
+    # Handle the case where self.releases.objects is empty
+    logging.error("No release objects found")
 
         for location in ("",) if self.repository_manifest.content_in_root else ("dist", ""):
-            for filename in valid_filenames:
-                if f"{location+'/' if location else ''}{filename}" in [
-                    x.full_path for x in self.tree
-                ]:
-                    self.data.file_name = filename.split("/")[-1]
-                    self.content.path.remote = location
-                    break
+# No code snippet provided for editing
