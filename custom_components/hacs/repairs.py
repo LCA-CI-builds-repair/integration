@@ -31,7 +31,7 @@ class RestartRequiredFixFlow(RepairsFlow):
         self, user_input: dict[str, str] | None = None
     ) -> data_entry_flow.FlowResult:
         """Handle the confirm step of a fix flow."""
-        if user_input is not None:
+        if user_input is not None and user_input.get("confirm_restart") == "yes":
             await self.hass.services.async_call("homeassistant", "restart")
             return self.async_create_entry(title="", data={})
 

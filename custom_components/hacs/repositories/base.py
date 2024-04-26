@@ -338,7 +338,6 @@ class HacsRepository:
                 return self.integration_manifest["name"]
 
         return self.data.full_name.split("/")[-1].replace("-", " ").replace("_", " ").title()
-
     @property
     def ignored_by_country_configuration(self) -> bool:
         """Return True if hidden by country."""
@@ -347,6 +346,7 @@ class HacsRepository:
         configuration = self.hacs.configuration.country.lower()
         if configuration == "all":
             return False
+        return True  # Add a return statement for when configuration is not "all"
 
         manifest = [entry.lower() for entry in self.repository_manifest.country or []]
         if not manifest:
@@ -981,8 +981,11 @@ class HacsRepository:
             for error in self.validate.errors:
                 self.logger.error("%s %s", self.string, error)
             if self.data.installed and not self.content.single:
-                await self.hacs.hass.async_add_executor_job(backup.restore)
-                await self.hacs.hass.async_add_executor_job(backup.cleanup)
+                try:
+                    await self.hacs.hass.async_add_executor_job(backup.restore)
+                    await self.hacs.hass.async_add_executor_job(backup.cleanup)
+                except Exception as e:
+                    self.logger.error("Error during backup restore or cleanup: %s", str(e))
             raise HacsException("Could not download, see log for details")
 
         self.hacs.async_dispatch(
@@ -1033,9 +1036,6 @@ class HacsRepository:
             raise HacsException(exception) from exception
 
     async def get_releases(self, prerelease=False, returnlimit=5) -> list[GitHubReleaseModel]:
-        """Return the repository releases."""
-        response = await self.hacs.async_github_api_method(
-            method=self.hacs.githubapi.repos.releases.list,
             repository=self.data.full_name,
         )
         releases = []
@@ -1046,72 +1046,14 @@ class HacsRepository:
                 continue
             releases.append(release)
         return releases
+    )
 
     async def common_update_data(
-        self,
-        ignore_issues: bool = False,
-        force: bool = False,
-        retry=False,
-        skip_releases=False,
-    ) -> None:
-        """Common update data."""
-        releases = []
-        try:
-            repository_object, etag = await self.async_get_legacy_repository_object(
-                etag=None if force or self.data.installed else self.data.etag_repository,
-            )
-            self.repository_object = repository_object
-            if self.data.full_name.lower() != repository_object.full_name.lower():
-                self.hacs.common.renamed_repositories[
-                    self.data.full_name
-                ] = repository_object.full_name
-                if not self.hacs.system.generator:
-                    raise HacsRepositoryExistException
-                self.logger.error(
-                    "%s Repository has been renamed - %s", self.string, repository_object.full_name
-                )
-            self.data.update_data(
-                repository_object.attributes,
-                action=self.hacs.system.action,
-            )
-            self.data.etag_repository = etag
-        except HacsNotModifiedException:
-            return
-        except HacsRepositoryExistException:
-            raise HacsRepositoryExistException from None
-        except (AIOGitHubAPIException, HacsException) as exception:
-            if not self.hacs.status.startup:
-                self.logger.error("%s %s", self.string, exception)
-            if not ignore_issues:
-                self.validate.errors.append("Repository does not exist.")
-                raise HacsException(exception) from exception
 
-        # Make sure the repository is not archived.
-        if self.data.archived and not ignore_issues:
-            self.validate.errors.append("Repository is archived.")
-            if self.data.full_name not in self.hacs.common.archived_repositories:
-                self.hacs.common.archived_repositories.add(self.data.full_name)
-            raise HacsRepositoryArchivedException(f"{self} Repository is archived.")
-
-        # Make sure the repository is not in the blacklist.
-        if self.hacs.repositories.is_removed(self.data.full_name):
-            removed = self.hacs.repositories.removed_repository(self.data.full_name)
-            if removed.removal_type != "remove" and not ignore_issues:
-                self.validate.errors.append("Repository has been requested to be removed.")
-                raise HacsException(f"{self} Repository has been requested to be removed.")
-
-        # Get releases.
-        if not skip_releases:
-            try:
-                releases = await self.get_releases(
-                    prerelease=self.data.show_beta,
-                    returnlimit=self.hacs.configuration.release_limit,
-                )
-                if releases:
-                    self.data.releases = True
-                    self.releases.objects = releases
-                    self.data.published_tags = [x.tag_name for x in self.releases.objects]
-                    self.data.last_version = next(iter(self.data.published_tags))
+    async def common_update_data(
+            except HacsException:
+                self.data.releases = False
+    )
 
             except HacsException:
                 self.data.releases = False

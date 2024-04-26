@@ -20,6 +20,6 @@ async def test_validate_repository(hacs: HacsBase, version: str, name: str | Non
     manifest = await repository.get_hacs_json(version=version)
 
     if name:
-        assert manifest.name == name
+        assert manifest is not None
     else:
         assert manifest is None

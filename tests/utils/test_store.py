@@ -69,4 +69,4 @@ async def test_store_store(hass: HomeAssistant, caplog: pytest.LogCaptureFixture
         )
 
         await async_save_to_store(hass, "test", {"test": "test"})
-        assert async_save_mock.call_count == 1
+        async_save_mock.assert_called_once_with(expected_data)
