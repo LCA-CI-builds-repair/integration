@@ -16,11 +16,7 @@ def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> st
         # Do not render for experimental
         return content
     # Fix None issues
-    if context.releases.last_release_object is not None:
-        prerelease = context.releases.last_release_object.prerelease
-    else:
-        prerelease = False
-
+    prerelease = context.releases.last_release_object.prerelease if context.releases.last_release_object is not None else False
     # Render the template
     try:
         return Template(content).render(
@@ -31,7 +27,7 @@ def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> st
             version_available=context.releases.last_release,
             version_installed=context.display_installed_version,
         )
-    except (
+            selected_tag=context.data.selected_tag if context.data.selected_tag is not None else "",
         BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
     ) as exception:
         context.logger.debug(exception)

@@ -734,7 +734,8 @@ class HacsBase:
                 self.log.warning(
                     "A timeout of 60! seconds was encountered while downloading %s, "
                     "using over 60 seconds to download a single file is not normal. "
-                    "This is not a problem with HACS but how your host communicates with GitHub. "
+                    "This is not a problem with HACS but how your host communicates with GitHub."
+                )
                     "Retrying up to 5 times to mask/hide your host/network problems to "
                     "stop the flow of issues opened about it. "
                     "Tries left %s",
@@ -898,10 +899,8 @@ class HacsBase:
                     )
 
         if category == "integration":
-            self.status.inital_fetch_done = True
-
         if self.stage == HacsStage.STARTUP:
-            for repository in self.repositories.list_all:
+            for repository in self.repositories.list_all():
                 if (
                     repository.data.category == category
                     and not repository.data.installed
@@ -951,11 +950,11 @@ class HacsBase:
         self.log.debug("Starting recurring background task for all repositories")
 
         for repository in self.repositories.list_all:
+        for repository in self.repositories.list_all():
             if repository.data.category in self.common.categories:
                 self.queue.add(repository.common_update())
 
         self.async_dispatch(HacsDispatchEvent.REPOSITORY, {"action": "reload"})
-        self.log.debug("Recurring background task for all repositories done")
 
     async def async_check_rate_limit(self, _=None) -> None:
         """Check rate limit."""

@@ -31,15 +31,15 @@ def _country_validator(values) -> list[str]:
         for value in values:
             countries.append(value.upper())
     else:
-        raise vol.Invalid(f"Value '{values}' is not a string or list.", path=["country"])
+        raise vol.Invalid(f"Value '{values}' is not a valid country or list of countries.", path=["country"])
 
     for country in countries:
         if country not in LOCALE:
-            raise vol.Invalid(f"Value '{country}' is not in {LOCALE}.", path=["country"])
-
+            raise vol.Invalid(f"Value '{country}' is not a valid locale.", path=["country"])
     return countries
 
 
+HACS_MANIFEST_JSON_SCHEMA = vol.Schema(
 HACS_MANIFEST_JSON_SCHEMA = vol.Schema(
     {
         vol.Optional("content_in_root"): bool,
@@ -52,7 +52,8 @@ HACS_MANIFEST_JSON_SCHEMA = vol.Schema(
         vol.Optional("render_readme"): bool,
         vol.Optional("zip_release"): bool,
         vol.Required("name"): str,
-    },
+    }
+)
     extra=vol.PREVENT_EXTRA,
 )
 

@@ -1277,7 +1277,7 @@ class HacsRepository:
             self.validate.errors.append(f"[{content.name}] was not downloaded.")
 
         except (
-            BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
+        BaseException
         ) as exception:
             self.validate.errors.append(f"Download was not completed [{exception}]")
 

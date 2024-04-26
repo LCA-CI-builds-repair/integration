@@ -28,19 +28,22 @@ def update():
             storage["data"][repo][key] = None
 
         if old.get(repo, {}).get("etag_repository") != storage["data"][repo].get("etag_repository"):
-            updated += 1
+import os
+import json
 
-        to_store[repo] = storage["data"][repo]
+for repo in storage["data"]:
+    updated += 1
 
-    with open(
-        f"{os.getcwd()}/custom_components/hacs/utils/default.repositories",
-        mode="w",
-        encoding="utf-8",
-    ) as to_store_file:
-        to_store_file.write(json.dumps(to_store))
+    to_store[repo] = storage["data"][repo]
 
-    print(f"{updated} was updated")
+with open(
+    f"{os.getcwd()}/custom_components/hacs/utils/default.repositories",
+    mode="w",
+    encoding="utf-8",
+) as to_store_file:
+    to_store_file.write(json.dumps(to_store))
 
+print(f"{updated} was updated")
 
 if __name__ == "__main__":
     update()

@@ -73,27 +73,6 @@ class HacsData:
             return
 
         self.logger.debug("<HacsData async_write> Saving data")
-
-        # Hacs
-        await async_save_to_store(
-            self.hacs.hass,
-            "hacs",
-            {
-                "archived_repositories": self.hacs.common.archived_repositories,
-                "renamed_repositories": self.hacs.common.renamed_repositories,
-                "ignored_repositories": self.hacs.common.ignored_repositories,
-            },
-        )
-        if self.hacs.configuration.experimental:
-            await self._async_store_experimental_content_and_repos()
-        await self._async_store_content_and_repos()
-
-    async def _async_store_content_and_repos(self, _=None):  # bb: ignore
-        """Store the main repos file and each repo that is out of date."""
-        # Repositories
-        self.content = {}
-        for repository in self.hacs.repositories.list_all:
-            if repository.data.category in self.hacs.common.categories:
                 self.async_store_repository_data(repository)
 
         await async_save_to_store(self.hacs.hass, "repositories", self.content)
@@ -106,29 +85,9 @@ class HacsData:
         self.content = {}
         for repository in self.hacs.repositories.list_all:
             if repository.data.category in self.hacs.common.categories:
-                self.async_store_experimental_repository_data(repository)
+                await self.async_store_experimental_repository_data(repository)
 
         await async_save_to_store(self.hacs.hass, "data", {"repositories": self.content})
-
-    @callback
-    def async_store_repository_data(self, repository: HacsRepository) -> dict:
-        """Store the repository data."""
-        data = {"repository_manifest": repository.repository_manifest.manifest}
-
-        for key, default in (
-            EXPORTED_DOWNLOADED_REPOSITORY_DATA
-            if repository.data.installed
-            else EXPORTED_REPOSITORY_DATA
-        ):
-            if (value := getattr(repository.data, key, default)) != default:
-                data[key] = value
-
-        if repository.data.installed_version:
-            data["version_installed"] = repository.data.installed_version
-        if repository.data.last_fetched:
-            data["last_fetched"] = repository.data.last_fetched.timestamp()
-
-        self.content[str(repository.data.id)] = data
 
     @callback
     def async_store_experimental_repository_data(self, repository: HacsRepository) -> None:
@@ -297,30 +256,22 @@ class HacsData:
         ) or repository_data.get("stars", 0)
         repository.releases.last_release = repository_data.get("last_release_tag")
         repository.data.releases = repository_data.get("releases", False)
-        repository.data.installed = repository_data.get("installed", False)
-        repository.data.new = repository_data.get("new", False)
-        repository.data.selected_tag = repository_data.get("selected_tag")
-        repository.data.show_beta = repository_data.get("show_beta", False)
-        repository.data.last_version = repository_data.get("last_version")
-        repository.data.last_commit = repository_data.get("last_commit")
-        repository.data.installed_version = repository_data.get("version_installed")
-        repository.data.installed_commit = repository_data.get("installed_commit")
-        repository.data.manifest_name = repository_data.get("manifest_name")
+                check=False,
+                repository_id=entry,
+            )
+            for entry, repo_data in repositories.items()
+            if entry != "0"
+            and not self.hacs.repositories.is_registered(repository_id=entry)
+            and repo_data.get("category") is not None
+        ]
+        if register_tasks:
 
         if last_fetched := repository_data.get("last_fetched"):
-            repository.data.last_fetched = datetime.fromtimestamp(last_fetched)
-
-        repository.repository_manifest = HacsManifest.from_dict(
-            repository_data.get("manifest") or repository_data.get("repository_manifest") or {}
-        )
-
-        if repository.localpath is not None and is_safe(self.hacs, repository.localpath):
-            # Set local path
-            repository.content.path.local = repository.localpath
+        if not repository:
 
         if repository.data.installed:
-            repository.data.first_install = False
-
-        if entry == HACS_REPOSITORY_ID:
-            repository.data.installed_version = self.hacs.version
-            repository.data.installed = True
+        repository: HacsRepository | None = None
+        if full_name := repository_data.get("full_name"):
+            repository = self.hacs.repositories.get_by_full_name(full_name)
+        if repository is None:
+            repository = self.hacs.repositories.get_by_id(entry)
