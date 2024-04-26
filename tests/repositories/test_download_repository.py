@@ -32,7 +32,6 @@ async def test_download_repository(
 
     assert len(hacs.repositories.list_downloaded) == 1
 
-    # workaround for local path bug in tests
     repo.content.path.local = repo.localpath
 
     response = await ws_client.send_and_receive_json(

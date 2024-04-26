@@ -1,7 +1,7 @@
 """Class for integrations in HACS."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
 from homeassistant.loader import async_get_custom_components
@@ -14,8 +14,6 @@ from ..utils.decorator import concurrent
 from ..utils.filters import get_first_directory_in_directory
 from ..utils.json import json_loads
 from .base import HacsRepository
-
-if TYPE_CHECKING:
     from ..base import HacsBase
 
 
@@ -31,6 +29,7 @@ class HacsIntegrationRepository(HacsRepository):
         self.content.path.remote = "custom_components"
         self.content.path.local = self.localpath
 
+    @property
     @property
     def localpath(self):
         """Return localpath."""
@@ -93,10 +92,10 @@ class HacsIntegrationRepository(HacsRepository):
 
             except KeyError as exception:
                 self.validate.errors.append(
-                    f"Missing expected key '{exception}' in { RepositoryFile.MAINIFEST_JSON}"
+                    f"Missing expected key '{exception}' in { RepositoryFile.MANIFEST_JSON}"
                 )
                 self.hacs.log.error(
-                    "Missing expected key '%s' in '%s'", exception, RepositoryFile.MAINIFEST_JSON
+                    "Missing expected key '%s' in '%s'", exception, RepositoryFile.MANIFEST_JSON
                 )
 
         # Set local path
@@ -117,9 +116,10 @@ class HacsIntegrationRepository(HacsRepository):
 
         if self.repository_manifest.content_in_root:
             self.content.path.remote = ""
-
-        if self.content.path.remote == "custom_components":
             name = get_first_directory_in_directory(self.tree, "custom_components")
+            self.content.path.remote = f"custom_components/{name}"
+
+        # Get the content of manifest.json
             self.content.path.remote = f"custom_components/{name}"
 
         # Get the content of manifest.json
@@ -133,10 +133,10 @@ class HacsIntegrationRepository(HacsRepository):
 
             except KeyError as exception:
                 self.validate.errors.append(
-                    f"Missing expected key '{exception}' in { RepositoryFile.MAINIFEST_JSON}"
+                    f"Missing expected key '{exception}' in { RepositoryFile.MANIFEST_JSON}"
                 )
                 self.hacs.log.error(
-                    "Missing expected key '%s' in '%s'", exception, RepositoryFile.MAINIFEST_JSON
+                    "Missing expected key '%s' in '%s'", exception, RepositoryFile.MANIFEST_JSON
                 )
 
         # Set local path
@@ -155,7 +155,7 @@ class HacsIntegrationRepository(HacsRepository):
             )
 
     async def reload_custom_components(self):
-        """Reload custom_components (and config flows)in HA."""
+        """Reload custom_components (and config flows) in HA."""
         self.logger.info("Reloading custom_component cache")
         del self.hacs.hass.data["custom_components"]
         await async_get_custom_components(self.hacs.hass)
@@ -163,14 +163,10 @@ class HacsIntegrationRepository(HacsRepository):
 
     async def async_get_integration_manifest(self, ref: str = None) -> dict[str, Any] | None:
         """Get the content of the manifest.json file."""
-        manifest_path = (
-            "manifest.json"
-            if self.repository_manifest.content_in_root
-            else f"{self.content.path.remote}/{RepositoryFile.MAINIFEST_JSON}"
-        )
+        manifest_path = "manifest.json"
 
         if not manifest_path in (x.full_path for x in self.tree):
-            raise HacsException(f"No {RepositoryFile.MAINIFEST_JSON} file found '{manifest_path}'")
+            else f"{self.content.path.remote}/{RepositoryFile.MANIFEST_JSON}"
 
         response = await self.hacs.async_github_api_method(
             method=self.hacs.githubapi.repos.contents.get,

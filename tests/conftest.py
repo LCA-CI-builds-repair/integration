@@ -94,7 +94,7 @@ def connection():
     yield MagicMock()
 
 
-@pytest.fixture
+@pytest.fixture()
 def hass_storage():
     """Fixture to mock storage."""
     with mock_storage() as stored_data:
@@ -358,11 +358,10 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int):
         calls[_test_caller][url] += 1
 
     if session.config.option.snapshot_update:
-        with open("tests/output/proxy_calls.json", mode="w", encoding="utf-8") as file:
-            file.write(safe_json_dumps(calls))
-            return
+with open("tests/output/proxy_calls.json", mode="w", encoding="utf-8") as file:
+    file.write(safe_json_dumps(calls))
 
-    with open("tests/output/proxy_calls.json", encoding="utf-8") as file:
-        current = json.load(file)
-        if current != calls:
-            raise AssertionError("API calls have changed, please run scripts/snapshot-update")
+with open("tests/output/proxy_calls.json", encoding="utf-8") as file:
+    current = json.load(file)
+    if current != calls:
+        raise AssertionError("API calls have changed, please run scripts/snapshot-update")

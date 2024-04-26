@@ -531,7 +531,6 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
         )
 
     base._request = _request
-
     return base
 
 

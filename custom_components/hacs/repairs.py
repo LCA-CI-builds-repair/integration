@@ -18,8 +18,6 @@ class RestartRequiredFixFlow(RepairsFlow):
     """Handler for an issue fixing flow."""
 
     def __init__(self, issue_id: str) -> None:
-        self.issue_id = issue_id
-
     async def async_step_init(
         self, user_input: dict[str, str] | None = None
     ) -> data_entry_flow.FlowResult:
@@ -33,7 +31,7 @@ class RestartRequiredFixFlow(RepairsFlow):
         """Handle the confirm step of a fix flow."""
         if user_input is not None:
             await self.hass.services.async_call("homeassistant", "restart")
-            return self.async_create_entry(title="", data={})
+            return self.async_create_entry(title="Restart Home Assistant", data={})
 
         hacs: HacsBase = self.hass.data[DOMAIN]
         integration = hacs.repositories.get_by_id(self.issue_id.split("_")[2])

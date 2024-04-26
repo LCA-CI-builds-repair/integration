@@ -852,7 +852,7 @@ class HacsRepository:
             self.force_branch = True
 
         if not await self.validate_repository():
-            return False
+        return False
 
         # Run common registration steps.
         await self.common_registration()

@@ -735,6 +735,7 @@ class HacsBase:
                     "A timeout of 60! seconds was encountered while downloading %s, "
                     "using over 60 seconds to download a single file is not normal. "
                     "This is not a problem with HACS but how your host communicates with GitHub. "
+                )
                     "Retrying up to 5 times to mask/hide your host/network problems to "
                     "stop the flow of issues opened about it. "
                     "Tries left %s",
