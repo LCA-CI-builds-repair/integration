@@ -1048,36 +1048,8 @@ class HacsRepository:
         return releases
 
     async def common_update_data(
-        self,
-        ignore_issues: bool = False,
-        force: bool = False,
-        retry=False,
-        skip_releases=False,
-    ) -> None:
-        """Common update data."""
-        releases = []
-        try:
-            repository_object, etag = await self.async_get_legacy_repository_object(
-                etag=None if force or self.data.installed else self.data.etag_repository,
-            )
-            self.repository_object = repository_object
-            if self.data.full_name.lower() != repository_object.full_name.lower():
-                self.hacs.common.renamed_repositories[
-                    self.data.full_name
-                ] = repository_object.full_name
-                if not self.hacs.system.generator:
-                    raise HacsRepositoryExistException
-                self.logger.error(
-                    "%s Repository has been renamed - %s", self.string, repository_object.full_name
-                )
-            self.data.update_data(
-                repository_object.attributes,
-                action=self.hacs.system.action,
-            )
-            self.data.etag_repository = etag
-        except HacsNotModifiedException:
-            return
         except HacsRepositoryExistException:
+            # Add appropriate exception handling or logging here
             raise HacsRepositoryExistException from None
         except (AIOGitHubAPIException, HacsException) as exception:
             if not self.hacs.status.startup:
