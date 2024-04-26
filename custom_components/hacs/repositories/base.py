@@ -1111,7 +1111,7 @@ class HacsRepository:
                     self.data.releases = True
                     self.releases.objects = releases
                     self.data.published_tags = [x.tag_name for x in self.releases.objects]
-                    self.data.last_version = next(iter(self.data.published_tags))
+self.data.published_tags.sort()
 
             except HacsException:
                 self.data.releases = False

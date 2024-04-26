@@ -65,12 +65,6 @@ pytestmark = pytest.mark.asyncio
 
 asyncio.set_event_loop_policy(HassEventLoopPolicy(False))
 # Disable fixtures overriding our beautiful policy
-asyncio.set_event_loop_policy = lambda policy: None
-
-# Disable sleep in tests
-_sleep = asyncio.sleep
-asyncio.sleep = lambda _: _sleep(0)
-
 
 @pytest.fixture()
 def connection():
