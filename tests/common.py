@@ -76,8 +76,7 @@ def dummy_repository_base(hacs, repository=None):
     repository.hacs_manifest = HacsManifest.from_dict({})
 
     async def update_repository(*args, **kwargs):
-        pass
-
+        # Add the implementation or functionality here
     repository.update_repository = update_repository
     return repository
 

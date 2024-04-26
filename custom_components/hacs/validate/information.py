@@ -17,13 +17,5 @@ class Validator(ActionValidationBase):
     async def async_validate(self):
         """Validate the repository."""
         filenames = [x.filename.lower() for x in self.repository.tree]
-        if "readme" in filenames:
-            pass
-        elif "readme.md" in filenames:
-            pass
-        elif "info" in filenames:
-            pass
-        elif "info.md" in filenames:
-            pass
-        else:
+        if "readme" not in filenames and "readme.md" not in filenames and "info" not in filenames and "info.md" not in filenames:
             raise ValidationException("The repository has no information file")
