@@ -978,12 +978,15 @@ class HacsRepository:
         )
 
         if self.validate.errors:
-            for error in self.validate.errors:
-                self.logger.error("%s %s", self.string, error)
-            if self.data.installed and not self.content.single:
-                await self.hacs.hass.async_add_executor_job(backup.restore)
-                await self.hacs.hass.async_add_executor_job(backup.cleanup)
-            raise HacsException("Could not download, see log for details")
+from custom_components.hacs.exceptions import HacsException
+from custom_components.hacs.helpers.backup import backup
+
+for error in self.validate.errors:
+    self.logger.error("%s %s", self.string, error)
+if self.data.installed and not self.content.single:
+    await self.hacs.hass.async_add_executor_job(backup.restore)
+    await self.hacs.hass.async_add_executor_job(backup.cleanup)
+raise HacsException("Could not download, see log for details")
 
         self.hacs.async_dispatch(
             HacsDispatchEvent.REPOSITORY_DOWNLOAD_PROGRESS,
@@ -1033,34 +1036,40 @@ class HacsRepository:
             raise HacsException(exception) from exception
 
     async def get_releases(self, prerelease=False, returnlimit=5) -> list[GitHubReleaseModel]:
-        """Return the repository releases."""
-        response = await self.hacs.async_github_api_method(
-            method=self.hacs.githubapi.repos.releases.list,
-            repository=self.data.full_name,
-        )
-        releases = []
-        for release in response.data or []:
-            if len(releases) == returnlimit:
-                break
+# Assuming response and returnlimit are external dependencies that need to be imported
+# Add appropriate import statements for them
+
+repository=self.data.full_name,
+)
+releases = []
+for release in response.data or []:
+    if len(releases) == returnlimit:
+        break
+    if release.draft:
+        continue
+    if release.prerelease and not prerelease:
+        continue
+    releases.append(release)
             if release.draft or (release.prerelease and not prerelease):
                 continue
             releases.append(release)
         return releases
 
     async def common_update_data(
-        self,
-        ignore_issues: bool = False,
-        force: bool = False,
-        retry=False,
-        skip_releases=False,
-    ) -> None:
-        """Common update data."""
-        releases = []
-        try:
-            repository_object, etag = await self.async_get_legacy_repository_object(
-                etag=None if force or self.data.installed else self.data.etag_repository,
-            )
-            self.repository_object = repository_object
+try:
+    repository_object, etag = await self.async_get_legacy_repository_object(
+        etag=None if force or self.data.installed else self.data.etag_repository,
+    )
+    self.repository_object = repository_object
+    if self.data.full_name.lower() != repository_object.full_name.lower():
+        self.hacs.common.renamed_repositories[
+            self.data.full_name
+        ] = repository_object.full_name
+        if not self.hacs.system.generator:
+            raise HacsRepositoryExistException
+        self.logger.error(
+            "%s Repository has been renamed - %s", self.string, repository_object.full_name
+        )
             if self.data.full_name.lower() != repository_object.full_name.lower():
                 self.hacs.common.renamed_repositories[
                     self.data.full_name

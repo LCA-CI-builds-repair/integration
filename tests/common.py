@@ -161,19 +161,22 @@ async def async_test_home_assistant(loop, tmpdir):
     hass.state = ha.CoreState.running
 
     # Mock async_start
-    orig_start = hass.async_start
+from unittest.mock import patch
+from homeassistant.components.http import HTTP_CONFIG_SCHEMA
 
-    await http_async_setup(hass, HTTP_CONFIG_SCHEMA({}))
+orig_start = hass.async_start
 
-    async def mock_async_start():
-        """Start the mocking."""
-        # We only mock time during tests and we want to track tasks
-        with patch("homeassistant.core._async_create_timer"), patch.object(
-            hass, "async_stop_track_tasks"
-        ):
-            await orig_start()
+await http_async_setup(hass, HTTP_CONFIG_SCHEMA({}))
 
-    hass.async_start = mock_async_start
+async def mock_async_start():
+    """Start the mocking."""
+    # We only mock time during tests and we want to track tasks
+    with patch("homeassistant.core._async_create_timer"), patch.object(
+        hass, "async_stop_track_tasks"
+    ):
+        await orig_start()
+
+hass.async_start = mock_async_start
 
     async def clear_instance(event):
         """Clear global instance."""
