@@ -49,7 +49,6 @@ class QueueManager:
             return
 
         self.running = True
-
         _LOGGER.debug("<QueueManager> Checking out tasks to execute")
         local_queue = []
 
@@ -57,7 +56,7 @@ class QueueManager:
             for task in self.queue[:number_of_tasks]:
                 local_queue.append(task)
         else:
-            for task in self.queue:
+            for task in self.queue[:]:
                 local_queue.append(task)
 
         for task in local_queue:

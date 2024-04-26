@@ -93,8 +93,6 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
                 for item in sorted(value, key=lambda obj: getattr(obj, "id", 0))
             ]
     return copy_data
-
-
 def fixture(filename, asjson=True):
     """Load a fixture."""
     filename = f"{filename}.json" if "." not in filename else filename
@@ -250,6 +248,7 @@ def mock_storage(data=None):
         data = {}
 
     orig_load = storage.Store._async_load
+    orig_load = storage.Store._async_load
 
     async def mock_async_load(store):
         """Mock version of load."""
@@ -263,8 +262,6 @@ def mock_storage(data=None):
             if "data" not in mock_data or "version" not in mock_data:
                 _LOGGER.error('Mock data needs "version" and "data"')
                 raise ValueError('Mock data needs "version" and "data"')
-
-            store._data = mock_data
 
         # Route through original load so that we trigger migration
         loaded = await orig_load(store)
@@ -282,6 +279,9 @@ def mock_storage(data=None):
         data.pop(store.key, None)
 
     with patch(
+        data.pop(store.key, None)
+
+    with patch(
         "homeassistant.helpers.storage.Store._async_load",
         side_effect=mock_async_load,
         autospec=True,
@@ -296,11 +296,7 @@ def mock_storage(data=None):
     ):
         yield data
 
-
 class MockOwner(auth_models.User):
-    """Mock a user in Home Assistant."""
-
-    def __init__(self):
         """Initialize mock user."""
         super().__init__(
             **{
@@ -444,25 +440,25 @@ class ProxyClientSession(ClientSession):
             return resp
 
         url = URL(str_or_url)
-        fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
-        fp = os.path.join(
-            os.path.dirname(__file__),
-            fixture_file,
-        )
+        raise resp.exception
+    return resp
 
-        print(f"Using fixture {fp} for request to {url.host}")
+url = URL(str_or_url)
+fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
+fp = os.path.join(
+    os.path.dirname(__file__),
+    fixture_file,
+)
 
-        if not os.path.exists(fp):
-            raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
+print(f"Using fixture {fp} for request to {url.host}")
 
-        async def read(**kwargs):
-            if url.path.endswith(".zip"):
-                with open(fp, mode="rb") as fptr:
-                    return fptr.read()
-            with open(fp, encoding="utf-8") as fptr:
-                return fptr.read().encode("utf-8")
+if not os.path.exists(fp):
+    raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
 
-        async def json(**kwargs):
+async def read(**kwargs):
+    if url.path.endswith(".zip"):
+        with open(fp, mode="rb") as fptr:
+            return fptr.read()
             with open(fp, encoding="utf-8") as fptr:
                 return json_func.loads(fptr.read())
 
@@ -496,25 +492,25 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
             return resp
 
         url = URL(str_or_url)
-        fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
-        fp = os.path.join(
-            os.path.dirname(__file__),
-            fixture_file,
-        )
+        raise resp.exception
+    return resp
 
-        print(f"Using fixture {fp} for request to {url.host}")
+url = URL(str_or_url)
+fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
+fp = os.path.join(
+    os.path.dirname(__file__),
+    fixture_file,
+)
 
-        if not os.path.exists(fp):
-            raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
+print(f"Using fixture {fp} for request to {url.host}")
 
-        async def read(**kwargs):
-            if url.path.endswith(".zip"):
-                with open(fp, mode="rb") as fptr:
-                    return fptr.read()
-            with open(fp, encoding="utf-8") as fptr:
-                return fptr.read().encode("utf-8")
+if not os.path.exists(fp):
+    raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
 
-        async def json(**kwargs):
+async def read(**kwargs):
+    if url.path.endswith(".zip"):
+        with open(fp, mode="rb") as fptr:
+            return fptr.read()
             with open(fp, encoding="utf-8") as fptr:
                 return json_func.loads(fptr.read())
 

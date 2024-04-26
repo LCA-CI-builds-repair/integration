@@ -744,8 +744,6 @@ class HacsBase:
                 timeouts += 1
                 await asyncio.sleep(1)
                 continue
-
-            except (
                 BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
             ) as exception:
                 if not nolog:

@@ -1276,19 +1276,19 @@ class HacsRepository:
             self.validate.errors.append(f"[{content.name}] was not downloaded.")
 
         except (
-            BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
-        ) as exception:
-            self.validate.errors.append(f"Download was not completed [{exception}]")
+        BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
+    ) as exception:
+        self.validate.errors.append(f"Download was not completed [{exception}]")
 
-    async def async_remove_entity_device(self) -> None:
-        """Remove the entity device."""
-        if (
-            self.hacs.configuration == ConfigurationType.YAML
-            or not self.hacs.configuration.experimental
-        ):
-            return
+async def async_remove_entity_device(self) -> None:
+    """Remove the entity device."""
+    if (
+        self.hacs.configuration == ConfigurationType.YAML
+        or not self.hacs.configuration.experimental
+    ):
+        return
 
-        device_registry: dr.DeviceRegistry = dr.async_get(hass=self.hacs.hass)
+    device_registry: dr.DeviceRegistry = dr.async_get(hass=self.hacs.hass)
         device = device_registry.async_get_device(identifiers={(DOMAIN, str(self.data.id))})
 
         if device is None:
