@@ -78,9 +78,7 @@ asyncio.set_event_loop_policy(HassEventLoopPolicy(False))
 asyncio.set_event_loop_policy = lambda policy: None
 
 # Disable sleep in tests
-_sleep = asyncio.sleep
-asyncio.sleep = lambda _: _sleep(0)
-
+import asyncio
 
 @pytest.fixture(autouse=True)
 def set_request_context(request: pytest.FixtureRequest):

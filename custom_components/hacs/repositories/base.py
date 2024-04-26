@@ -765,7 +765,10 @@ class HacsRepository:
             except BaseException:  # lgtm [py/catch-base-exception] pylint: disable=broad-except
                 pass
         elif self.data.category == "template":
-            await self.hacs.hass.services.async_call("homeassistant", "reload_custom_templates", {})
+            try:
+                await self.hacs.hass.services.async_call("homeassistant", "reload_custom_templates", {})
+            except Exception as e:
+                _LOGGER.error(f"Error reloading custom templates: {e}")
 
         await async_remove_store(self.hacs.hass, f"hacs/{self.data.id}.hacs")
 
