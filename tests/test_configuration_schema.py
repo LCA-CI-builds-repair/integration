@@ -4,4 +4,5 @@ from custom_components.hacs.utils.configuration_schema import hacs_config_combin
 
 
 def test_combined():
+    """Test the hacs_config_combined function."""
     assert isinstance(hacs_config_combined(), dict)

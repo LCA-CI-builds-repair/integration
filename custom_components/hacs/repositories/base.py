@@ -983,7 +983,7 @@ class HacsRepository:
             if self.data.installed and not self.content.single:
                 await self.hacs.hass.async_add_executor_job(backup.restore)
                 await self.hacs.hass.async_add_executor_job(backup.cleanup)
-            raise HacsException("Could not download, see log for details")
+                raise HacsException("Could not download, see log for details")
 
         self.hacs.async_dispatch(
             HacsDispatchEvent.REPOSITORY_DOWNLOAD_PROGRESS,
@@ -1051,8 +1051,8 @@ class HacsRepository:
         self,
         ignore_issues: bool = False,
         force: bool = False,
-        retry=False,
-        skip_releases=False,
+        retry: bool = False,
+        skip_releases: bool = False,
     ) -> None:
         """Common update data."""
         releases = []

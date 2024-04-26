@@ -1,11 +1,11 @@
 """Test the diagnostics module."""
+import pytest
 from unittest.mock import MagicMock, patch
 
 from aiogithubapi import GitHubException, GitHubRateLimitModel, GitHubResponseModel
 from homeassistant.components.diagnostics import REDACTED
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-import pytest
 
 from custom_components.hacs.base import HacsBase
 from custom_components.hacs.diagnostics import async_get_config_entry_diagnostics

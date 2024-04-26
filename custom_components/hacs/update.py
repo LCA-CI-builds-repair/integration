@@ -160,7 +160,6 @@ class HacsRepositoryUpdateEntity(HacsRepositoryEntity, UpdateEntity):
                 )
 
         return release_notes.replace("\n#", "\n\n#")
-
     async def async_added_to_hass(self) -> None:
         """Register for status events."""
         await super().async_added_to_hass()
@@ -170,6 +169,7 @@ class HacsRepositoryUpdateEntity(HacsRepositoryEntity, UpdateEntity):
                 HacsDispatchEvent.REPOSITORY_DOWNLOAD_PROGRESS,
                 self._update_download_progress,
             )
+        )
         )
 
     @callback

@@ -61,16 +61,18 @@ if "GITHUB_ACTION" in os.environ:
     )
 
 # All test coroutines will be treated as marked.
+import asyncio
+import pytest
+
 pytestmark = pytest.mark.asyncio
 
-asyncio.set_event_loop_policy(HassEventLoopPolicy(False))
-# Disable fixtures overriding our beautiful policy
-asyncio.set_event_loop_policy = lambda policy: None
+# Optionally include the asyncio event loop policy setting if needed
+# asyncio.set_event_loop_policy(HassEventLoopPolicy(False))
+# asyncio.set_event_loop_policy = lambda policy: None
 
-# Disable sleep in tests
-_sleep = asyncio.sleep
-asyncio.sleep = lambda _: _sleep(0)
-
+# Optionally disable sleep in tests
+# _sleep = asyncio.sleep
+# asyncio.sleep = lambda _: _sleep(0)
 
 @pytest.fixture()
 def connection():
