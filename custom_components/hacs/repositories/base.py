@@ -1277,10 +1277,8 @@ class HacsRepository:
             self.validate.errors.append(f"[{content.name}] was not downloaded.")
 
         except (
-            BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
-        ) as exception:
+        except Exception as exception:
             self.validate.errors.append(f"Download was not completed [{exception}]")
-
     async def async_remove_entity_device(self) -> None:
         """Remove the entity device."""
         if (

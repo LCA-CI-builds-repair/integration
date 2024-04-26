@@ -23,15 +23,15 @@ class Validate:
 
 
 def _country_validator(values) -> list[str]:
-    """Custom country validator."""
-    countries = []
-    if isinstance(values, str):
-        countries.append(values.upper())
-    elif isinstance(values, list):
-        for value in values:
-            countries.append(value.upper())
-    else:
-        raise vol.Invalid(f"Value '{values}' is not a string or list.", path=["country"])
+"""Custom country validator."""
+countries = []
+if isinstance(values, str):
+    countries.append(values.upper())
+elif isinstance(values, list):
+    for value in values:
+        countries.append(value.upper())
+else:
+    raise vol.Invalid(f"Value '{values}' is not a string or list.", path=["country"])
 
     for country in countries:
         if country not in LOCALE:
