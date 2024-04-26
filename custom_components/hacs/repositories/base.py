@@ -857,10 +857,10 @@ class HacsRepository:
         # Run common registration steps.
         await self.common_registration()
 
-        # Set correct local path
+        # Set the correct local path for the repository content
         self.content.path.local = self.localpath
 
-        # Run local post registration steps.
+        # Run local post-registration steps.
         await self.async_post_registration()
 
     async def async_post_registration(self) -> None:

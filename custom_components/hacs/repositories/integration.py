@@ -46,6 +46,8 @@ class HacsIntegrationRepository(HacsRepository):
                 self.pending_restart = False
 
         if self.pending_restart and self.hacs.configuration.experimental:
+from homeassistant.helpers.issue import IssueSeverity
+
             self.logger.debug("%s Creating restart_required issue", self.string)
             async_create_issue(
                 hass=self.hacs.hass,
@@ -53,7 +55,7 @@ class HacsIntegrationRepository(HacsRepository):
                 issue_id=f"restart_required_{self.data.id}_{self.ref}",
                 is_fixable=True,
                 issue_domain=self.data.domain or DOMAIN,
-                severity=IssueSeverity.WARNING,
+                severity=IssueSeverity.WARNING.value,
                 translation_key="restart_required",
                 translation_placeholders={
                     "name": self.display_name,
@@ -100,13 +102,14 @@ class HacsIntegrationRepository(HacsRepository):
                 )
 
         # Set local path
-        self.content.path.local = self.localpath
-
         # Handle potential errors
         if self.validate.errors:
             for error in self.validate.errors:
                 if not self.hacs.status.startup:
                     self.logger.error("%s %s", self.string, error)
+                else:
+                    self.logger.warning("%s %s", self.string, error)
+        return self.validate.success
         return self.validate.success
 
     @concurrent(concurrenttasks=10, backoff_time=5)
@@ -155,11 +158,13 @@ class HacsIntegrationRepository(HacsRepository):
             )
 
     async def reload_custom_components(self):
-        """Reload custom_components (and config flows)in HA."""
-        self.logger.info("Reloading custom_component cache")
-        del self.hacs.hass.data["custom_components"]
+from typing import Any
+
         await async_get_custom_components(self.hacs.hass)
         self.logger.info("Custom_component cache reloaded")
+
+    async def async_get_integration_manifest(self, ref: str = None) -> dict[str, Any] | None:
+        """Get the content of the manifest.json file."""
 
     async def async_get_integration_manifest(self, ref: str = None) -> dict[str, Any] | None:
         """Get the content of the manifest.json file."""

@@ -18,21 +18,24 @@ class RestartRequiredFixFlow(RepairsFlow):
     """Handler for an issue fixing flow."""
 
     def __init__(self, issue_id: str) -> None:
+import homeassistant.helpers.config_validation as cv
+from homeassistant.data_entry_flow import FlowResult
+
         self.issue_id = issue_id
 
     async def async_step_init(
         self, user_input: dict[str, str] | None = None
-    ) -> data_entry_flow.FlowResult:
+    ) -> FlowResult:
         """Handle the first step of a fix flow."""
 
         return await self.async_step_confirm_restart()
 
     async def async_step_confirm_restart(
         self, user_input: dict[str, str] | None = None
-    ) -> data_entry_flow.FlowResult:
+    ) -> FlowResult:
         """Handle the confirm step of a fix flow."""
         if user_input is not None:
-            await self.hass.services.async_call("homeassistant", "restart")
+            await self.hass.services.async_call("homeassistant", "restart", {})
             return self.async_create_entry(title="", data={})
 
         hacs: HacsBase = self.hass.data[DOMAIN]

@@ -78,6 +78,10 @@ asyncio.set_event_loop_policy(HassEventLoopPolicy(False))
 asyncio.set_event_loop_policy = lambda policy: None
 
 # Disable sleep in tests
+import asyncio
+from unittest.mock import MagicMock
+from homeassistant.core import mock_storage
+
 _sleep = asyncio.sleep
 asyncio.sleep = lambda _: _sleep(0)
 
