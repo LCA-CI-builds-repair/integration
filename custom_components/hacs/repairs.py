@@ -21,12 +21,10 @@ class RestartRequiredFixFlow(RepairsFlow):
         self.issue_id = issue_id
 
     async def async_step_init(
-        self, user_input: dict[str, str] | None = None
-    ) -> data_entry_flow.FlowResult:
+    async def __init__(self, user_input=None) -> data_entry_flow.FlowResult:
         """Handle the first step of a fix flow."""
 
         return await self.async_step_confirm_restart()
-
     async def async_step_confirm_restart(
         self, user_input: dict[str, str] | None = None
     ) -> data_entry_flow.FlowResult:
