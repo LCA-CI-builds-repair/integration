@@ -16,7 +16,6 @@ from homeassistant.const import __version__ as HAVERSION
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ServiceNotFound
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.loader import Integration
 from homeassistant.runner import HassEventLoopPolicy
 import pytest
 import pytest_asyncio
@@ -48,7 +47,6 @@ from tests.common import (
     MockOwner,
     WSClient,
     async_test_home_assistant,
-    dummy_repository_base,
     mock_storage as mock_storage,
 )
 
@@ -88,7 +86,6 @@ def hass_storage():
 @pytest.fixture
 def hass(event_loop, tmpdir):
     """Fixture to provide a test instance of Home Assistant."""
-
     def exc_handle(loop, context):
         """Handle exceptions by rethrowing them, which will fail the test."""
         if exception := context.get("exception"):

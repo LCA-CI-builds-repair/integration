@@ -56,6 +56,8 @@ async def test_base(aresponses, repository_integration):
         "custom_components/test/__init__.py",
         "custom_components/test/translations/en.json",
         "custom_components/test/manifest.json",
+    filestocheck = [
+        # Add file paths to check here
     ]
     for check in filestocheck:
         assert check in [x.full_path for x in tree]

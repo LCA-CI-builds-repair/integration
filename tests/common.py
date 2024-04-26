@@ -83,6 +83,11 @@ def dummy_repository_base(hacs, repository=None):
 
 
 # pylint: disable=protected-access
+import homeassistant as ha
+from homeassistant.auth import auth_manager as auth
+from homeassistant.auth import store as auth_store
+from homeassistant.auth.permissions import ensure_auth_manager_loaded
+
 async def async_test_home_assistant(loop, tmpdir):
     """Return a Home Assistant object pointing at test config dir."""
     try:

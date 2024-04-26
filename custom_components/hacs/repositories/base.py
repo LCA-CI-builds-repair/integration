@@ -1021,8 +1021,8 @@ class HacsRepository:
 
     def update_filenames(self) -> None:
         """Get the filename to target."""
-
-    async def get_tree(self, ref: str):
+    
+    async def get_tree(self, ref: str) -> Any:
         """Return the repository tree."""
         if self.repository_object is None:
             raise HacsException("No repository_object")
@@ -1051,8 +1051,8 @@ class HacsRepository:
         self,
         ignore_issues: bool = False,
         force: bool = False,
-        retry=False,
-        skip_releases=False,
+        retry: bool = False,
+        skip_releases: bool = False,
     ) -> None:
         """Common update data."""
         releases = []
@@ -1078,6 +1078,7 @@ class HacsRepository:
         except HacsNotModifiedException:
             return
         except HacsRepositoryExistException:
+            return
             raise HacsRepositoryExistException from None
         except (AIOGitHubAPIException, HacsException) as exception:
             if not self.hacs.status.startup:
