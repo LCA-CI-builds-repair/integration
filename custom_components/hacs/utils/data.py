@@ -235,12 +235,12 @@ class HacsData:
                 if entry == "0":
                     # Ignore repositories with ID 0
                     self.logger.debug(
-                        "<HacsData restore> Found repository with ID %s - %s", entry, repo_data
+                        "Found repository with ID %s - %s", entry, repo_data
                     )
                     continue
-                self.async_restore_repository(entry, repo_data)
+                await self.async_restore_repository(entry, repo_data)
 
-            self.logger.info("<HacsData restore> Restore done")
+            self.logger.info("Restore done")
         except (
             BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
         ) as exception:

@@ -732,8 +732,8 @@ class HacsBase:
                 )
             except asyncio.TimeoutError:
                 self.log.warning(
-                    "A timeout of 60! seconds was encountered while downloading %s, "
-                    "using over 60 seconds to download a single file is not normal. "
+                    "A timeout of 60 seconds was encountered while downloading %s. "
+                    "Using over 60 seconds to download a single file is not normal. "
                     "This is not a problem with HACS but how your host communicates with GitHub. "
                     "Retrying up to 5 times to mask/hide your host/network problems to "
                     "stop the flow of issues opened about it. "
@@ -744,8 +744,8 @@ class HacsBase:
                 timeouts += 1
                 await asyncio.sleep(1)
                 continue
-
-            except (
+            except Exception as e:
+                self.log.error(f"An error occurred: {e}")
                 BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
             ) as exception:
                 if not nolog:

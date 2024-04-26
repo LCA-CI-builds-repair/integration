@@ -132,16 +132,11 @@ async def async_initialize_integration(
         hacs.enable_hacs()
 
         for location in (
-            hass.config.path("custom_components/custom_updater.py"),
-            hass.config.path("custom_components/custom_updater/__init__.py"),
-        ):
-            if os.path.exists(location):
+            if os.path.exists(os.path.join(hass.config.path(), "custom_components/custom_updater.py")) or os.path.exists(os.path.join(hass.config.path(), "custom_components/custom_updater/__init__.py")):
                 hacs.log.critical(
-                    "This cannot be used with custom_updater. "
-                    "To use this you need to remove custom_updater form %s",
+                    "This cannot be used with custom_updater. To use this, you need to remove custom_updater from %s",
                     location,
                 )
-
                 hacs.disable_hacs(HacsDisabledReason.CONSTRAINS)
                 return False
 

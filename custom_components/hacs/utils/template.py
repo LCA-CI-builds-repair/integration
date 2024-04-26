@@ -16,7 +16,7 @@ def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> st
         # Do not render for experimental
         return content
     # Fix None issues
-    if context.releases.last_release_object is not None:
+    if context.releases and context.releases.last_release_object:
         prerelease = context.releases.last_release_object.prerelease
     else:
         prerelease = False

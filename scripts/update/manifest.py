@@ -19,16 +19,22 @@ def update_manifest():
         base["version"] = version
 
     with open(MANIFEST_FILE, "w", encoding="utf-8") as manifestfile:
-        manifestfile.write(
-            json.dumps(
-                {
-                    "domain": base["domain"],
-                    "name": base["name"],
-                    **{k: v for k, v in sorted(base.items()) if k not in ("domain", "name")},
-                },
-                indent=4,
-            )
-        )
+import json
 
+def update_manifest():
+    try:
+        with open('path/to/manifest.json', 'w') as manifestfile:
+            manifestfile.write(
+                json.dumps(
+                    {
+                        "domain": base["domain"],
+                        "name": base["name"],
+                        **{k: v for k, v in sorted(base.items()) if k not in ("domain", "name")},
+                    },
+                    indent=4,
+                )
+            )
+    except Exception as e:
+        print(f"Error updating manifest: {e}")
 
 update_manifest()

@@ -61,6 +61,12 @@ if "GITHUB_ACTION" in os.environ:
     )
 
 # All test coroutines will be treated as marked.
+import pytest
+import asyncio
+from unittest.mock import MagicMock
+from custom_components.hacs.hass_event_loop_policy import HassEventLoopPolicy
+from tests.mock_storage import mock_storage
+
 pytestmark = pytest.mark.asyncio
 
 asyncio.set_event_loop_policy(HassEventLoopPolicy(False))
@@ -71,12 +77,10 @@ asyncio.set_event_loop_policy = lambda policy: None
 _sleep = asyncio.sleep
 asyncio.sleep = lambda _: _sleep(0)
 
-
 @pytest.fixture()
 def connection():
     """Mock fixture for connection."""
     yield MagicMock()
-
 
 @pytest.fixture
 def hass_storage():
@@ -84,12 +88,12 @@ def hass_storage():
     with mock_storage() as stored_data:
         yield stored_data
 
-
 @pytest.fixture
 def hass(event_loop, tmpdir):
     """Fixture to provide a test instance of Home Assistant."""
 
     def exc_handle(loop, context):
+        pass
         """Handle exceptions by rethrowing them, which will fail the test."""
         if exception := context.get("exception"):
             exceptions.append(exception)

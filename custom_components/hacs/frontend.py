@@ -37,6 +37,7 @@ def async_register_frontend(hass: HomeAssistant, hacs: HacsBase) -> None:
         hass.http.register_static_path(
             f"{URL_BASE}/frontend", experimental_locate_dir(), cache_headers=False
         )
+        )
     else:
         #
         hass.http.register_static_path(f"{URL_BASE}/frontend", locate_dir(), cache_headers=False)

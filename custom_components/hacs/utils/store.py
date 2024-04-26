@@ -44,8 +44,6 @@ def _get_store_for_key(hass, key, encoder):
 def get_store_for_key(hass, key):
     """Create a Store object for the key."""
     return _get_store_for_key(hass, key, JSONEncoder)
-
-
 async def async_load_from_store(hass, key):
     """Load the retained data from store and return de-serialized data."""
     return await get_store_for_key(hass, key).async_load() or {}

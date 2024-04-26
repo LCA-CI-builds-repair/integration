@@ -102,8 +102,7 @@ class HacsThemeRepository(HacsRepository):
 
     def update_filenames(self) -> None:
         """Get the filename to target."""
-        for treefile in self.tree:
-            if treefile.full_path.startswith(
-                self.content.path.remote
-            ) and treefile.full_path.endswith(".yaml"):
-                self.data.file_name = treefile.filename
+        if self.tree:
+            for treefile in self.tree:
+                if treefile.full_path.startswith(self.content.path.remote) and treefile.full_path.endswith(".yaml"):
+                    self.data.file_name = treefile.filename
