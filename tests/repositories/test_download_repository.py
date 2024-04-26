@@ -27,7 +27,6 @@ async def test_download_repository(
     assert repo.data.installed is False
 
     assert len(hacs.repositories.list_downloaded) == 1
-
     # workaround for local path bug in tests
     repo.content.path.local = repo.localpath
 

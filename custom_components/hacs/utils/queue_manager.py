@@ -49,7 +49,6 @@ class QueueManager:
             return
 
         self.running = True
-
         _LOGGER.debug("<QueueManager> Checking out tasks to execute")
         local_queue = []
 
