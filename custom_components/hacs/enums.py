@@ -32,13 +32,26 @@ class HacsCategory(StrEnum):
     NETDAEMON = "netdaemon"
     PYTHON_SCRIPT = "python_script"
     TEMPLATE = "template"
-    THEME = "theme"
-    REMOVED = "removed"
+class HacsAction(StrEnum):
+    """HacsAction."""
 
-    def __str__(self):
-        return str(self.value)
+    INSTALL = "install"
+    UNINSTALL = "uninstall"
+    UPGRADE = "upgrade"
 
+class HacsStage(StrEnum):
+    """HacsStage."""
 
+    STARTUP = "startup"
+    INITIALIZATION = "initialization"
+    SETUP = "setup"
+
+class HacsSystem(StrEnum):
+    """HacsSystem."""
+
+    HACS = "hacs"
+    INTEGRATION = "integration"
+    PLUGIN = "plugin"
 class HacsDispatchEvent(StrEnum):
     """HacsDispatchEvent."""
 
