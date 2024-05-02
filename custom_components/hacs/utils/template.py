@@ -12,15 +12,13 @@ if TYPE_CHECKING:
 
 def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> str:
     """Render templates in content."""
+    prerelease = False  # Initialize prerelease variable
     if hacs.configuration.experimental:
         # Do not render for experimental
         return content
     # Fix None issues
     if context.releases.last_release_object is not None:
         prerelease = context.releases.last_release_object.prerelease
-    else:
-        prerelease = False
-
     # Render the template
     try:
         return Template(content).render(

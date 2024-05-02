@@ -38,7 +38,7 @@ def async_register_frontend(hass: HomeAssistant, hacs: HacsBase) -> None:
             f"{URL_BASE}/frontend", experimental_locate_dir(), cache_headers=False
         )
     else:
-        #
+        # Register frontend with default directory
         hass.http.register_static_path(f"{URL_BASE}/frontend", locate_dir(), cache_headers=False)
 
     # Custom iconset
