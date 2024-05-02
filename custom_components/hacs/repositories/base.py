@@ -1051,8 +1051,8 @@ class HacsRepository:
         self,
         ignore_issues: bool = False,
         force: bool = False,
-        retry=False,
-        skip_releases=False,
+        retry: bool = False,
+        skip_releases: bool = False,
     ) -> None:
         """Common update data."""
         releases = []
@@ -1066,17 +1066,17 @@ class HacsRepository:
                     self.data.full_name
                 ] = repository_object.full_name
                 if not self.hacs.system.generator:
+                    self.logger.error(
+                        "%s Repository has been renamed - %s", self.string, repository_object.full_name
+                    )
                     raise HacsRepositoryExistException
-                self.logger.error(
-                    "%s Repository has been renamed - %s", self.string, repository_object.full_name
-                )
             self.data.update_data(
                 repository_object.attributes,
                 action=self.hacs.system.action,
             )
             self.data.etag_repository = etag
         except HacsNotModifiedException:
-            return
+            pass
         except HacsRepositoryExistException:
             raise HacsRepositoryExistException from None
         except (AIOGitHubAPIException, HacsException) as exception:
