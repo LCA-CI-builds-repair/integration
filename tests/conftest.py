@@ -362,7 +362,9 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int):
             file.write(safe_json_dumps(calls))
             return
 
-    with open("tests/output/proxy_calls.json", encoding="utf-8") as file:
-        current = json.load(file)
-        if current != calls:
-            raise AssertionError("API calls have changed, please run scripts/snapshot-update")
+import json
+
+with open("tests/output/proxy_calls.json", encoding="utf-8") as file:
+    current = json.load(file)
+    if current != calls:
+        raise AssertionError("API calls have changed, please run scripts/snapshot-update")

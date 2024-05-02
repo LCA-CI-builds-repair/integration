@@ -37,20 +37,23 @@ def async_register_frontend(hass: HomeAssistant, hacs: HacsBase) -> None:
         hass.http.register_static_path(
             f"{URL_BASE}/frontend", experimental_locate_dir(), cache_headers=False
         )
-    else:
-        #
-        hass.http.register_static_path(f"{URL_BASE}/frontend", locate_dir(), cache_headers=False)
+# Import or define locate_dir() function
+# Import or define URL_BASE variable
 
-    # Custom iconset
-    hass.http.register_static_path(
-        f"{URL_BASE}/iconset.js", str(hacs.integration_dir / "iconset.js")
-    )
-    if "frontend_extra_module_url" not in hass.data:
-        hass.data["frontend_extra_module_url"] = set()
-    hass.data["frontend_extra_module_url"].add(f"{URL_BASE}/iconset.js")
+else:
+    hass.http.register_static_path(f"{URL_BASE}/frontend", locate_dir(), cache_headers=False)
 
-    hacs.frontend_version = (
-        FE_VERSION if not hacs.configuration.experimental else EXPERIMENTAL_FE_VERSION
+# Custom iconset
+hass.http.register_static_path(
+    f"{URL_BASE}/iconset.js", str(hacs.integration_dir / "iconset.js")
+)
+if "frontend_extra_module_url" not in hass.data:
+    hass.data["frontend_extra_module_url"] = set()
+hass.data["frontend_extra_module_url"].add(f"{URL_BASE}/iconset.js")
+
+hacs.frontend_version = (
+    FE_VERSION if not hacs.configuration.experimental else EXPERIMENTAL_FE_VERSION
+)
     )
 
     # Add to sidepanel if needed
@@ -67,9 +70,7 @@ def async_register_frontend(hass: HomeAssistant, hacs: HacsBase) -> None:
                     "trust_external": False,
                     "js_url": f"/hacsfiles/frontend/entrypoint.js?hacstag={hacs.frontend_version}",
                 }
-            },
-            require_admin=True,
-        )
+# Import necessary module for hacs
 
-    # Setup plugin endpoint if needed
-    hacs.async_setup_frontend_endpoint_plugin()
+# Setup plugin endpoint if needed
+hacs.async_setup_frontend_endpoint_plugin()
