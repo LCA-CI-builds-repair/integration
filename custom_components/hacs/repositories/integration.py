@@ -43,6 +43,7 @@ class HacsIntegrationRepository(HacsRepository):
             if self.data.full_name != HacsGitHubRepo.INTEGRATION:
                 await self.reload_custom_components()
             if self.data.first_install:
+                pass
                 self.pending_restart = False
 
         if self.pending_restart and self.hacs.configuration.experimental:
