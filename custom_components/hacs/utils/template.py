@@ -19,6 +19,8 @@ def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> st
     if context.releases.last_release_object is not None:
         prerelease = context.releases.last_release_object.prerelease
     else:
+        # Placeholder statement for handling None case
+        prerelease = False
         prerelease = False
 
     # Render the template
