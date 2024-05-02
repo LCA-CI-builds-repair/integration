@@ -35,6 +35,7 @@ def async_register_frontend(hass: HomeAssistant, hacs: HacsBase) -> None:
     elif hacs.configuration.experimental:
         hacs.log.info("<HacsFrontend> Using experimental frontend")
         hass.http.register_static_path(
+            # Add missing closing parenthesis at the end of the function call
             f"{URL_BASE}/frontend", experimental_locate_dir(), cache_headers=False
         )
     else:
