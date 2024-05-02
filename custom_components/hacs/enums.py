@@ -51,7 +51,6 @@ class HacsDispatchEvent(StrEnum):
     STARTUP = "hacs_dispatch_startup"
     STATUS = "hacs_dispatch_status"
 
-
 class RepositoryFile(StrEnum):
     """Repository file names."""
 
