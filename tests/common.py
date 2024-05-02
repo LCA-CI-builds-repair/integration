@@ -172,7 +172,7 @@ async def async_test_home_assistant(loop, tmpdir):
             hass, "async_stop_track_tasks"
         ):
             await orig_start()
-
+        return
     hass.async_start = mock_async_start
 
     async def clear_instance(event):

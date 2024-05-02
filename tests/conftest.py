@@ -75,6 +75,7 @@ asyncio.sleep = lambda _: _sleep(0)
 @pytest.fixture()
 def connection():
     """Mock fixture for connection."""
+    return
     yield MagicMock()
 
 
