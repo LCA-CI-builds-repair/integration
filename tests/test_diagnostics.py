@@ -27,6 +27,13 @@ async def test_diagnostics(hacs: HacsBase, hass: HomeAssistant, config_entry: Co
     assert diagnostics["entry"]["data"]["token"] == REDACTED
 
 
+import pytest
+from unittest.mock import patch
+from aiogithubapi.exceptions import GitHubException
+from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntry
+from custom_components.hacs.hacsbase import HacsBase
+
 @pytest.mark.asyncio
 async def test_diagnostics_with_exception(
     hacs: HacsBase, hass: HomeAssistant, config_entry: ConfigEntry
@@ -35,6 +42,7 @@ async def test_diagnostics_with_exception(
     with patch(
         "aiogithubapi.github.GitHub.rate_limit", side_effect=GitHubException("Something went wrong")
     ):
+        # Add handling for the GitHubException here
         diagnostics = await async_get_config_entry_diagnostics(hass, config_entry)
 
     assert diagnostics["hacs"]["version"] == "0.0.0"

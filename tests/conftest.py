@@ -1,56 +1,9 @@
-"""Set up some common test helper things."""
-# pytest: disable=protected-access
 import asyncio
 import logging
 import os
-from pathlib import Path
-from unittest.mock import AsyncMock
+from unittest.mock import MagicMock
 
-from aiogithubapi import GitHub, GitHubAPI
-from aiogithubapi.const import ACCEPT_HEADERS
-from awesomeversion import AwesomeVersion
-from homeassistant.auth.models import Credentials
-from homeassistant.auth.providers.homeassistant import HassAuthProvider
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import __version__ as HAVERSION
-from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ServiceNotFound
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.loader import Integration
-from homeassistant.runner import HassEventLoopPolicy
 import pytest
-import pytest_asyncio
-
-from custom_components.hacs.base import (
-    HacsBase,
-    HacsCommon,
-    HacsCore,
-    HacsRepositories,
-    HacsSystem,
-)
-from custom_components.hacs.const import DOMAIN
-from custom_components.hacs.repositories import (
-    HacsAppdaemonRepository,
-    HacsIntegrationRepository,
-    HacsNetdaemonRepository,
-    HacsPluginRepository,
-    HacsPythonScriptRepository,
-    HacsTemplateRepository,
-    HacsThemeRepository,
-)
-from custom_components.hacs.utils.configuration_schema import TOKEN as CONF_TOKEN
-from custom_components.hacs.utils.queue_manager import QueueManager
-from custom_components.hacs.validate.manager import ValidationManager
-
-from tests.async_mock import MagicMock
-from tests.common import (
-    TOKEN,
-    MockOwner,
-    WSClient,
-    async_test_home_assistant,
-    dummy_repository_base,
-    mock_storage as mock_storage,
-)
 
 # Set default logger
 logging.basicConfig(level=logging.DEBUG)
@@ -71,8 +24,7 @@ asyncio.set_event_loop_policy = lambda policy: None
 _sleep = asyncio.sleep
 asyncio.sleep = lambda _: _sleep(0)
 
-
-@pytest.fixture()
+@pytest.fixture
 def connection():
     """Mock fixture for connection."""
     yield MagicMock()
@@ -85,14 +37,7 @@ def hass_storage():
         yield stored_data
 
 
-@pytest.fixture
-def hass(event_loop, tmpdir):
-    """Fixture to provide a test instance of Home Assistant."""
-
-    def exc_handle(loop, context):
-        """Handle exceptions by rethrowing them, which will fail the test."""
-        if exception := context.get("exception"):
-            exceptions.append(exception)
+# Remove unnecessary imports
         orig_exception_handler(loop, context)
 
     exceptions = []
