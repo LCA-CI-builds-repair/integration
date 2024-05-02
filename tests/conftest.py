@@ -87,7 +87,6 @@ def hass_storage():
     with mock_storage() as stored_data:
         yield stored_data
 
-
 @pytest.fixture(scope="session")
 def event_loop():
     try:
