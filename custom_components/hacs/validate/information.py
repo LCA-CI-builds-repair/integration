@@ -26,4 +26,5 @@ class Validator(ActionValidationBase):
         elif "info.md" in filenames:
             pass
         else:
+            # Add appropriate handling or return statement here
             raise ValidationException("The repository has no information file")

@@ -1158,7 +1158,6 @@ class HacsRepository:
                 self.logger.error("%s %s", self.string, exception)
             if not ignore_issues:
                 raise HacsException(exception) from None
-
     def gather_files_to_download(self) -> list[FileInformation]:
         """Return a list of file objects to be downloaded."""
         files = []
