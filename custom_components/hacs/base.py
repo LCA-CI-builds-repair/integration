@@ -737,14 +737,13 @@ class HacsBase:
                     "This is not a problem with HACS but how your host communicates with GitHub. "
                     "Retrying up to 5 times to mask/hide your host/network problems to "
                     "stop the flow of issues opened about it. "
-                    "Tries left %s",
+                    f"Tries left {4 - timeouts}",
                     url,
                     (4 - timeouts),
                 )
                 timeouts += 1
                 await asyncio.sleep(1)
                 continue
-
             except (
                 BaseException  # lgtm [py/catch-base-exception] pylint: disable=broad-except
             ) as exception:

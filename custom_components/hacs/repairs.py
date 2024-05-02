@@ -48,10 +48,10 @@ class RestartRequiredFixFlow(RepairsFlow):
 async def async_create_fix_flow(
     hass: HomeAssistant,
     issue_id: str,
-    data: dict[str, str | int | float | None] | None = None,
+    data: dict[str, Union[str, int, float, None]] | None = None,
     *args: Any,
     **kwargs: Any,
-) -> RepairsFlow | None:
+) -> Union[RepairsFlow, None]:
     """Create flow."""
     if issue_id.startswith("restart_required"):
         return RestartRequiredFixFlow(issue_id)
