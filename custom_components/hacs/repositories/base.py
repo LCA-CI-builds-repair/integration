@@ -1058,7 +1058,7 @@ class HacsRepository:
         releases = []
         try:
             repository_object, etag = await self.async_get_legacy_repository_object(
-                etag=None if force or self.data.installed else self.data.etag_repository,
+                etag=None if force or self.data.installed else self.data.etag_repository
             )
             self.repository_object = repository_object
             if self.data.full_name.lower() != repository_object.full_name.lower():
@@ -1066,7 +1066,7 @@ class HacsRepository:
                     self.data.full_name
                 ] = repository_object.full_name
                 if not self.hacs.system.generator:
-                    raise HacsRepositoryExistException
+                    raise HacsRepositoryExistException()
                 self.logger.error(
                     "%s Repository has been renamed - %s", self.string, repository_object.full_name
                 )
@@ -1105,7 +1105,7 @@ class HacsRepository:
             try:
                 releases = await self.get_releases(
                     prerelease=self.data.show_beta,
-                    returnlimit=self.hacs.configuration.release_limit,
+                    returnlimit=self.hacs.configuration.release_limit
                 )
                 if releases:
                     self.data.releases = True

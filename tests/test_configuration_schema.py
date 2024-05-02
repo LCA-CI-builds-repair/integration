@@ -2,6 +2,5 @@
 # pylint: disable=missing-docstring
 from custom_components.hacs.utils.configuration_schema import hacs_config_combined
 
-
-def test_combined():
+def test_combined() -> None:
     assert isinstance(hacs_config_combined(), dict)
