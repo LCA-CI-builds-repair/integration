@@ -25,7 +25,7 @@ def async_register_frontend(hass: HomeAssistant, hacs: HacsBase) -> None:
     hacs.async_setup_frontend_endpoint_themes()
 
     # Register frontend
-    if hacs.configuration.dev and (frontend_path := os.getenv("HACS_FRONTEND_DIR")):
+    if hacs.configuration.dev and (frontend_path = os.getenv("HACS_FRONTEND_DIR")):
         hacs.log.warning(
             "<HacsFrontend> Frontend development mode enabled. Do not run in production!"
         )

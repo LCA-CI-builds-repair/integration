@@ -353,7 +353,7 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int):
             continue
         if _test_caller not in calls:
             calls[_test_caller] = {}
-        if (url := call.get("url")) not in calls[_test_caller]:
+        if (url = call.get("url")) not in calls[_test_caller]:
             calls[_test_caller][url] = 0
         calls[_test_caller][url] += 1
 

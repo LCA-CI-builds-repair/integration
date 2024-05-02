@@ -513,7 +513,6 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
                     return fptr.read()
             with open(fp, encoding="utf-8") as fptr:
                 return fptr.read().encode("utf-8")
-
         async def json(**kwargs):
             with open(fp, encoding="utf-8") as fptr:
                 return json_func.loads(fptr.read())
