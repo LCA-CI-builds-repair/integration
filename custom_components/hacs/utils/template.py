@@ -19,6 +19,7 @@ def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> st
     if context.releases.last_release_object is not None:
         prerelease = context.releases.last_release_object.prerelease
     else:
+        prerelease = False  # Assign a default value for prerelease when last_release_object is None
         prerelease = False
 
     # Render the template

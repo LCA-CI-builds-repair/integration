@@ -36,6 +36,11 @@ class HacsIntegrationRepository(HacsRepository):
         """Return localpath."""
         return f"{self.hacs.core.config_path}/custom_components/{self.data.domain}"
 
+    from custom_components.hacs.helpers.functions.misc import async_create_issue
+    from custom_components.hacs.helpers.functions.misc import get_first_directory_in_directory
+    from custom_components.hacs.helpers.classes.exceptions import AddonRepositoryException
+    from custom_components.hacs.helpers.classes.exceptions import HacsException
+
     async def async_post_installation(self):
         """Run post installation steps."""
         self.pending_restart = True
@@ -82,34 +87,11 @@ class HacsIntegrationRepository(HacsRepository):
                 )
             self.content.path.remote = f"custom_components/{name}"
 
-        # Get the content of manifest.json
-        if manifest := await self.async_get_integration_manifest():
-            try:
-                self.integration_manifest = manifest
-                self.data.authors = manifest.get("codeowners", [])
-                self.data.domain = manifest["domain"]
-                self.data.manifest_name = manifest.get("name")
-                self.data.config_flow = manifest.get("config_flow", False)
+    from custom_components.hacs.helpers.functions.misc import async_get_custom_components
+    from custom_components.hacs.helpers.functions.misc import get_first_directory_in_directory
+    from custom_components.hacs.const import HacsDispatchEvent
+    from custom_components.hacs.const import RepositoryFile
 
-            except KeyError as exception:
-                self.validate.errors.append(
-                    f"Missing expected key '{exception}' in { RepositoryFile.MAINIFEST_JSON}"
-                )
-                self.hacs.log.error(
-                    "Missing expected key '%s' in '%s'", exception, RepositoryFile.MAINIFEST_JSON
-                )
-
-        # Set local path
-        self.content.path.local = self.localpath
-
-        # Handle potential errors
-        if self.validate.errors:
-            for error in self.validate.errors:
-                if not self.hacs.status.startup:
-                    self.logger.error("%s %s", self.string, error)
-        return self.validate.success
-
-    @concurrent(concurrenttasks=10, backoff_time=5)
     async def update_repository(self, ignore_issues=False, force=False):
         """Update."""
         if not await self.common_update(ignore_issues, force) and not force:
@@ -133,7 +115,7 @@ class HacsIntegrationRepository(HacsRepository):
 
             except KeyError as exception:
                 self.validate.errors.append(
-                    f"Missing expected key '{exception}' in { RepositoryFile.MAINIFEST_JSON}"
+                    f"Missing expected key '{exception}' in {RepositoryFile.MAINIFEST_JSON}"
                 )
                 self.hacs.log.error(
                     "Missing expected key '%s' in '%s'", exception, RepositoryFile.MAINIFEST_JSON
@@ -153,30 +135,21 @@ class HacsIntegrationRepository(HacsRepository):
                     "repository_id": self.data.id,
                 },
             )
-
-    async def reload_custom_components(self):
-        """Reload custom_components (and config flows)in HA."""
-        self.logger.info("Reloading custom_component cache")
-        del self.hacs.hass.data["custom_components"]
-        await async_get_custom_components(self.hacs.hass)
         self.logger.info("Custom_component cache reloaded")
 
-    async def async_get_integration_manifest(self, ref: str = None) -> dict[str, Any] | None:
-        """Get the content of the manifest.json file."""
-        manifest_path = (
-            "manifest.json"
-            if self.repository_manifest.content_in_root
-            else f"{self.content.path.remote}/{RepositoryFile.MAINIFEST_JSON}"
+    from custom_components.hacs.const import HacsDispatchEvent
+
+    # Signal entities to refresh
+    if self.data.installed:
+        self.hacs.async_dispatch(
+            HacsDispatchEvent.REPOSITORY,
+            {
+                "id": 1337,
+                "action": "update",
+                "repository": self.data.full_name,
+                "repository_id": self.data.id,
+            },
         )
 
-        if not manifest_path in (x.full_path for x in self.tree):
-            raise HacsException(f"No {RepositoryFile.MAINIFEST_JSON} file found '{manifest_path}'")
-
-        response = await self.hacs.async_github_api_method(
-            method=self.hacs.githubapi.repos.contents.get,
-            repository=self.data.full_name,
-            path=manifest_path,
-            **{"params": {"ref": ref or self.version_to_download()}},
-        )
-        if response:
+async def reload_custom_components(self):
             return json_loads(decode_content(response.data.content))
