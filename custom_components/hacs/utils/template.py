@@ -20,7 +20,6 @@ def render_template(hacs: HacsBase, content: str, context: HacsRepository) -> st
         prerelease = context.releases.last_release_object.prerelease
     else:
         prerelease = False
-
     # Render the template
     try:
         return Template(content).render(

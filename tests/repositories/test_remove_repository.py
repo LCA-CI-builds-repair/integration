@@ -52,7 +52,6 @@ async def test_remove_repository(
     await snapshots.assert_hacs_data(
         hacs, f"{category_test_data['repository']}/test_remove_repository_pre.json"
     )
-
     response = await ws_client.send_and_receive_json(
         "hacs/repository/remove", {"repository": repo.data.id}
     )

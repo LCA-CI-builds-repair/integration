@@ -138,10 +138,9 @@ async def async_initialize_integration(
             if os.path.exists(location):
                 hacs.log.critical(
                     "This cannot be used with custom_updater. "
-                    "To use this you need to remove custom_updater form %s",
+                    "To use this you need to remove custom_updater from %s",
                     location,
                 )
-
                 hacs.disable_hacs(HacsDisabledReason.CONSTRAINS)
                 return False
 

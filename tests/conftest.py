@@ -68,7 +68,6 @@ asyncio.set_event_loop_policy = lambda policy: None
 _sleep = asyncio.sleep
 asyncio.sleep = lambda _: _sleep(0)
 
-
 @pytest.fixture(autouse=True)
 def set_request_context(request: pytest.FixtureRequest):
     """Set request context for every test."""
