@@ -100,8 +100,7 @@ def fixture(filename, asjson=True):
     filename = f"{filename}.json" if "." not in filename else filename
     path = os.path.join(
         os.path.dirname(__file__),
-        "fixtures",
-        filename.lower().replace("/", "_"),
+        "fixtures", filename.lower().replace("/", "_"),
     )
     try:
         with open(path, encoding="utf-8") as fptr:
@@ -538,28 +537,16 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
 def create_config_entry(
     data: dict[str, Any] = None, options: dict[str, Any] = None
 ) -> MockConfigEntry:
-    try:
-        # Core 2024.1 added minor_version
-        return MockConfigEntry(
-            version=1,
-            minor_version=0,
-            domain=DOMAIN,
-            title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
-            source="user",
-            options={**(options or {})},
-            unique_id="12345",
-        )
-    except TypeError:
-        return MockConfigEntry(
-            version=1,
-            domain=DOMAIN,
-            title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
-            source="user",
-            options={**(options or {})},
-            unique_id="12345",
-        )
+    return MockConfigEntry(
+        version=1,
+        minor_version=0,
+        domain=DOMAIN,
+        title="",
+        data={CONF_TOKEN: TOKEN, **(data or {})},
+        source="user",
+        options={**(options or {})},
+        unique_id="12345",
+    )
 
 
 async def setup_integration(hass: ha.HomeAssistant, config_entry: MockConfigEntry) -> None:
