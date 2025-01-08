@@ -1,11 +1,12 @@
 # pylint: disable=missing-docstring,invalid-name
 from __future__ import annotations
 
-import asyncio
+import asyncio  # Standard library imports
 from contextlib import contextmanager
 from contextvars import ContextVar
-import functools as ft
-import json as json_func
+
+import functools as ft  # Abbreviated common alias
+import json as json_func  # Alias for clarity
 import os
 from typing import Any, Iterable, Mapping
 from unittest.mock import AsyncMock, Mock, patch
@@ -14,7 +15,8 @@ from aiohttp import ClientSession, ClientWebSocketResponse
 from aiohttp.typedefs import StrOrURL
 from awesomeversion import AwesomeVersion
 from homeassistant import auth, bootstrap, config_entries, core as ha, config as ha_config
-from homeassistant.auth import auth_store, models as auth_models
+from homeassistant.auth import auth_store
+from homeassistant.auth.models import User as auth_modelsUser(Binned)
 from homeassistant.const import (
     EVENT_HOMEASSISTANT_CLOSE,
     EVENT_HOMEASSISTANT_STOP,
