@@ -8,6 +8,7 @@ import functools as ft
 import json as json_func
 import os
 from typing import Any, Iterable, Mapping
+from collections.abc import Mapping, Iterable
 from unittest.mock import AsyncMock, Mock, patch
 
 from aiohttp import ClientSession, ClientWebSocketResponse
@@ -58,7 +59,7 @@ IGNORED_BASE_FILES = set([
     ])
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[str, Any] | list[Any]) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -67,7 +68,7 @@ def safe_json_dumps(data: dict | list) -> str:
     )
 
 
-def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
+def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict:
     if not isinstance(data, (Mapping, list)):
         return data
 
@@ -97,7 +98,8 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
 
 def fixture(filename, asjson=True):
     """Load a fixture."""
-    filename = f"{filename}.json" if "." not in filename else filename
+    if "." not in filename:
+        filename = f"{filename}.json"
     path = os.path.join(
         os.path.dirname(__file__),
         "fixtures",
@@ -479,7 +481,7 @@ class ProxyClientSession(ClientSession):
         )
 
 
-async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
+async async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
     """Create a mocked client session."""
     base = async_get_clientsession(hass)
     base_request = base._request
