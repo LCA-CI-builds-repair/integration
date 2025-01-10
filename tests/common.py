@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring,invalid-name
 from __future__ import annotations
+from __future__ import annotations
 
 import asyncio
 from contextlib import contextmanager
@@ -58,7 +59,7 @@ IGNORED_BASE_FILES = set([
     ])
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[str, Any] | list[Any]) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -67,7 +68,7 @@ def safe_json_dumps(data: dict | list) -> str:
     )
 
 
-def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
+def recursive_remove_key(data: dict[str, Any] | list[Any], to_remove: Iterable[str]) -> dict[str, Any] | list[Any]:
     if not isinstance(data, (Mapping, list)):
         return data
 
