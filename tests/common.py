@@ -50,12 +50,12 @@ INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
 IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
+    "/config/automations.yaml",
+    "/config/configuration.yaml",
+    "/config/scenes.yaml",
+    "/config/scripts.yaml",
+    "/config/secrets.yaml",
+)
 
 
 def safe_json_dumps(data: dict | list) -> str:
@@ -260,9 +260,9 @@ def mock_storage(data=None):
 
             mock_data = data.get(store.key)
 
-            if "data" not in mock_data or "version" not in mock_data:
-                _LOGGER.error('Mock data needs "version" and "data"')
-                raise ValueError('Mock data needs "version" and "data"')
+            if not all(k in mock_data for k in ("data", "version")):
+                _LOGGER.error("Mock data needs 'version' and 'data'")
+                raise ValueError("Mock data needs 'version' and 'data'")
 
             store._data = mock_data
 
