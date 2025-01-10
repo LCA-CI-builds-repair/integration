@@ -1,5 +1,5 @@
 # pylint: disable=missing-docstring,invalid-name
-from __future__ import annotations
+from __future__ import annotations  # For postponed evaluation of annotations (PEP 563)
 
 import asyncio
 from contextlib import contextmanager
@@ -68,7 +68,7 @@ def safe_json_dumps(data: dict | list) -> str:
 
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
-    if not isinstance(data, (Mapping, list)):
+    if not isinstance(data, (Mapping, list)):  # Narrowly define acceptable types
         return data
 
     if isinstance(data, list):
@@ -96,7 +96,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
 
 
 def fixture(filename, asjson=True):
-    """Load a fixture."""
+    """Load a fixture. Handles .json extension if not provided."""
     filename = f"{filename}.json" if "." not in filename else filename
     path = os.path.join(
         os.path.dirname(__file__),
@@ -563,7 +563,7 @@ def create_config_entry(
 
 
 async def setup_integration(hass: ha.HomeAssistant, config_entry: MockConfigEntry) -> None:
-    mock_session = await client_session_proxy(hass)
+    mock_session: ProxyClientSession = await client_session_proxy(hass)  # Explicit typing added
     with patch(
         "homeassistant.helpers.aiohttp_client.async_get_clientsession", return_value=mock_session
     ):
