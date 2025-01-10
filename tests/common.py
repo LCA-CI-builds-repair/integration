@@ -95,7 +95,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
     return copy_data
 
 
-def fixture(filename, asjson=True):
+def fixture(filename, asjson=True) -> dict | str:
     """Load a fixture."""
     filename = f"{filename}.json" if "." not in filename else filename
     path = os.path.join(
