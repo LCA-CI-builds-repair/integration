@@ -19,7 +19,7 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_CLOSE,
     EVENT_HOMEASSISTANT_STOP,
     __version__ as HAVERSION,
-)
+    )
 from homeassistant.helpers import (
     area_registry as ar,
     device_registry as dr,
@@ -28,7 +28,7 @@ from homeassistant.helpers import (
     issue_registry as ir,
     restore_state as rs,
     storage,
-)
+    )
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.json import ExtendedJSONEncoder
 from homeassistant.setup import async_setup_component
@@ -48,14 +48,13 @@ _LOGGER = LOGGER
 TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
-
-IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
+IGNORED_BASE_FILES = {
+    "/config/automations.yaml",
+    "/config/configuration.yaml",
+    "/config/scenes.yaml",
+    "/config/scripts.yaml",
+    "/config/secrets.yaml",
+}
 
 
 def safe_json_dumps(data: dict | list) -> str:
@@ -86,12 +85,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
         if key in to_remove:
             copy_data[key] = None
         elif isinstance(value, Mapping):
-            copy_data[key] = recursive_remove_key(value, to_remove)
-        elif isinstance(value, list):
-            copy_data[key] = [
-                recursive_remove_key(item, to_remove)
-                for item in sorted(value, key=lambda obj: getattr(obj, "id", 0))
-            ]
+            copy_data[key] = recursive_remove_key(value, to_remove)  # type: ignore[arg-type]
     return copy_data
 
 
@@ -161,7 +155,7 @@ async def async_test_home_assistant(loop, tmpdir):
             check_target = check_target.func
 
         if isinstance(check_target, Mock) and not isinstance(target, AsyncMock):
-            fut = asyncio.Future()
+            fut = asyncio.Future()  # type: ignore[deprecated]
             fut.set_result(target(*args))
             return fut
 
@@ -174,7 +168,7 @@ async def async_test_home_assistant(loop, tmpdir):
             check_target = check_target.func
 
         if isinstance(check_target, Mock):
-            fut = asyncio.Future()
+            fut = asyncio.Future()  # type: ignore[deprecated]
             fut.set_result(target(*args))
             return fut
 
@@ -183,7 +177,7 @@ async def async_test_home_assistant(loop, tmpdir):
     def async_create_task(coroutine, *args):
         """Create task."""
         if isinstance(coroutine, Mock) and not isinstance(coroutine, AsyncMock):
-            fut = asyncio.Future()
+            fut = asyncio.Future()  # type: ignore[deprecated]
             fut.set_result(None)
             return fut
 
@@ -444,7 +438,7 @@ class ProxyClientSession(ClientSession):
             return resp
 
         url = URL(str_or_url)
-        fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
+        fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"  # noqa: E501
         fp = os.path.join(
             os.path.dirname(__file__),
             fixture_file,
