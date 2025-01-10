@@ -7,6 +7,7 @@ from contextvars import ContextVar
 import functools as ft
 import json as json_func
 import os
+import re
 from typing import Any, Iterable, Mapping
 from unittest.mock import AsyncMock, Mock, patch
 
@@ -93,6 +94,24 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
                 for item in sorted(value, key=lambda obj: getattr(obj, "id", 0))
             ]
     return copy_data
+
+
+def pyupgrade_fix(content: str) -> str:
+    """Fix pyupgrade issues in the given content."""
+    # Replace `async def` with `async def` in docstrings
+    content = re.sub(r'""".*?async def.*?"""', lambda match: match.group().replace('async def', 'async def'), content, flags=re.DOTALL)
+
+    # Replace `async with` with `async with`
+    content = re.sub(r'async\s+with', 'async with', content)
+
+    # Replace `async for` with `async for`
+    content = re.sub(r'async\s+for', 'async for', content)
+
+    # Replace `await` with `await` inside list/dict comprehensions
+    content = re.sub(r'\[(.*?)\]', lambda match: match.group().replace('await', 'await'), content)
+    content = re.sub(r'\{(.*?)\}', lambda match: match.group().replace('await', 'await'), content)
+
+    return content
 
 
 def fixture(filename, asjson=True):
