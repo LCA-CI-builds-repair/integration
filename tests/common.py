@@ -99,7 +99,7 @@ def fixture(filename, asjson=True):
     """Load a fixture."""
     filename = f"{filename}.json" if "." not in filename else filename
     path = os.path.join(
-        os.path.dirname(__file__),
+        f"{os.path.dirname(__file__)}",
         "fixtures",
         filename.lower().replace("/", "_"),
     )
@@ -446,14 +446,14 @@ class ProxyClientSession(ClientSession):
         url = URL(str_or_url)
         fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
         fp = os.path.join(
-            os.path.dirname(__file__),
+            f"{os.path.dirname(__file__)}",
             fixture_file,
         )
 
         print(f"Using fixture {fp} for request to {url.host}")
 
         if not os.path.exists(fp):
-            raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
+            raise Exception("Missing fixture for proxy/" + f"{url.host}{url.path}")
 
         async def read(**kwargs):
             if url.path.endswith(".zip"):
@@ -498,14 +498,14 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
         url = URL(str_or_url)
         fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
         fp = os.path.join(
-            os.path.dirname(__file__),
+            f"{os.path.dirname(__file__)}",
             fixture_file,
         )
 
         print(f"Using fixture {fp} for request to {url.host}")
 
         if not os.path.exists(fp):
-            raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
+            raise Exception("Missing fixture for proxy/" + f"{url.host}{url.path}")
 
         async def read(**kwargs):
             if url.path.endswith(".zip"):
@@ -546,7 +546,7 @@ def create_config_entry(
             domain=DOMAIN,
             title="",
             data={CONF_TOKEN: TOKEN, **(data or {})},
-            source="user",
+            source=config_entries.SOURCE_USER,
             options={**(options or {})},
             unique_id="12345",
         )
