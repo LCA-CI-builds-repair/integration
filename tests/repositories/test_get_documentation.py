@@ -1,4 +1,5 @@
 
+from __future__ import annotations  # Required for forward compatibility of type hints
 from typing import Any
 import pytest
 from custom_components.hacs.base import HacsBase
@@ -10,10 +11,10 @@ from tests.common import client_session_proxy
 
 @pytest.mark.parametrize("data,result", [
     ({"installed": True, "installed_version": "1.0.0"}, "Example readme file"),
-    ({"installed": False, "last_version": "2.0.0"}, "Example readme file")
+    ({"installed": False, "last_version": "2.0.0"}, "Example readme file"),
 ])
 @pytest.mark.asyncio
-async def test_validate_repository(hacs: HacsBase, data: dict[str, Any], result: str):
+async def test_validate_repository(hacs: HacsBase, data: dict[str, Any], result: str) -> None:
     repository = HacsRepository(hacs=hacs)
     repository.data.full_name = "octocat/integration"
     for key, value in data.items():
