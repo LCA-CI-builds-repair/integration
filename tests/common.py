@@ -47,10 +47,9 @@ from custom_components.hacs.utils.logger import LOGGER
 _LOGGER = LOGGER
 TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
-REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
-
-IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
+REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context")
+IGNORED_BASE_FILES = {
+    "/config/automations.yaml",
         "/config/configuration.yaml",
         "/config/scenes.yaml",
         "/config/scripts.yaml",
@@ -59,12 +58,7 @@ IGNORED_BASE_FILES = set([
 
 
 def safe_json_dumps(data: dict | list) -> str:
-    return json_func.dumps(
-        data,
-        indent=4,
-        sort_keys=True,
-        cls=ExtendedJSONEncoder,
-    )
+    return json_func.dumps(data, indent=4, sort_keys=True, cls=ExtendedJSONEncoder)
 
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
@@ -98,11 +92,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
 def fixture(filename, asjson=True):
     """Load a fixture."""
     filename = f"{filename}.json" if "." not in filename else filename
-    path = os.path.join(
-        os.path.dirname(__file__),
-        "fixtures",
-        filename.lower().replace("/", "_"),
-    )
+    path = os.path.join(os.path.dirname(__file__), "fixtures", filename.lower().replace("/", "_"))
     try:
         with open(path, encoding="utf-8") as fptr:
             _LOGGER.debug("Loading fixture from %s", path)
@@ -232,9 +222,7 @@ async def async_test_home_assistant(loop, tmpdir):
     return hass
 
 
-@ha.callback
-def ensure_auth_manager_loaded(auth_mgr):
-    """Ensure an auth manager is considered loaded."""
+@ha.callback def ensure_auth_manager_loaded(auth_mgr):
     store = auth_mgr._store
     if store._users is None:
         store._set_defaults()
@@ -384,11 +372,8 @@ class WSClient:
         return await self.client.receive_json()
 
 
-class MockedResponse:
-    def __init__(self, **kwargs) -> None:
-        self.kwargs = kwargs
-        self.exception = kwargs.get("exception", None)
-
+class MockedResponse:    def __init__(self, **kwargs) -> None:
+        self.kwargs = kwargs; self.exception = kwargs.get("exception")
     @property
     def status(self):
         return self.kwargs.get("status", 200)
@@ -445,11 +430,7 @@ class ProxyClientSession(ClientSession):
 
         url = URL(str_or_url)
         fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
-        fp = os.path.join(
-            os.path.dirname(__file__),
-            fixture_file,
-        )
-
+        fp = os.path.join(os.path.dirname(__file__), fixture_file)
         print(f"Using fixture {fp} for request to {url.host}")
 
         if not os.path.exists(fp):
