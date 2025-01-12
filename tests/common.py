@@ -109,8 +109,7 @@ def fixture(filename, asjson=True):
             if asjson:
                 return json_func.loads(fptr.read())
             return fptr.read()
-    except OSError as err:
-        raise OSError(f"Missing fixture for {path.split('fixtures/')[1]}") from err
+    except OSError as err: raise OSError(f"Missing fixture for {path.split('fixtures/')[1]}") from err
 
 
 def dummy_repository_base(hacs, repository=None):
@@ -178,7 +177,7 @@ async def async_test_home_assistant(loop, tmpdir):
             fut.set_result(target(*args))
             return fut
 
-        return orig_async_add_executor_job(target, *args)
+        return orig_async_add_executor_job(target, *args) 
 
     def async_create_task(coroutine, *args):
         """Create task."""
@@ -261,8 +260,7 @@ def mock_storage(data=None):
             mock_data = data.get(store.key)
 
             if "data" not in mock_data or "version" not in mock_data:
-                _LOGGER.error('Mock data needs "version" and "data"')
-                raise ValueError('Mock data needs "version" and "data"')
+                raise ValueError("Mock data needs 'version' and 'data'")
 
             store._data = mock_data
 
@@ -450,8 +448,7 @@ class ProxyClientSession(ClientSession):
             fixture_file,
         )
 
-        print(f"Using fixture {fp} for request to {url.host}")
-
+        print("Using fixture", fp, "for request to", url.host)
         if not os.path.exists(fp):
             raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
 
@@ -502,8 +499,7 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
             fixture_file,
         )
 
-        print(f"Using fixture {fp} for request to {url.host}")
-
+        print("Using fixture", fp, "for request to", url.host)
         if not os.path.exists(fp):
             raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
 
@@ -545,7 +541,7 @@ def create_config_entry(
             minor_version=0,
             domain=DOMAIN,
             title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
+            data={"token": TOKEN, **(data or {})},
             source="user",
             options={**(options or {})},
             unique_id="12345",
@@ -555,7 +551,7 @@ def create_config_entry(
             version=1,
             domain=DOMAIN,
             title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
+            data={"token": TOKEN, **(data or {})},
             source="user",
             options={**(options or {})},
             unique_id="12345",
