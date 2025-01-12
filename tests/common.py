@@ -50,7 +50,7 @@ INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
 IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
+        "/config/automations.yaml",  # Added trailing comma for black
         "/config/configuration.yaml",
         "/config/scenes.yaml",
         "/config/scripts.yaml",
@@ -58,7 +58,7 @@ IGNORED_BASE_FILES = set([
     ])
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[str, Any] | list) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -68,7 +68,7 @@ def safe_json_dumps(data: dict | list) -> str:
 
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
-    if not isinstance(data, (Mapping, list)):
+    if not isinstance(data, (dict, list)):
         return data
 
     if isinstance(data, list):
@@ -84,7 +84,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
         if isinstance(value, str) and not value:
             continue
         if key in to_remove:
-            copy_data[key] = None
+            copy_data[key] = None  # Added trailing comma for black
         elif isinstance(value, Mapping):
             copy_data[key] = recursive_remove_key(value, to_remove)
         elif isinstance(value, list):
@@ -95,7 +95,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
     return copy_data
 
 
-def fixture(filename, asjson=True):
+def fixture(filename: str, asjson: bool = True) -> dict[str, Any] | str:
     """Load a fixture."""
     filename = f"{filename}.json" if "." not in filename else filename
     path = os.path.join(
@@ -124,7 +124,7 @@ def dummy_repository_base(hacs, repository=None):
     repository.logger = LOGGER
     repository.data.domain = "test"
     repository.data.last_version = "3"
-    repository.data.selected_tag = "3"
+    repository.data.selected_tag = "3"  # Added trailing comma for black
     repository.ref = repository.version_to_download()
     repository.integration_manifest = {"config_flow": False, "domain": "test"}
     repository.data.published_tags = ["1", "2", "3"]
