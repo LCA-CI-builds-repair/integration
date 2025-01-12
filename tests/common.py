@@ -254,7 +254,7 @@ def mock_storage(data=None):
     async def mock_async_load(store):
         """Mock version of load."""
         if store._data is None:
-            # No data to load
+            # No data to load.
             if store.key not in data:
                 return None
 
@@ -347,7 +347,7 @@ class WSClient:
 
     async def _create_client(self) -> None:
         if self.client is not None:
-            return
+            return None
 
         clientsession = async_get_clientsession(self.hass)
 
