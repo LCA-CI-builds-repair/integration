@@ -87,7 +87,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
             copy_data[key] = None
         elif isinstance(value, Mapping):
             copy_data[key] = recursive_remove_key(value, to_remove)
-        elif isinstance(value, list):
+        elif isinstance(value, list) and value:
             copy_data[key] = [
                 recursive_remove_key(item, to_remove)
                 for item in sorted(value, key=lambda obj: getattr(obj, "id", 0))
@@ -113,7 +113,7 @@ def fixture(filename, asjson=True):
         raise OSError(f"Missing fixture for {path.split('fixtures/')[1]}") from err
 
 
-def dummy_repository_base(hacs, repository=None):
+def dummy_repository_base(hacs, repository=None) -> HacsRepository:
     if repository is None:
         repository = HacsRepository(hacs)
         repository.data.full_name = "test/test"
