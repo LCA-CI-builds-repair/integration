@@ -118,7 +118,7 @@ def dummy_repository_base(hacs, repository=None):
         repository = HacsRepository(hacs)
         repository.data.full_name = "test/test"
         repository.data.full_name_lower = "test/test"
-    repository.hacs = hacs
+    repository.hacs.set(hacs)
     repository.hacs.hass = hacs.hass
     repository.hacs.core.config_path = hacs.hass.config.path()
     repository.logger = LOGGER
