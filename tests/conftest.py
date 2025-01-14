@@ -222,6 +222,7 @@ def config_entry() -> ConfigEntry:
         domain=DOMAIN,
         title="",
         data={CONF_TOKEN: TOKEN},
+        minor_version=1,
         source="user",
         options={},
         unique_id="12345",
