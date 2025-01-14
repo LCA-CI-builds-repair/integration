@@ -58,7 +58,7 @@ IGNORED_BASE_FILES = set([
     ])
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[str, Any] | list[Any]) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -67,7 +67,7 @@ def safe_json_dumps(data: dict | list) -> str:
     )
 
 
-def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
+def recursive_remove_key(data: dict[str, Any] | list[Any], to_remove: Iterable[str]) -> dict[str, Any] | list[Any]:
     if not isinstance(data, (Mapping, list)):
         return data
 
@@ -109,7 +109,7 @@ def fixture(filename, asjson=True):
             if asjson:
                 return json_func.loads(fptr.read())
             return fptr.read()
-    except OSError as err:
+    except Exception as err:
         raise OSError(f"Missing fixture for {path.split('fixtures/')[1]}") from err
 
 
@@ -385,7 +385,7 @@ class WSClient:
 
 
 class MockedResponse:
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         self.kwargs = kwargs
         self.exception = kwargs.get("exception", None)
 
@@ -401,12 +401,12 @@ class MockedResponse:
     def headers(self):
         return self.kwargs.get("headers", {})
 
-    async def read(self, **kwargs):
+    async def read(self, **kwargs: Any) -> bytes:
         if (content := self.kwargs.get("content")) is not None:
             return content
         return await self.kwargs.get("read", AsyncMock())()
 
-    async def json(self, **kwargs):
+    async def json(self, **kwargs: Any) -> dict[str, Any]:
         if (content := self.kwargs.get("content")) is not None:
             return content
         return await self.kwargs.get("json", AsyncMock())()
