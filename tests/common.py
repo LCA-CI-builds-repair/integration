@@ -84,7 +84,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
         if isinstance(value, str) and not value:
             continue
         if key in to_remove:
-            copy_data[key] = None
+            del copy_data[key]
         elif isinstance(value, Mapping):
             copy_data[key] = recursive_remove_key(value, to_remove)
         elif isinstance(value, list):
