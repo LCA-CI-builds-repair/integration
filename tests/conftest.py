@@ -219,6 +219,7 @@ def config_entry() -> ConfigEntry:
     """Fixture for a config entry."""
     yield ConfigEntry(
         version=1,
+        minor_version=3,
         domain=DOMAIN,
         title="",
         data={CONF_TOKEN: TOKEN},
