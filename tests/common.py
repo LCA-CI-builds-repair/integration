@@ -49,16 +49,16 @@ TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
-IGNORED_BASE_FILES = set([
+IGNORED_BASE_FILES = {
         "/config/automations.yaml",
         "/config/configuration.yaml",
         "/config/scenes.yaml",
         "/config/scripts.yaml",
         "/config/secrets.yaml",
-    ])
+    }
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[str, Any] | list) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -144,7 +144,7 @@ async def async_test_home_assistant(loop, tmpdir):
     try:
         hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
     except TypeError:
-        hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
+        hass = ha.HomeAssistant(str(tmpdir))  # pylint: disable=too-many-function-args
     store = auth_store.AuthStore(hass)
     hass.auth = auth.AuthManager(hass, store, {}, {})
     ensure_auth_manager_loaded(hass.auth)
@@ -241,7 +241,7 @@ def ensure_auth_manager_loaded(auth_mgr):
 
 
 @contextmanager
-def mock_storage(data=None):
+def mock_storage(data: dict[str, Any] | None = None):
     """Mock storage.
     Data is a dict {'key': {'version': version, 'data': data}}
     Written data will be converted to JSON to ensure JSON parsing works.
