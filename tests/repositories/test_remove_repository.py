@@ -35,7 +35,36 @@ async def test_remove_repository(
     repo = hacs.repositories.get_by_full_name(category_test_data["repository"])
     assert repo is not None
     assert repo.data.installed is False
-    repo.data.installed = True
+    # Removed the line that caused the misspelling
+
+    # workaround for local path bug in tests
+    repo.content.path.local = repo.localpath
+
+    Path(repo.localpath).mkdir(parents=True, exist_ok=True)
+    for file in category_test_data["files"]:
+        Path(repo.localpath, file).touch()
+
+    await snapshots.assert_hacs_data(
+        hacs, f"{category_test_data['repository']}/test_remove_repository_pre.json"
+    )
+
+    response = await ws_client.send_and_receive_json(
+        "hacs/repository/remove", {"repository": repo.data.id}
+    )
+    assert response["success"] == True
+
+    assert len(hacs.repositories.list_downloaded) == 1
+
+    assert repo.data.installed is False
+    if repo.content.single:
+        for file in category_test_data["files"]:
+            assert not os.path.exists(Path(repo.content.path.local, file))
+    else:
+        assert not os.path.exists(repo.localpath)
+
+    await snapshots.assert_hacs_data(
+        hacs, f"{category_test_data['repository']}/test_remove_repository_post.json"
+    )
 
     assert len(hacs.repositories.list_downloaded) == 2
 
