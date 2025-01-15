@@ -141,10 +141,7 @@ def dummy_repository_base(hacs, repository=None):
 # pylint: disable=protected-access
 async def async_test_home_assistant(loop, tmpdir):
     """Return a Home Assistant object pointing at test config dir."""
-    try:
-        hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
-    except TypeError:
-        hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
+    hass = ha.HomeAssistant()
     store = auth_store.AuthStore(hass)
     hass.auth = auth.AuthManager(hass, store, {}, {})
     ensure_auth_manager_loaded(hass.auth)
@@ -244,7 +241,6 @@ def ensure_auth_manager_loaded(auth_mgr):
 def mock_storage(data=None):
     """Mock storage.
     Data is a dict {'key': {'version': version, 'data': data}}
-    Written data will be converted to JSON to ensure JSON parsing works.
     """
     if data is None:
         data = {}
