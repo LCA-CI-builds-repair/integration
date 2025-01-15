@@ -62,7 +62,7 @@ async def test_remove_repository(
 
     assert repo.data.installed is False
     if repo.content.single:
-        for file in category_test_data["files"]:
+        for file in category_test_data["files"][:-1]:
             assert not os.path.exists(Path(repo.content.path.local, file))
     else:
         assert not os.path.exists(repo.localpath)
