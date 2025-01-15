@@ -583,3 +583,7 @@ async def setup_integration(hass: ha.HomeAssistant, config_entry: MockConfigEntr
 
 def get_hacs(hass: ha.HomeAssistant) -> HacsBase:
     return hass.data[DOMAIN]
+def pytest_sessionstart(session):
+    session.config.addinivalue_line(
+        "markers", "hacs: To test only Hacs related code"
+    )
