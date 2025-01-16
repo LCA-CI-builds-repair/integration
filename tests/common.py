@@ -63,7 +63,7 @@ def safe_json_dumps(data: dict | list) -> str:
         data,
         indent=4,
         sort_keys=True,
-        cls=ExtendedJSONEncoder,
+        default=str,
     )
 
 
@@ -420,7 +420,7 @@ class ResponseMocker:
     responses: dict[str, MockedResponse] = {}
 
     def add(self, url: str, response: MockedResponse) -> None:
-        self.responses[url] = response
+        self.responses[str(url)] = response
 
     def get(self, url: str, *args, **kwargs) -> MockedResponse:
         data = {"url": url, "args": list(args), "kwargs": kwargs}
@@ -434,7 +434,7 @@ class ProxyClientSession(ClientSession):
     response_mocker = ResponseMocker()
 
     async def _request(self, method: str, str_or_url: StrOrURL, *args, **kwargs):
-        if str_or_url.startswith("ws://"):
+        if isinstance(str_or_url, str) and str_or_url.startswith("ws://"):
             return await super()._request(method, str_or_url, *args, **kwargs)
 
         if (resp := self.response_mocker.get(str_or_url, args, kwargs)) is not None:
@@ -482,7 +482,7 @@ class ProxyClientSession(ClientSession):
 async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
     """Create a mocked client session."""
     base = async_get_clientsession(hass)
-    base_request = base._request
+    base_request = base._request.__func__
     response_mocker = ResponseMocker()
 
     async def _request(method: str, str_or_url: StrOrURL, *args, **kwargs):
