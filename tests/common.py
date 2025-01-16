@@ -49,13 +49,13 @@ TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
-IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
+IGNORED_BASE_FILES = {
+    "/config/automations.yaml",
+    "/config/configuration.yaml",
+    "/config/scenes.yaml",
+    "/config/scripts.yaml",
+    "/config/secrets.yaml",
+}
 
 
 def safe_json_dumps(data: dict | list) -> str:
@@ -97,7 +97,6 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
 
 def fixture(filename, asjson=True):
     """Load a fixture."""
-    filename = f"{filename}.json" if "." not in filename else filename
     path = os.path.join(
         os.path.dirname(__file__),
         "fixtures",
@@ -438,7 +437,7 @@ class ProxyClientSession(ClientSession):
             return await super()._request(method, str_or_url, *args, **kwargs)
 
         if (resp := self.response_mocker.get(str_or_url, args, kwargs)) is not None:
-            LOGGER.info("Using mocked response for %s", str_or_url)
+            LOGGER.info(f"Using mocked response for {str_or_url}")
             if resp.exception:
                 raise resp.exception
             return resp
@@ -490,7 +489,7 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
             return await base_request(method, str_or_url, *args, **kwargs)
 
         if (resp := response_mocker.get(str_or_url, args, kwargs)) is not None:
-            LOGGER.info("Using mocked response for %s", str_or_url)
+            LOGGER.info(f"Using mocked response for {str_or_url}")
             if resp.exception:
                 raise resp.exception
             return resp
