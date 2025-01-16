@@ -218,7 +218,8 @@ def repository_netdaemon(hacs):
 def config_entry() -> ConfigEntry:
     """Fixture for a config entry."""
     yield ConfigEntry(
-        version=1,
+        version=2,
+        minor_version=1,
         domain=DOMAIN,
         title="",
         data={CONF_TOKEN: TOKEN},
