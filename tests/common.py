@@ -27,7 +27,7 @@ from homeassistant.helpers import (
     entity_registry as er,
     issue_registry as ir,
     restore_state as rs,
-    storage,
+    storage
 )
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.json import ExtendedJSONEncoder
@@ -49,14 +49,13 @@ TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
-IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
-
+IGNORED_BASE_FILES = {
+    "/config/automations.yaml",
+    "/config/configuration.yaml",
+    "/config/scenes.yaml",
+    "/config/scripts.yaml",
+    "/config/secrets.yaml",
+}
 
 def safe_json_dumps(data: dict | list) -> str:
     return json_func.dumps(
@@ -65,7 +64,6 @@ def safe_json_dumps(data: dict | list) -> str:
         sort_keys=True,
         cls=ExtendedJSONEncoder,
     )
-
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
     if not isinstance(data, (Mapping, list)):
@@ -101,7 +99,7 @@ def fixture(filename, asjson=True):
     path = os.path.join(
         os.path.dirname(__file__),
         "fixtures",
-        filename.lower().replace("/", "_"),
+        filename.lower().replace("/", "_")
     )
     try:
         with open(path, encoding="utf-8") as fptr:
@@ -442,7 +440,7 @@ class ProxyClientSession(ClientSession):
             if resp.exception:
                 raise resp.exception
             return resp
-
+        
         url = URL(str_or_url)
         fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
         fp = os.path.join(
