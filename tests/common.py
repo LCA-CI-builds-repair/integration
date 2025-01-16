@@ -47,11 +47,11 @@ from custom_components.hacs.utils.logger import LOGGER
 _LOGGER = LOGGER
 TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
-REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
+REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar(
+    "request_context", default=None
+)
 
-IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
+IGNORED_BASE_FILES = {"/config/automations.yaml", "/config/configuration.yaml",
         "/config/scenes.yaml",
         "/config/scripts.yaml",
         "/config/secrets.yaml",
@@ -81,10 +81,8 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
     for key, value in copy_data.items():
         if value is None:
             continue
-        if isinstance(value, str) and not value:
-            continue
-        if key in to_remove:
-            copy_data[key] = None
+        if isinstance(value, str) and not value or key in to_remove:
+            copy_data[key] = None if key in to_remove else value
         elif isinstance(value, Mapping):
             copy_data[key] = recursive_remove_key(value, to_remove)
         elif isinstance(value, list):
@@ -109,9 +107,8 @@ def fixture(filename, asjson=True):
             if asjson:
                 return json_func.loads(fptr.read())
             return fptr.read()
-    except OSError as err:
-        raise OSError(f"Missing fixture for {path.split('fixtures/')[1]}") from err
-
+    except OSError:
+        raise OSError(f"Missing fixture for {path.split('fixtures/')[1]}")
 
 def dummy_repository_base(hacs, repository=None):
     if repository is None:
@@ -270,7 +267,7 @@ def mock_storage(data=None):
         loaded = await orig_load(store)
         _LOGGER.info("Loading data for %s: %s", store.key, loaded)
         return loaded
-
+        
     def mock_write_data(store, path, data_to_write):
         """Mock version of write data."""
         _LOGGER.info("Writing data to %s: %s", store.key, data_to_write)
