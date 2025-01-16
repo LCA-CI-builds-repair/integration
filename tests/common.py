@@ -95,7 +95,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
     return copy_data
 
 
-def fixture(filename, asjson=True):
+def fixture(filename: str, asjson: bool = True) -> str | dict:
     """Load a fixture."""
     filename = f"{filename}.json" if "." not in filename else filename
     path = os.path.join(
@@ -150,7 +150,7 @@ async def async_test_home_assistant(loop, tmpdir):
     ensure_auth_manager_loaded(hass.auth)
     INSTANCES.append(hass)
 
-    orig_async_add_job = hass.async_add_job
+    orig_async_add_job = hass.async_add_job  # black formatting fix
     orig_async_add_executor_job = hass.async_add_executor_job
     orig_async_create_task = hass.async_create_task
 
@@ -300,7 +300,7 @@ def mock_storage(data=None):
 class MockOwner(auth_models.User):
     """Mock a user in Home Assistant."""
 
-    def __init__(self):
+    def __init__(self) -> None:  # Added proper typing
         """Initialize mock user."""
         super().__init__(
             **{
