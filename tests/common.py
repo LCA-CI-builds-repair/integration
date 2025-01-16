@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 import functools as ft
 import json as json_func
-import os
+from pathlib import Path
 from typing import Any, Iterable, Mapping
 from unittest.mock import AsyncMock, Mock, patch
 
@@ -49,14 +49,13 @@ TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
-IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
-
+IGNORED_BASE_FILES = {
+    "/config/automations.yaml",
+    "/config/configuration.yaml",
+    "/config/scenes.yaml",
+    "/config/scripts.yaml",
+    "/config/secrets.yaml",
+}
 
 def safe_json_dumps(data: dict | list) -> str:
     return json_func.dumps(
@@ -83,7 +82,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
             continue
         if isinstance(value, str) and not value:
             continue
-        if key in to_remove:
+        if key in set(to_remove):
             copy_data[key] = None
         elif isinstance(value, Mapping):
             copy_data[key] = recursive_remove_key(value, to_remove)
@@ -98,14 +97,12 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
 def fixture(filename, asjson=True):
     """Load a fixture."""
     filename = f"{filename}.json" if "." not in filename else filename
-    path = os.path.join(
-        os.path.dirname(__file__),
-        "fixtures",
-        filename.lower().replace("/", "_"),
-    )
+    path = Path(__file__).parent / "fixtures" / filename.lower().replace("/", "_")
+
     try:
-        with open(path, encoding="utf-8") as fptr:
+        with path.open(encoding="utf-8") as fptr:
             _LOGGER.debug("Loading fixture from %s", path)
+            content = fptr.read()
             if asjson:
                 return json_func.loads(fptr.read())
             return fptr.read()
@@ -444,7 +441,6 @@ class ProxyClientSession(ClientSession):
             return resp
 
         url = URL(str_or_url)
-        fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
         fp = os.path.join(
             os.path.dirname(__file__),
             fixture_file,
