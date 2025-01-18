@@ -59,6 +59,7 @@ IGNORED_BASE_FILES = set([
 
 
 def safe_json_dumps(data: dict | list) -> str:
+    """Dump data to a JSON string."""
     return json_func.dumps(
         data,
         indent=4,
@@ -68,6 +69,7 @@ def safe_json_dumps(data: dict | list) -> str:
 
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
+    """Recursively remove keys from a dictionary."""
     if not isinstance(data, (Mapping, list)):
         return data
 
@@ -416,6 +418,7 @@ class MockedResponse:
 
 
 class ResponseMocker:
+    """Mock responses for HTTP requests."""
     calls: list[dict[str, Any]] = []
     responses: dict[str, MockedResponse] = {}
 
@@ -431,6 +434,7 @@ class ResponseMocker:
 
 
 class ProxyClientSession(ClientSession):
+    """Proxy client session for mocking HTTP requests."""
     response_mocker = ResponseMocker()
 
     async def _request(self, method: str, str_or_url: StrOrURL, *args, **kwargs):
