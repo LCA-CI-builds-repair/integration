@@ -225,6 +225,7 @@ def config_entry() -> ConfigEntry:
         source="user",
         options={},
         unique_id="12345",
+        minor_version=0  # Add minor_version
     )
 
 
