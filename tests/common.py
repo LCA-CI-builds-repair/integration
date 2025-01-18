@@ -107,7 +107,7 @@ def fixture(filename, asjson=True):
         with open(path, encoding="utf-8") as fptr:
             _LOGGER.debug("Loading fixture from %s", path)
             if asjson:
-                return json_func.loads(fptr.read())
+                return json.loads(fptr.read())
             return fptr.read()
     except OSError as err:
         raise OSError(f"Missing fixture for {path.split('fixtures/')[1]}") from err
@@ -147,7 +147,7 @@ async def async_test_home_assistant(loop, tmpdir):
         hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
     store = auth_store.AuthStore(hass)
     hass.auth = auth.AuthManager(hass, store, {}, {})
-    ensure_auth_manager_loaded(hass.auth)
+    ensure_auth_manager_loaded(auth_mgr=hass.auth)
     INSTANCES.append(hass)
 
     orig_async_add_job = hass.async_add_job
