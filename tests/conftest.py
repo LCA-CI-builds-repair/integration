@@ -129,11 +129,36 @@ async def hacs(hass: HomeAssistant):
     hacs_obj.queue = QueueManager(hass=hass)
     hacs_obj.core = HacsCore()
     hacs_obj.system = HacsSystem()
+        hass=hass,
+        pkg_path="custom_components.hacs",
+        file_path=Path(hass.config.path("custom_components/hacs")),
+        manifest={"domain": DOMAIN, "version": "0.0.0", "requirements": ["hacs_frontend==1"]},
+    )
+    hacs_obj.common = HacsCommon()
+    hacs_obj.data = AsyncMock()
+    hacs_obj.queue = QueueManager(hass=hass)
+    hacs_obj.core = HacsCore()
+    hacs_obj.system = HacsSystem()
 
     hacs_obj.core.config_path = hass.config.path()
     hacs_obj.core.ha_version = AwesomeVersion(HAVERSION)
     hacs_obj.version = hacs_obj.integration.version
     hacs_obj.configuration.token = TOKEN
+    ## Old GitHub client
+    hacs_obj.github = GitHub(
+        token=hacs_obj.configuration.token,
+        session=hacs_obj.session,
+        headers={
+            "User-Agent": "HACS/pytest",
+            "Accept": ACCEPT_HEADERS["preview"],
+        },
+    )
+    ## New GitHub client
+    hacs_obj.githubapi = GitHubAPI(
+        token=hacs_obj.configuration.token,
+        session=hacs_obj.session,
+        **{"client_name": "HACS/pytest"},
+    )
 
     ## Old GitHub client
     hacs_obj.github = GitHub(
