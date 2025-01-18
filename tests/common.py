@@ -77,7 +77,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
             for val in sorted(data, key=lambda obj: getattr(obj, "id", 0))
         ]
 
-    copy_data = {**data}
+    copy_data = data.copy()
     for key, value in copy_data.items():
         if value is None:
             continue
@@ -545,9 +545,9 @@ def create_config_entry(
             minor_version=0,
             domain=DOMAIN,
             title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
+            data={"token": TOKEN} | (data or {}),
             source="user",
-            options={**(options or {})},
+            options=options or {},
             unique_id="12345",
         )
     except TypeError:
