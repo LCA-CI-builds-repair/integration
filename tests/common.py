@@ -8,7 +8,7 @@ import functools as ft
 import json as json_func
 import os
 from typing import Any, Iterable, Mapping
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import patch, AsyncMock, Mock
 
 from aiohttp import ClientSession, ClientWebSocketResponse
 from aiohttp.typedefs import StrOrURL
@@ -45,7 +45,7 @@ from custom_components.hacs.utils.configuration_schema import TOKEN as CONF_TOKE
 from custom_components.hacs.utils.logger import LOGGER
 
 _LOGGER = LOGGER
-TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+TOKEN = "X" * 31
 INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
@@ -58,7 +58,7 @@ IGNORED_BASE_FILES = set([
     ])
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[Any, Any] | list[Any]) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -67,7 +67,7 @@ def safe_json_dumps(data: dict | list) -> str:
     )
 
 
-def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
+def recursive_remove_key(data: dict[str, Any] | list[Any], to_remove: Iterable[str]) -> dict[str, Any] | list[Any]:
     if not isinstance(data, (Mapping, list)):
         return data
 
@@ -98,14 +98,10 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
 def fixture(filename, asjson=True):
     """Load a fixture."""
     filename = f"{filename}.json" if "." not in filename else filename
-    path = os.path.join(
-        os.path.dirname(__file__),
-        "fixtures",
-        filename.lower().replace("/", "_"),
-    )
+    path = f"{os.path.dirname(__file__)}/fixtures/{filename.lower().replace('/', '_')}"
     try:
         with open(path, encoding="utf-8") as fptr:
-            _LOGGER.debug("Loading fixture from %s", path)
+            _LOGGER.debug(f"Loading fixture from {path}")
             if asjson:
                 return json_func.loads(fptr.read())
             return fptr.read()
@@ -254,7 +250,7 @@ def mock_storage(data=None):
     async def mock_async_load(store):
         """Mock version of load."""
         if store._data is None:
-            # No data to load
+            # Nothing loaded yet, load from mock data
             if store.key not in data:
                 return None
 
@@ -268,13 +264,13 @@ def mock_storage(data=None):
 
         # Route through original load so that we trigger migration
         loaded = await orig_load(store)
-        _LOGGER.info("Loading data for %s: %s", store.key, loaded)
+        _LOGGER.info(f"Loading data for {store.key}: {loaded}")
         return loaded
 
     def mock_write_data(store, path, data_to_write):
         """Mock version of write data."""
-        _LOGGER.info("Writing data to %s: %s", store.key, data_to_write)
-        # To ensure that the data can be serialized
+        _LOGGER.info(f"Writing data to {store.key}: {data_to_write}")
+        # Ensure data can be serialized
         data[store.key] = json_func.loads(json_func.dumps(data_to_write, cls=store._encoder))
 
     async def mock_remove(store):
@@ -444,11 +440,8 @@ class ProxyClientSession(ClientSession):
             return resp
 
         url = URL(str_or_url)
-        fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
-        fp = os.path.join(
-            os.path.dirname(__file__),
-            fixture_file,
-        )
+        json_extension = '.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''
+        fp = f"{os.path.dirname(__file__)}/fixtures/proxy/{url.host}{url.path}{json_extension}"
 
         print(f"Using fixture {fp} for request to {url.host}")
 
