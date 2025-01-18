@@ -50,7 +50,7 @@ INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
 IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
+        "/config/automations.yaml",  # noqa: E131
         "/config/configuration.yaml",
         "/config/scenes.yaml",
         "/config/scripts.yaml",
@@ -58,7 +58,7 @@ IGNORED_BASE_FILES = set([
     ])
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[str, Any] | list[Any]) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -143,7 +143,7 @@ async def async_test_home_assistant(loop, tmpdir):
     """Return a Home Assistant object pointing at test config dir."""
     try:
         hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
-    except TypeError:
+    except TypeError:  # pragma: no cover
         hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
     store = auth_store.AuthStore(hass)
     hass.auth = auth.AuthManager(hass, store, {}, {})
@@ -546,7 +546,7 @@ def create_config_entry(
             domain=DOMAIN,
             title="",
             data={CONF_TOKEN: TOKEN, **(data or {})},
-            source="user",
+            source="user",  # type: ignore[arg-type]
             options={**(options or {})},
             unique_id="12345",
         )
