@@ -59,12 +59,7 @@ IGNORED_BASE_FILES = set([
 
 
 def safe_json_dumps(data: dict | list) -> str:
-    return json_func.dumps(
-        data,
-        indent=4,
-        sort_keys=True,
-        cls=ExtendedJSONEncoder,
-    )
+    return json_func.dumps(data, indent=4, sort_keys=True, cls=ExtendedJSONEncoder)
 
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
@@ -233,11 +228,10 @@ async def async_test_home_assistant(loop, tmpdir):
 
 
 @ha.callback
-def ensure_auth_manager_loaded(auth_mgr):
+def ensure_auth_manager_loaded(auth_mgr: auth.AuthManager) -> None:
     """Ensure an auth manager is considered loaded."""
-    store = auth_mgr._store
-    if store._users is None:
-        store._set_defaults()
+    if auth_mgr._store._users is None:
+        auth_mgr._store._set_defaults()
 
 
 @contextmanager
@@ -323,6 +317,7 @@ class MockOwner(auth_models.User):
 
 
 class MockConfigEntry(config_entries.ConfigEntry):
+    """Mock ConfigEntry."""
     entry_id = uuid_util.random_uuid_hex()
 
     def add_to_hass(self, hass: ha.HomeAssistant) -> None:
