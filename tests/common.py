@@ -141,10 +141,7 @@ def dummy_repository_base(hacs, repository=None):
 # pylint: disable=protected-access
 async def async_test_home_assistant(loop, tmpdir):
     """Return a Home Assistant object pointing at test config dir."""
-    try:
-        hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
-    except TypeError:
-        hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
+    hass = ha.HomeAssistant(tmpdir)
     store = auth_store.AuthStore(hass)
     hass.auth = auth.AuthManager(hass, store, {}, {})
     ensure_auth_manager_loaded(hass.auth)
@@ -538,28 +535,16 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
 def create_config_entry(
     data: dict[str, Any] = None, options: dict[str, Any] = None
 ) -> MockConfigEntry:
-    try:
-        # Core 2024.1 added minor_version
-        return MockConfigEntry(
-            version=1,
-            minor_version=0,
-            domain=DOMAIN,
-            title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
-            source="user",
-            options={**(options or {})},
-            unique_id="12345",
-        )
-    except TypeError:
-        return MockConfigEntry(
-            version=1,
-            domain=DOMAIN,
-            title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
-            source="user",
-            options={**(options or {})},
-            unique_id="12345",
-        )
+    return MockConfigEntry(
+        version=1,
+        minor_version=0,
+        domain=DOMAIN,
+        title="",
+        data={CONF_TOKEN: TOKEN, **(data or {})},
+        source="user",
+        options={**(options or {})},
+        unique_id="12345",
+    )
 
 
 async def setup_integration(hass: ha.HomeAssistant, config_entry: MockConfigEntry) -> None:
