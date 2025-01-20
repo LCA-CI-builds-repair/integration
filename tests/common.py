@@ -466,17 +466,17 @@ class ProxyClientSession(ClientSession):
             with open(fp, encoding="utf-8") as fptr:
                 return json_func.loads(fptr.read())
 
-        return MockedResponse(
-            url=url,
-            read=read,
-            json=json,
-            headers={
-                "X-RateLimit-Limit": "999",
-                "X-RateLimit-Remaining": "999",
-                "X-RateLimit-Reset": "999",
-                "Content-Type": "application/json",
-            },
-        )
+    return MockedResponse(
+        url=url,
+        read=read,
+        json=json,
+        headers={
+            "X-RateLimit-Limit": "999",
+            "X-RateLimit-Remaining": "999",
+            "X-RateLimit-Reset": "999",
+            "Content-Type": "application/json",
+        },
+    )
 
 
 async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
