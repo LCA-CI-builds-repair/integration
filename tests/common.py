@@ -131,7 +131,7 @@ def dummy_repository_base(hacs, repository=None):
     repository.data.update_data(fixture("repository_data.json", asjson=True))
     repository.hacs_manifest = HacsManifest.from_dict({})
 
-    async def update_repository(*args, **kwargs):
+    async def update_repository(self, *args, **kwargs):
         pass
 
     repository.update_repository = update_repository
