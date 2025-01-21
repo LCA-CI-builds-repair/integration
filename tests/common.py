@@ -433,11 +433,11 @@ class ResponseMocker:
 class ProxyClientSession(ClientSession):
     response_mocker = ResponseMocker()
 
-    async def _request(self, method: str, str_or_url: StrOrURL, *args, **kwargs):
+    async def _request(self, method: str, str_or_url: StrOrURL, *args: Any, **kwargs: Any) -> Any:
         if str_or_url.startswith("ws://"):
             return await super()._request(method, str_or_url, *args, **kwargs)
 
-        if (resp := self.response_mocker.get(str_or_url, args, kwargs)) is not None:
+        if (resp := self.response_mocker.get(str_or_url, *args, **kwargs)) is not None:
             LOGGER.info("Using mocked response for %s", str_or_url)
             if resp.exception:
                 raise resp.exception
