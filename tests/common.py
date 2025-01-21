@@ -4,7 +4,7 @@ from __future__ import annotations
 import asyncio
 from contextlib import contextmanager
 from contextvars import ContextVar
-import functools as ft
+from functools import partial
 import json as json_func
 import os
 from typing import Any, Iterable, Mapping
