@@ -13,7 +13,13 @@ from unittest.mock import AsyncMock, Mock, patch
 from aiohttp import ClientSession, ClientWebSocketResponse
 from aiohttp.typedefs import StrOrURL
 from awesomeversion import AwesomeVersion
-from homeassistant import auth, bootstrap, config_entries, core as ha, config as ha_config
+from homeassistant import (
+    auth,
+    bootstrap,
+    config_entries,
+    core as ha,
+    config as ha_config,
+)
 from homeassistant.auth import auth_store, models as auth_models
 from homeassistant.const import (
     EVENT_HOMEASSISTANT_CLOSE,
