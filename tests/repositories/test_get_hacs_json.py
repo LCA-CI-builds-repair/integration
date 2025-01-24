@@ -15,6 +15,10 @@ from tests.common import client_session_proxy
 async def test_validate_repository(hacs: HacsBase, version: str, name: str | None):
     repository = HacsRepository(hacs=hacs)
     repository.data.full_name = "octocat/integration"
+    repository.data.default_branch = "main"
+    repository.data.selected_tag = version
+    await repository.update_repository()
+    assert repository.display_name == name
 
     hacs.session = await client_session_proxy(hacs.hass)
     manifest = await repository.get_hacs_json(version=version)
