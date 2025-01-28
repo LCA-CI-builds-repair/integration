@@ -1,6 +1,7 @@
 
 import pytest
 from custom_components.hacs.base import HacsBase
+from typing import Optional
 from custom_components.hacs.repositories.base import HacsRepository
 
 from tests.common import client_session_proxy
@@ -13,6 +14,7 @@ from tests.common import client_session_proxy
 ])
 @pytest.mark.asyncio
 async def test_validate_repository(hacs: HacsBase, version: str, name: str | None):
+async def test_validate_repository(hacs: HacsBase, version: str, name: Optional[str]):
     repository = HacsRepository(hacs=hacs)
     repository.data.full_name = "octocat/integration"
 
