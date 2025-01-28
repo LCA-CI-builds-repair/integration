@@ -7,7 +7,7 @@ from contextvars import ContextVar
 import functools as ft
 import json as json_func
 import os
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, Union
 from unittest.mock import AsyncMock, Mock, patch
 
 from aiohttp import ClientSession, ClientWebSocketResponse
@@ -68,7 +68,8 @@ def safe_json_dumps(data: dict | list) -> str:
 
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
-    if not isinstance(data, (Mapping, list)):
+    if not isinstance(data, (dict, list)):
+        # Mapping is deprecated in favor of dict
         return data
 
     if isinstance(data, list):
@@ -140,7 +141,7 @@ def dummy_repository_base(hacs, repository=None):
 
 # pylint: disable=protected-access
 async def async_test_home_assistant(loop, tmpdir):
-    """Return a Home Assistant object pointing at test config dir."""
+    """Return a Home Assistant object pointing at a test config dir."""
     try:
         hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
     except TypeError:
@@ -275,7 +276,8 @@ def mock_storage(data=None):
         """Mock version of write data."""
         _LOGGER.info("Writing data to %s: %s", store.key, data_to_write)
         # To ensure that the data can be serialized
-        data[store.key] = json_func.loads(json_func.dumps(data_to_write, cls=store._encoder))
+        json_data = json_func.dumps(data_to_write, cls=store._encoder)
+        data[store.key] = json_func.loads(json_data)
 
     async def mock_remove(store):
         """Remove data."""
@@ -361,8 +363,10 @@ class WSClient:
 
         self.hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, _async_close_websession)
 
-        self.client = await clientsession.ws_connect(
-            "ws://localhost:8123/api/websocket", timeout=1, autoclose=True
+        self.client = await clientsession.ws_connect(  # type: ignore[assignment]
+            "ws://localhost:8123/api/websocket",
+            timeout=1,
+            autoclose=True,
         )
         auth_response = await self.client.receive_json()
         assert auth_response["type"] == "auth_required"
