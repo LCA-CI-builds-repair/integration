@@ -39,7 +39,7 @@ async def test_remove_repository(
 
     assert len(hacs.repositories.list_downloaded) == 2
 
-    if repo.data.category in ("theme", "python_script"):
+    if repo.data.category in ("theme", "plugin"):
         repo.data.file_name = category_test_data["files"][0]
 
     # workaround for local path bug in tests
