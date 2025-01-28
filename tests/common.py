@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 import functools as ft
 import json as json_func
-import os
+import os.path
 from typing import Any, Iterable, Mapping
 from unittest.mock import AsyncMock, Mock, patch
 
@@ -14,10 +14,8 @@ from aiohttp import ClientSession, ClientWebSocketResponse
 from aiohttp.typedefs import StrOrURL
 from awesomeversion import AwesomeVersion
 from homeassistant import auth, bootstrap, config_entries, core as ha, config as ha_config
-from homeassistant.auth import auth_store, models as auth_models
-from homeassistant.const import (
-    EVENT_HOMEASSISTANT_CLOSE,
-    EVENT_HOMEASSISTANT_STOP,
+from homeassistant.auth import models as auth_models
+from homeassistant.const import EVENT_HOMEASSISTANT_CLOSE, EVENT_HOMEASSISTANT_STOP, (
     __version__ as HAVERSION,
 )
 from homeassistant.helpers import (
@@ -50,13 +48,8 @@ INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
 IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
-
+    "/config/automations.yaml", "/config/configuration.yaml", "/config/scenes.yaml", "/config/scripts.yaml", "/config/secrets.yaml",
+])
 
 def safe_json_dumps(data: dict | list) -> str:
     return json_func.dumps(
@@ -140,7 +133,7 @@ def dummy_repository_base(hacs, repository=None):
 
 # pylint: disable=protected-access
 async def async_test_home_assistant(loop, tmpdir):
-    """Return a Home Assistant object pointing at test config dir."""
+    """Return a HomeAssistant object pointing at test config dir."""
     try:
         hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
     except TypeError:
@@ -298,7 +291,7 @@ def mock_storage(data=None):
 
 
 class MockOwner(auth_models.User):
-    """Mock a user in Home Assistant."""
+    """Mock a user in HomeAssistant."""
 
     def __init__(self):
         """Initialize mock user."""
@@ -315,7 +308,7 @@ class MockOwner(auth_models.User):
 
     @staticmethod
     def create(hass: ha.HomeAssistant):
-        """Create a mock user."""
+        """Create a mock HassUser."""
         user = MockOwner()
         ensure_auth_manager_loaded(hass.auth)
         hass.auth._store._users[user.id] = user
@@ -417,7 +410,7 @@ class MockedResponse:
 
 class ResponseMocker:
     calls: list[dict[str, Any]] = []
-    responses: dict[str, MockedResponse] = {}
+    responses: dict = {}
 
     def add(self, url: str, response: MockedResponse) -> None:
         self.responses[url] = response
@@ -563,7 +556,7 @@ def create_config_entry(
 
 
 async def setup_integration(hass: ha.HomeAssistant, config_entry: MockConfigEntry) -> None:
-    mock_session = await client_session_proxy(hass)
+    mock_session = client_session_proxy(hass)
     with patch(
         "homeassistant.helpers.aiohttp_client.async_get_clientsession", return_value=mock_session
     ):
