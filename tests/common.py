@@ -59,17 +59,12 @@ IGNORED_BASE_FILES = set([
 
 
 def safe_json_dumps(data: dict | list) -> str:
-    return json_func.dumps(
-        data,
-        indent=4,
-        sort_keys=True,
-        cls=ExtendedJSONEncoder,
-    )
+    return json_func.dumps(data, indent=4, sort_keys=True, cls=ExtendedJSONEncoder)
 
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
-    if not isinstance(data, (Mapping, list)):
-        return data
+    if isinstance(data, (Mapping, list)):
+        ...
 
     if isinstance(data, list):
         return [
@@ -150,11 +145,17 @@ async def async_test_home_assistant(loop, tmpdir):
     ensure_auth_manager_loaded(hass.auth)
     INSTANCES.append(hass)
 
-    orig_async_add_job = hass.async_add_job
-    orig_async_add_executor_job = hass.async_add_executor_job
-    orig_async_create_task = hass.async_create_task
+    (
+        orig_async_add_job,
+        orig_async_add_executor_job,
+        orig_async_create_task,
+    ) = (
+        hass.async_add_job,
+        hass.async_add_executor_job,
+        hass.async_create_task,
+    )
 
-    def async_add_job(target, *args):
+    async def async_add_job(target, *args):
         """Add job."""
         check_target = target
         while isinstance(check_target, ft.partial):
