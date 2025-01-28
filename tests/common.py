@@ -141,13 +141,10 @@ def dummy_repository_base(hacs, repository=None):
 # pylint: disable=protected-access
 async def async_test_home_assistant(loop, tmpdir):
     """Return a Home Assistant object pointing at test config dir."""
-    try:
-        hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
-    except TypeError:
-        hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
+    hass = ha.HomeAssistant(tmpdir)
     store = auth_store.AuthStore(hass)
     hass.auth = auth.AuthManager(hass, store, {}, {})
-    ensure_auth_manager_loaded(hass.auth)
+    await ensure_auth_manager_loaded(hass.auth)
     INSTANCES.append(hass)
 
     orig_async_add_job = hass.async_add_job
@@ -486,7 +483,7 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
     response_mocker = ResponseMocker()
 
     async def _request(method: str, str_or_url: StrOrURL, *args, **kwargs):
-        if str_or_url.startswith("ws://"):
+        if str_or_url.startswith(("ws://",)):
             return await base_request(method, str_or_url, *args, **kwargs)
 
         if (resp := response_mocker.get(str_or_url, args, kwargs)) is not None:
