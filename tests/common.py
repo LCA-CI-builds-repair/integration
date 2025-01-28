@@ -50,12 +50,12 @@ INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
 IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
+    "/config/automations.yaml",
+    "/config/configuration.yaml",
+    "/config/scenes.yaml",
+    "/config/scripts.yaml",
+    "/config/secrets.yaml",
+)
 
 
 def safe_json_dumps(data: dict | list) -> str:
