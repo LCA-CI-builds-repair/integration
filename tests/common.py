@@ -26,16 +26,16 @@ from homeassistant.helpers import (
     entity,
     entity_registry as er,
     issue_registry as ir,
-    restore_state as rs,
+    restore_state,
     storage,
 )
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.json import ExtendedJSONEncoder
 from homeassistant.setup import async_setup_component
-import homeassistant.util.dt as date_util
+from homeassistant.util import dt as date_util
 from homeassistant.util.unit_system import METRIC_SYSTEM
-import homeassistant.util.uuid as uuid_util
-import pytest
+from homeassistant.util import uuid as uuid_util
+from pytest import FixtureRequest
 from yarl import URL
 
 from custom_components.hacs.base import HacsBase
@@ -47,15 +47,15 @@ from custom_components.hacs.utils.logger import LOGGER
 _LOGGER = LOGGER
 TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
-REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
+REQUEST_CONTEXT: ContextVar[FixtureRequest] = ContextVar("request_context", default=None)
 
-IGNORED_BASE_FILES = set([
+IGNORED_BASE_FILES = {
         "/config/automations.yaml",
         "/config/configuration.yaml",
         "/config/scenes.yaml",
         "/config/scripts.yaml",
         "/config/secrets.yaml",
-    ])
+}
 
 
 def safe_json_dumps(data: dict | list) -> str:
@@ -210,7 +210,7 @@ async def async_test_home_assistant(loop, tmpdir):
         dr.async_load(hass),
         er.async_load(hass),
         ir.async_load(hass),
-        rs.async_load(hass),
+        restore_state.async_load(hass),
     )
     hass.data[bootstrap.DATA_REGISTRIES_LOADED] = None
 
