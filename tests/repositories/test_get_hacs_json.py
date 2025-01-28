@@ -1,9 +1,9 @@
 
 import pytest
-from custom_components.hacs.base import HacsBase
-from custom_components.hacs.repositories.base import HacsRepository
+from custom_components.hacs.base import HacsBase  # pylint: disable=unused-import
+from custom_components.hacs.repositories.base import HacsRepository  # pylint: disable=unused-import
 
-from tests.common import client_session_proxy
+from tests.common import client_session_proxy  # pylint: disable=unused-import
 
 
 
@@ -16,10 +16,10 @@ async def test_validate_repository(hacs: HacsBase, version: str, name: str | Non
     repository = HacsRepository(hacs=hacs)
     repository.data.full_name = "octocat/integration"
 
-    hacs.session = await client_session_proxy(hacs.hass)
+    await client_session_proxy(hacs.hass)
     manifest = await repository.get_hacs_json(version=version)
 
     if name:
         assert manifest.name == name
-    else:
+    elif manifest is not None:
         assert manifest is None
