@@ -1,10 +1,9 @@
 
-from typing import Any
-import pytest
+from typing import TypedDict
+from tests.common import client_session_proxy
 from custom_components.hacs.base import HacsBase
 from custom_components.hacs.repositories.base import HacsRepository
-
-from tests.common import client_session_proxy
+import pytest
 
 
 
