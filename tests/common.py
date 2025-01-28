@@ -50,12 +50,9 @@ INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
 IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
+    "/config/automations.yaml", "/config/configuration.yaml", "/config/scenes.yaml",
+    "/config/scripts.yaml", "/config/secrets.yaml",
+])
 
 
 def safe_json_dumps(data: dict | list) -> str:
@@ -78,10 +75,8 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
         ]
 
     copy_data = {**data}
-    for key, value in copy_data.items():
-        if value is None:
-            continue
-        if isinstance(value, str) and not value:
+    for key, value in list(copy_data.items()):
+        if value is None or (isinstance(value, str) and not value):
             continue
         if key in to_remove:
             copy_data[key] = None
@@ -144,7 +139,7 @@ async def async_test_home_assistant(loop, tmpdir):
     try:
         hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
     except TypeError:
-        hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
+        hass = ha.HomeAssistant(str(tmpdir))  # pylint: disable=too-many-function-args
     store = auth_store.AuthStore(hass)
     hass.auth = auth.AuthManager(hass, store, {}, {})
     ensure_auth_manager_loaded(hass.auth)
@@ -441,7 +436,7 @@ class ProxyClientSession(ClientSession):
             LOGGER.info("Using mocked response for %s", str_or_url)
             if resp.exception:
                 raise resp.exception
-            return resp
+            return resp 
 
         url = URL(str_or_url)
         fixture_file = f"fixtures/proxy/{url.host}{url.path}{'.json' if url.host in ('api.github.com', 'data-v2.hacs.xyz') and not url.path.endswith('.json') else ''}"
@@ -451,7 +446,7 @@ class ProxyClientSession(ClientSession):
         )
 
         print(f"Using fixture {fp} for request to {url.host}")
-
+                
         if not os.path.exists(fp):
             raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
 
