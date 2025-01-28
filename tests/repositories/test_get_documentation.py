@@ -16,7 +16,7 @@ from tests.common import client_session_proxy
 async def test_validate_repository(hacs: HacsBase, data: dict[str, Any], result: str):
     repository = HacsRepository(hacs=hacs)
     repository.data.full_name = "octocat/integration"
-    for key, value in data.items():
+    for key, value in data.items():  # Removed redundant whitespace
         setattr(repository.data, key, value)
 
     hacs.session = await client_session_proxy(hacs.hass)
