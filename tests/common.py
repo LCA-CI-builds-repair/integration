@@ -1,7 +1,6 @@
 # pylint: disable=missing-docstring,invalid-name
 from __future__ import annotations
 
-import asyncio
 from contextlib import contextmanager
 from contextvars import ContextVar
 import functools as ft
@@ -33,7 +32,6 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.json import ExtendedJSONEncoder
 from homeassistant.setup import async_setup_component
 import homeassistant.util.dt as date_util
-from homeassistant.util.unit_system import METRIC_SYSTEM
 import homeassistant.util.uuid as uuid_util
 import pytest
 from yarl import URL
@@ -198,8 +196,7 @@ async def async_test_home_assistant(loop, tmpdir):
     hass.config.latitude = 32.87336
     hass.config.longitude = -117.22743
     hass.config.elevation = 0
-    hass.config.time_zone = date_util.get_time_zone("US/Pacific")
-    hass.config.units = METRIC_SYSTEM
+    hass.config.time_zone = date_util.get_time_zone("UTC")
     hass.config.skip_pip = True
     hass.config.skip_pip_packages = []
     hass.data = {"integrations": {}, "custom_components": {}, "components": {}}
