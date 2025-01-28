@@ -32,9 +32,9 @@ from homeassistant.helpers import (
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.json import ExtendedJSONEncoder
 from homeassistant.setup import async_setup_component
-import homeassistant.util.dt as date_util
+from homeassistant.util import dt as date_util
 from homeassistant.util.unit_system import METRIC_SYSTEM
-import homeassistant.util.uuid as uuid_util
+from homeassistant.util import uuid as uuid_util
 import pytest
 from yarl import URL
 
@@ -49,13 +49,13 @@ TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
-IGNORED_BASE_FILES = set([
-        "/config/automations.yaml",
-        "/config/configuration.yaml",
-        "/config/scenes.yaml",
-        "/config/scripts.yaml",
-        "/config/secrets.yaml",
-    ])
+IGNORED_BASE_FILES = {
+    "/config/automations.yaml",
+    "/config/configuration.yaml",
+    "/config/scenes.yaml",
+    "/config/scripts.yaml",
+    "/config/secrets.yaml",
+}
 
 
 def safe_json_dumps(data: dict | list) -> str:
@@ -139,7 +139,7 @@ def dummy_repository_base(hacs, repository=None):
 
 
 # pylint: disable=protected-access
-async def async_test_home_assistant(loop, tmpdir):
+async def async_test_home_assistant(_, tmpdir):
     """Return a Home Assistant object pointing at test config dir."""
     try:
         hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
@@ -200,8 +200,9 @@ async def async_test_home_assistant(loop, tmpdir):
     hass.config.elevation = 0
     hass.config.time_zone = date_util.get_time_zone("US/Pacific")
     hass.config.units = METRIC_SYSTEM
-    hass.config.skip_pip = True
-    hass.config.skip_pip_packages = []
+    if hasattr(hass.config, "skip_pip"):
+        hass.config.skip_pip = True
+        hass.config.skip_pip_packages = []
     hass.data = {"integrations": {}, "custom_components": {}, "components": {}}
 
     entity.async_setup(hass)
@@ -323,7 +324,7 @@ class MockOwner(auth_models.User):
 
 
 class MockConfigEntry(config_entries.ConfigEntry):
-    entry_id = uuid_util.random_uuid_hex()
+    entry_id: str = uuid_util.random_uuid_hex()
 
     def add_to_hass(self, hass: ha.HomeAssistant) -> None:
         """Test helper to add entry to hass."""
@@ -337,7 +338,7 @@ class MockConfigEntry(config_entries.ConfigEntry):
 
 class WSClient:
     """WS Client to be used in testing."""
-
+    
     client: ClientWebSocketResponse | None = None
 
     def __init__(self, hass: ha.HomeAssistant, token: str) -> None:
@@ -401,12 +402,12 @@ class MockedResponse:
     def headers(self):
         return self.kwargs.get("headers", {})
 
-    async def read(self, **kwargs):
+    async def read(self, **_):
         if (content := self.kwargs.get("content")) is not None:
             return content
         return await self.kwargs.get("read", AsyncMock())()
 
-    async def json(self, **kwargs):
+    async def json(self, **_):
         if (content := self.kwargs.get("content")) is not None:
             return content
         return await self.kwargs.get("json", AsyncMock())()
@@ -422,7 +423,7 @@ class ResponseMocker:
     def add(self, url: str, response: MockedResponse) -> None:
         self.responses[url] = response
 
-    def get(self, url: str, *args, **kwargs) -> MockedResponse:
+    def get(self, url: str, *args, **kwargs) -> MockedResponse | None:
         data = {"url": url, "args": list(args), "kwargs": kwargs}
         if (request := REQUEST_CONTEXT.get()) is not None:
             data["_test_caller"] = request.node.name
