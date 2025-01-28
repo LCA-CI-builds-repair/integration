@@ -298,6 +298,17 @@ def mock_storage(data=None):
 
 
 class MockOwner(auth_models.User):
+    def __init__(self) -> None:
+        super().__init__(
+            **{
+                "is_owner": True,
+                "is_active": True,
+                "name": "Mocked Owner User",
+                "system_generated": False,
+                "groups": [],
+                "perm_lookup": None,
+            }
+        )
     """Mock a user in Home Assistant."""
 
     def __init__(self):
@@ -323,6 +334,12 @@ class MockOwner(auth_models.User):
 
 
 class MockConfigEntry(config_entries.ConfigEntry):
+    def add_to_hass(self, hass: ha.HomeAssistant) -> None:
+        hass.config_entries._entries[self.entry_id] = self
+        if AwesomeVersion(HAVERSION) >= "2023.10.0":
+            hass.config_entries._domain_index.setdefault(self.domain, []).append(self)
+        else:
+            hass.config_entries._domain_index.setdefault(self.domain, []).append(self.entry_id)
     entry_id = uuid_util.random_uuid_hex()
 
     def add_to_hass(self, hass: ha.HomeAssistant) -> None:
@@ -416,6 +433,9 @@ class MockedResponse:
 
 
 class ResponseMocker:
+    def __init__(self) -> None:
+        self.calls: list[dict[str, Any]] = []
+        self.responses: dict[str, MockedResponse] = {}
     calls: list[dict[str, Any]] = []
     responses: dict[str, MockedResponse] = {}
 
@@ -431,6 +451,9 @@ class ResponseMocker:
 
 
 class ProxyClientSession(ClientSession):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.response_mocker = ResponseMocker()
     response_mocker = ResponseMocker()
 
     async def _request(self, method: str, str_or_url: StrOrURL, *args, **kwargs):
