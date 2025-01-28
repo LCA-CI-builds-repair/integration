@@ -422,7 +422,7 @@ class ResponseMocker:
     def add(self, url: str, response: MockedResponse) -> None:
         self.responses[url] = response
 
-    def get(self, url: str, *args, **kwargs) -> MockedResponse:
+    def get(self, url: str, *args, **kwargs) -> MockedResponse | None:
         data = {"url": url, "args": list(args), "kwargs": kwargs}
         if (request := REQUEST_CONTEXT.get()) is not None:
             data["_test_caller"] = request.node.name
