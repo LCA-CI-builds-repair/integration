@@ -58,7 +58,7 @@ IGNORED_BASE_FILES = set([
     ])
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[str, Any] | list) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -67,7 +67,7 @@ def safe_json_dumps(data: dict | list) -> str:
     )
 
 
-def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
+def recursive_remove_key(data: dict[str, Any] | list, to_remove: Iterable[str]) -> dict[str, Any] | list:
     if not isinstance(data, (Mapping, list)):
         return data
 
@@ -419,7 +419,8 @@ class ResponseMocker:
     calls: list[dict[str, Any]] = []
     responses: dict[str, MockedResponse] = {}
 
-    def add(self, url: str, response: MockedResponse) -> None:
+    @classmethod
+    def add(cls, url: str, response: MockedResponse) -> None:
         self.responses[url] = response
 
     def get(self, url: str, *args, **kwargs) -> MockedResponse:
@@ -546,7 +547,7 @@ def create_config_entry(
             domain=DOMAIN,
             title="",
             data={CONF_TOKEN: TOKEN, **(data or {})},
-            source="user",
+            source=config_entries.SOURCE_USER,
             options={**(options or {})},
             unique_id="12345",
         )
