@@ -58,7 +58,7 @@ IGNORED_BASE_FILES = set([
     ])
 
 
-def safe_json_dumps(data: dict | list) -> str:
+def safe_json_dumps(data: dict[str, Any] | list) -> str:
     return json_func.dumps(
         data,
         indent=4,
@@ -144,7 +144,7 @@ async def async_test_home_assistant(loop, tmpdir):
     try:
         hass = ha.HomeAssistant()  # pylint: disable=no-value-for-parameter
     except TypeError:
-        hass = ha.HomeAssistant(tmpdir)  # pylint: disable=too-many-function-args
+        hass = ha.HomeAssistant(str(tmpdir))  # pylint: disable=too-many-function-args
     store = auth_store.AuthStore(hass)
     hass.auth = auth.AuthManager(hass, store, {}, {})
     ensure_auth_manager_loaded(hass.auth)
@@ -194,7 +194,7 @@ async def async_test_home_assistant(loop, tmpdir):
     hass.async_create_task = async_create_task
 
     hass.config.location_name = "test home"
-    hass.config.config_dir = str(tmpdir)
+    hass.config.config_dir = tmpdir
     hass.config.latitude = 32.87336
     hass.config.longitude = -117.22743
     hass.config.elevation = 0
@@ -202,7 +202,7 @@ async def async_test_home_assistant(loop, tmpdir):
     hass.config.units = METRIC_SYSTEM
     hass.config.skip_pip = True
     hass.config.skip_pip_packages = []
-    hass.data = {"integrations": {}, "custom_components": {}, "components": {}}
+    hass.data = dict(integrations={}, custom_components={}, components={})
 
     entity.async_setup(hass)
     await asyncio.gather(
@@ -545,7 +545,7 @@ def create_config_entry(
             minor_version=0,
             domain=DOMAIN,
             title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
+            data={CONF_TOKEN: TOKEN} | (data or {}),
             source="user",
             options={**(options or {})},
             unique_id="12345",
@@ -555,7 +555,7 @@ def create_config_entry(
             version=1,
             domain=DOMAIN,
             title="",
-            data={CONF_TOKEN: TOKEN, **(data or {})},
+            data={CONF_TOKEN: TOKEN} | (data or {}),
             source="user",
             options={**(options or {})},
             unique_id="12345",
