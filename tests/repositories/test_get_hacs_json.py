@@ -1,4 +1,3 @@
-
 import pytest
 from custom_components.hacs.base import HacsBase
 from custom_components.hacs.repositories.base import HacsRepository
@@ -16,7 +15,7 @@ async def test_validate_repository(hacs: HacsBase, version: str, name: str | Non
     repository = HacsRepository(hacs=hacs)
     repository.data.full_name = "octocat/integration"
 
-    hacs.session = await client_session_proxy(hacs.hass)
+    hacs.session = await client_session_proxy(hacs)
     manifest = await repository.get_hacs_json(version=version)
 
     if name:
