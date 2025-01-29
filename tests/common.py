@@ -90,8 +90,7 @@ def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict
         elif isinstance(value, list):
             copy_data[key] = [
                 recursive_remove_key(item, to_remove)
-                for item in sorted(value, key=lambda obj: getattr(obj, "id", 0))
-            ]
+                for item in sorted(value, key=lambda obj: getattr(obj, "id", 0))]
     return copy_data
 
 
@@ -102,7 +101,7 @@ def fixture(filename, asjson=True):
         os.path.dirname(__file__),
         "fixtures",
         filename.lower().replace("/", "_"),
-    )
+    ) 
     try:
         with open(path, encoding="utf-8") as fptr:
             _LOGGER.debug("Loading fixture from %s", path)
