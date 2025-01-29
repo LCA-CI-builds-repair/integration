@@ -113,14 +113,14 @@ def fixture(filename, asjson=True):
         raise OSError(f"Missing fixture for {path.split('fixtures/')[1]}") from err
 
 
-def dummy_repository_base(hacs, repository=None):
+def dummy_repository_base(hacs, repository=None) -> HacsRepository:
     if repository is None:
         repository = HacsRepository(hacs)
         repository.data.full_name = "test/test"
         repository.data.full_name_lower = "test/test"
     repository.hacs = hacs
-    repository.hacs.hass = hacs.hass
-    repository.hacs.core.config_path = hacs.hass.config.path()
+    repository.hacs.hass = hacs.hass  # type: ignore[assignment]
+    repository.hacs.core.config_path = hacs.hass.config.path()  # type: ignore[attr-defined]
     repository.logger = LOGGER
     repository.data.domain = "test"
     repository.data.last_version = "3"
@@ -131,10 +131,6 @@ def dummy_repository_base(hacs, repository=None):
     repository.data.update_data(fixture("repository_data.json", asjson=True))
     repository.hacs_manifest = HacsManifest.from_dict({})
 
-    async def update_repository(*args, **kwargs):
-        pass
-
-    repository.update_repository = update_repository
     return repository
 
 
