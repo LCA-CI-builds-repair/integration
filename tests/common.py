@@ -45,11 +45,8 @@ from custom_components.hacs.utils.configuration_schema import TOKEN as CONF_TOKE
 from custom_components.hacs.utils.logger import LOGGER
 
 _LOGGER = LOGGER
-TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
-REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
-
-IGNORED_BASE_FILES = set([
+IGNORED_BASE_FILES = {
         "/config/automations.yaml",
         "/config/configuration.yaml",
         "/config/scenes.yaml",
