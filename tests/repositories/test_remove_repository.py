@@ -19,7 +19,7 @@ from tests.conftest import SnapshotFixture
 @pytest.mark.parametrize(
     "category_test_data",
     category_test_data_parametrized(
-        skip_categories=[HacsCategory.PYTHON_SCRIPT],
+        skip_categories=[HacsCategory.PYTHON_SCRIPT] if os.environ.get("GITHUB_ACTION") else [], #FIXME: remove GITHUB_ACTION conditional when #8131 merged.
         skip_reason="bug in cleanup, using repo name instad of file name.",
     ),
 )
