@@ -7,7 +7,7 @@ from tests.common import client_session_proxy
 
 
 
-@pytest.mark.parametrize("version,name", [
+@pytest.mark.parametrize(("version", "name"), [
     ("1.0.0", "Proxy integration"),
     ("99.99.99", None)
 ])

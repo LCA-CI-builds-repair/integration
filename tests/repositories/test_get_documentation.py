@@ -8,7 +8,7 @@ from tests.common import client_session_proxy
 
 
 
-@pytest.mark.parametrize("data,result", [
+@pytest.mark.parametrize(("data", "result"), [
     ({"installed": True, "installed_version": "1.0.0"}, "Example readme file"),
     ({"installed": False, "last_version": "2.0.0"}, "Example readme file")
 ])
