@@ -9,7 +9,7 @@ from tests.common import client_session_proxy
 
 
 @pytest.mark.parametrize("data,result", [
-    ({"installed": True, "installed_version": "1.0.0"}, "Example readme file"),
+    ({"installed": True, "installed_version": "1.0.0"}, "Example readme file"), # type: ignore[typeddict-item]
     ({"installed": False, "last_version": "2.0.0"}, "Example readme file")
 ])
 @pytest.mark.asyncio
