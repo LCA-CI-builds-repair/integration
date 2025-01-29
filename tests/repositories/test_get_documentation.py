@@ -13,7 +13,7 @@ from tests.common import client_session_proxy
     ({"installed": False, "last_version": "2.0.0"}, "Example readme file")
 ])
 @pytest.mark.asyncio
-async def test_validate_repository(hacs: HacsBase, data: dict[str, Any], result: str):
+async def test_get_documentation(hacs: HacsBase, data: dict[str, Any], result: str):
     repository = HacsRepository(hacs=hacs)
     repository.data.full_name = "octocat/integration"
     for key, value in data.items():
