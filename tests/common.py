@@ -34,7 +34,7 @@ from homeassistant.helpers.json import ExtendedJSONEncoder
 from homeassistant.setup import async_setup_component
 import homeassistant.util.dt as date_util
 from homeassistant.util.unit_system import METRIC_SYSTEM
-import homeassistant.util.uuid as uuid_util
+from homeassistant.util import uuid as uuid_util
 import pytest
 from yarl import URL
 
@@ -52,7 +52,7 @@ REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context
 IGNORED_BASE_FILES = set([
         "/config/automations.yaml",
         "/config/configuration.yaml",
-        "/config/scenes.yaml",
+        "/config/scene.yaml",
         "/config/scripts.yaml",
         "/config/secrets.yaml",
     ])
@@ -67,7 +67,7 @@ def safe_json_dumps(data: dict | list) -> str:
     )
 
 
-def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
+def recursive_remove_key(data: dict, to_remove: Iterable[str]) -> dict:
     if not isinstance(data, (Mapping, list)):
         return data
 
@@ -536,7 +536,7 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
 
 
 def create_config_entry(
-    data: dict[str, Any] = None, options: dict[str, Any] = None
+    data: dict = None, options: dict = None
 ) -> MockConfigEntry:
     try:
         # Core 2024.1 added minor_version
