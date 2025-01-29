@@ -20,7 +20,7 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
     __version__ as HAVERSION,
 )
-from homeassistant.helpers import (
+from homeassistant.helpers import (  # type: ignore[attr-defined]
     area_registry as ar,
     device_registry as dr,
     entity,
