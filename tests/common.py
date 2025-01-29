@@ -254,7 +254,7 @@ def mock_storage(data=None):
     async def mock_async_load(store):
         """Mock version of load."""
         if store._data is None:
-            # No data to load
+            # No data to load, check if store exists in the mock data
             if store.key not in data:
                 return None
 
@@ -535,7 +535,7 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
     return base
 
 
-def create_config_entry(
+def create_mock_config_entry(
     data: dict[str, Any] = None, options: dict[str, Any] = None
 ) -> MockConfigEntry:
     try:
@@ -562,7 +562,7 @@ def create_config_entry(
         )
 
 
-async def setup_integration(hass: ha.HomeAssistant, config_entry: MockConfigEntry) -> None:
+async def setup_mock_integration(hass: ha.HomeAssistant, config_entry: MockConfigEntry) -> None:
     mock_session = await client_session_proxy(hass)
     with patch(
         "homeassistant.helpers.aiohttp_client.async_get_clientsession", return_value=mock_session
