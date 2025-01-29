@@ -6,11 +6,10 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 import functools as ft
 import json as json_func
-import os
-from typing import Any, Iterable, Mapping
+from typing import Any, Iterable, Mapping, cast
 from unittest.mock import AsyncMock, Mock, patch
 
-from aiohttp import ClientSession, ClientWebSocketResponse
+from aiohttp import ClientSession
 from aiohttp.typedefs import StrOrURL
 from awesomeversion import AwesomeVersion
 from homeassistant import auth, bootstrap, config_entries, core as ha, config as ha_config
@@ -37,6 +36,7 @@ from homeassistant.util.unit_system import METRIC_SYSTEM
 import homeassistant.util.uuid as uuid_util
 import pytest
 from yarl import URL
+import os
 
 from custom_components.hacs.base import HacsBase
 from custom_components.hacs.const import DOMAIN
@@ -133,7 +133,7 @@ def dummy_repository_base(hacs, repository=None):
 
     async def update_repository(*args, **kwargs):
         pass
-
+    
     repository.update_repository = update_repository
     return repository
 
@@ -250,7 +250,7 @@ def mock_storage(data=None):
         data = {}
 
     orig_load = storage.Store._async_load
-
+    
     async def mock_async_load(store):
         """Mock version of load."""
         if store._data is None:
@@ -271,12 +271,12 @@ def mock_storage(data=None):
         _LOGGER.info("Loading data for %s: %s", store.key, loaded)
         return loaded
 
-    def mock_write_data(store, path, data_to_write):
+    def mock_write_data(store, data_to_write):
         """Mock version of write data."""
         _LOGGER.info("Writing data to %s: %s", store.key, data_to_write)
         # To ensure that the data can be serialized
         data[store.key] = json_func.loads(json_func.dumps(data_to_write, cls=store._encoder))
-
+    
     async def mock_remove(store):
         """Remove data."""
         data.pop(store.key, None)
@@ -325,7 +325,7 @@ class MockOwner(auth_models.User):
 class MockConfigEntry(config_entries.ConfigEntry):
     entry_id = uuid_util.random_uuid_hex()
 
-    def add_to_hass(self, hass: ha.HomeAssistant) -> None:
+    def add_to_hass(self, hass):
         """Test helper to add entry to hass."""
         hass.config_entries._entries[self.entry_id] = self
 
@@ -338,7 +338,7 @@ class MockConfigEntry(config_entries.ConfigEntry):
 class WSClient:
     """WS Client to be used in testing."""
 
-    client: ClientWebSocketResponse | None = None
+    client = None
 
     def __init__(self, hass: ha.HomeAssistant, token: str) -> None:
         self.hass = hass
@@ -437,7 +437,7 @@ class ProxyClientSession(ClientSession):
         if str_or_url.startswith("ws://"):
             return await super()._request(method, str_or_url, *args, **kwargs)
 
-        if (resp := self.response_mocker.get(str_or_url, args, kwargs)) is not None:
+        if resp := self.response_mocker.get(str_or_url, args, kwargs):
             LOGGER.info("Using mocked response for %s", str_or_url)
             if resp.exception:
                 raise resp.exception
@@ -489,7 +489,7 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
         if str_or_url.startswith("ws://"):
             return await base_request(method, str_or_url, *args, **kwargs)
 
-        if (resp := response_mocker.get(str_or_url, args, kwargs)) is not None:
+        if resp := response_mocker.get(str_or_url, args, kwargs):
             LOGGER.info("Using mocked response for %s", str_or_url)
             if resp.exception:
                 raise resp.exception
