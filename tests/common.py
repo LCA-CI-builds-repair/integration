@@ -49,13 +49,13 @@ TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 INSTANCES = []
 REQUEST_CONTEXT: ContextVar[pytest.FixtureRequest] = ContextVar("request_context", default=None)
 
-IGNORED_BASE_FILES = set([
+IGNORED_BASE_FILES = {
         "/config/automations.yaml",
         "/config/configuration.yaml",
         "/config/scenes.yaml",
         "/config/scripts.yaml",
         "/config/secrets.yaml",
-    ])
+    }
 
 
 def safe_json_dumps(data: dict | list) -> str:
@@ -455,7 +455,7 @@ class ProxyClientSession(ClientSession):
         if not os.path.exists(fp):
             raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
 
-        async def read(**kwargs):
+        async def read(**kwargs):  # noqa: ANN003
             if url.path.endswith(".zip"):
                 with open(fp, mode="rb") as fptr:
                     return fptr.read()
@@ -507,7 +507,7 @@ async def client_session_proxy(hass: ha.HomeAssistant) -> ClientSession:
         if not os.path.exists(fp):
             raise Exception(f"Missing fixture for proxy/{url.host}{url.path}")
 
-        async def read(**kwargs):
+        async def read(**kwargs):  # noqa: ANN003
             if url.path.endswith(".zip"):
                 with open(fp, mode="rb") as fptr:
                     return fptr.read()
