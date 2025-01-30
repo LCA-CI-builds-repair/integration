@@ -195,10 +195,7 @@ async def async_test_home_assistant(loop, tmpdir):
 
     hass.config.location_name = "test home"
     hass.config.config_dir = str(tmpdir)
-    hass.config.latitude = 32.87336
-    hass.config.longitude = -117.22743
-    hass.config.elevation = 0
-    hass.config.time_zone = date_util.get_time_zone("US/Pacific")
+    hass.config.set_time_zone("US/Pacific")
     hass.config.units = METRIC_SYSTEM
     hass.config.skip_pip = True
     hass.config.skip_pip_packages = []
@@ -214,7 +211,7 @@ async def async_test_home_assistant(loop, tmpdir):
     )
     hass.data[bootstrap.DATA_REGISTRIES_LOADED] = None
 
-    hass.config_entries = config_entries.ConfigEntries(hass, {})
+    hass.config_entries = config_entries.ConfigEntries(hass, set())
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, hass.config_entries._async_shutdown)
 
     hass.state = ha.CoreState.running
@@ -328,11 +325,7 @@ class MockConfigEntry(config_entries.ConfigEntry):
     def add_to_hass(self, hass: ha.HomeAssistant) -> None:
         """Test helper to add entry to hass."""
         hass.config_entries._entries[self.entry_id] = self
-
-        if AwesomeVersion(HAVERSION) >= "2023.10.0":
-            hass.config_entries._domain_index.setdefault(self.domain, []).append(self)
-        else:
-            hass.config_entries._domain_index.setdefault(self.domain, []).append(self.entry_id)
+        hass.config_entries._domain_index.setdefault(self.domain, []).append(self)
 
 
 class WSClient:
@@ -539,8 +532,8 @@ def create_config_entry(
     data: dict[str, Any] = None, options: dict[str, Any] = None
 ) -> MockConfigEntry:
     try:
-        # Core 2024.1 added minor_version
         return MockConfigEntry(
+            # Core 2024.1 added minor_version
             version=1,
             minor_version=0,
             domain=DOMAIN,
