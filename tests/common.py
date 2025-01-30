@@ -59,12 +59,12 @@ IGNORED_BASE_FILES = set([
 
 
 def safe_json_dumps(data: dict | list) -> str:
-    return json_func.dumps(
+    return json_func.dumps(  # type: ignore[no-any-return]
         data,
         indent=4,
         sort_keys=True,
         cls=ExtendedJSONEncoder,
-    )
+    )  # pyupgrade: ignore
 
 
 def recursive_remove_key(data: dict[str, Any], to_remove: Iterable[str]) -> dict[str, Any]:
