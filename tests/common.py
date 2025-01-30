@@ -562,11 +562,13 @@ def create_config_entry(
         )
 
 
+@pytest.fixture(name="config_entry")
+def config_entry_fixture():
+    """Create a mock HACS config entry."""
+    return create_config_entry()
+
+
 async def setup_integration(hass: ha.HomeAssistant, config_entry: MockConfigEntry) -> None:
-    mock_session = await client_session_proxy(hass)
-    with patch(
-        "homeassistant.helpers.aiohttp_client.async_get_clientsession", return_value=mock_session
-    ):
         hass.data.pop("custom_components", None)
         config_entry.add_to_hass(hass)
         assert await hass.config_entries.async_setup(config_entry.entry_id)
